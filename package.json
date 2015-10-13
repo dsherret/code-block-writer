@@ -1,0 +1,36 @@
+{
+  "name": "code-block-writer",
+  "version": "1.0.0",
+  "description": "0.0.1",
+  "main": "dist/code-block-writer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dsherret/code-block-writer.git"
+  },
+  "keywords": [
+    "decorators",
+    "typescript",
+    "routes"
+  ],
+  "author": "David Sherret",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dsherret/code-block-writer/issues"
+  },
+  "homepage": "https://github.com/dsherret/code-block-writer#readme",
+  "dependencies": {
+    "typescript": "^1.6.2"
+  },
+  "devDependencies": {
+    "del": "^2.0.2",
+    "gulp": "^3.9.0",
+    "gulp-tslint": "^3.3.1",
+    "gulp-typescript": "^2.9.2",
+    "merge2": "^0.3.6",
+    "tslint": "^2.5.1"
+  }
+}

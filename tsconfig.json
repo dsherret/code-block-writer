@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "sourceMap": false,
+        "noImplicitAny":  true,
+        "removeComments": true,
+        "experimentalDecorators": true,
+        "outDir": "dist"
+    },
+    "files": [
+        "src/code-block-writer.ts"
+    ]
+}
