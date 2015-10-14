@@ -8,7 +8,6 @@ A simple text writer that assists formatting blocks of code.
 ```typescript
 import CodeBlockWriter from "./../src/code-block-writer";
 
-
 const writer = new CodeBlockWriter();
 const className = "MyClass";
  
