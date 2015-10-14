@@ -6,7 +6,7 @@ A simple text writer that assists formatting blocks of code.
 ## Example
 
 ```typescript
-import CodeBlockWriter from "./../src/code-block-writer";
+import CodeBlockWriter from "code-block-writer";
 
 const writer = new CodeBlockWriter();
 const className = "MyClass";
