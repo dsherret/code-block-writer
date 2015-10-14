@@ -22,6 +22,9 @@
     "url": "https://github.com/dsherret/code-block-writer/issues"
   },
   "homepage": "https://github.com/dsherret/code-block-writer#readme",
+  "typescript": {
+    "definition": "dist/code-block-writer.d.ts"
+  },
   "dependencies": {
     "typescript": "^1.6.2"
   },
