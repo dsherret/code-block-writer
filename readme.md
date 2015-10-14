@@ -1,7 +1,7 @@
 code-block-writer
 =================
 
-A simple text writer that assists formatting blocks of code.
+A simple code writer that assists with formatting and visualizing blocks of code.
 
 ## Example
 
