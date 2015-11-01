@@ -34,7 +34,9 @@ var CodeBlockWriter = (function () {
     CodeBlockWriter.prototype.write = function (str) {
         if (this._lastWasNewLine) {
             this._lastWasNewLine = false;
-            this.write(Array(this._getCurrentIndentationNumberSpaces()).join(" "));
+            if (str !== "\n") {
+                this.write(Array(this._getCurrentIndentationNumberSpaces()).join(" "));
+            }
         }
         this._text += str;
         return this;
