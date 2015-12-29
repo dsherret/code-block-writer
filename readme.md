@@ -8,9 +8,9 @@ A simple code writer that assists with formatting and visualizing blocks of code
 ```typescript
 import CodeBlockWriter from "code-block-writer";
 
-const writer = new CodeBlockWriter();
+const writer = new CodeBlockWriter({ newLine: "\r\n" }); // optional options (newLine defaults to "\n")
 const className = "MyClass";
- 
+
 writer.write(`class ${className} extends OtherClass`).block(() => {
     writer.writeLine(`@MyDecorator("myArgument1", "myArgument2")`);
     writer.write(`myMethod(myParam: any)`).block(() => {

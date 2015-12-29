@@ -4,6 +4,7 @@ declare module "code-block-writer" {
         private _text;
         private _numberSpaces;
         private _lastWasNewLine;
+        constructor(opts?: { newLine: string });
         block(block: () => void): CodeBlockWriter;
         writeLine(str: string): CodeBlockWriter;
         newLineIfLastNotNewLine(): CodeBlockWriter;

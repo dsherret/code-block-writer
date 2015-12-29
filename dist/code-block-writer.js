@@ -1,9 +1,11 @@
 var CodeBlockWriter = (function () {
-    function CodeBlockWriter() {
+    function CodeBlockWriter(opts) {
+        if (opts === void 0) { opts = null; }
         this._currentIndentation = 0;
         this._text = "";
         this._numberSpaces = 4;
         this._lastWasNewLine = false;
+        this._newline = (opts && opts.newLine) || "\n";
     }
     CodeBlockWriter.prototype.block = function (block) {
         this.write(" {");
@@ -27,14 +29,14 @@ var CodeBlockWriter = (function () {
         return this;
     };
     CodeBlockWriter.prototype.newLine = function () {
-        this.write("\n");
+        this.write(this._newline);
         this._lastWasNewLine = true;
         return this;
     };
     CodeBlockWriter.prototype.write = function (str) {
         if (this._lastWasNewLine) {
             this._lastWasNewLine = false;
-            if (str !== "\n") {
+            if (str !== this._newline) {
                 this.write(Array(this._getCurrentIndentationNumberSpaces()).join(" "));
             }
         }

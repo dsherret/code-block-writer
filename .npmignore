@@ -1,1 +1,3 @@
 /typings
+/.vscode
+/node_modules

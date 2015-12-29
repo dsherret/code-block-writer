@@ -3,6 +3,11 @@ export default class CodeBlockWriter {
     private _text = "";
     private _numberSpaces = 4;
     private _lastWasNewLine = false;
+    private _newline: string;
+
+    constructor(opts: { newLine: string } = null) {
+        this._newline = (opts && opts.newLine) || "\n";
+    }
 
     block(block: () => void) {
         this.write(" {");
@@ -32,7 +37,7 @@ export default class CodeBlockWriter {
     }
 
     newLine() {
-        this.write("\n");
+        this.write(this._newline);
         this._lastWasNewLine = true;
 
         return this;
@@ -42,7 +47,7 @@ export default class CodeBlockWriter {
         if (this._lastWasNewLine) {
             this._lastWasNewLine = false;
 
-            if (str !== "\n") {
+            if (str !== this._newline) {
                 this.write(Array(this._getCurrentIndentationNumberSpaces()).join(" "));
             }
         }
