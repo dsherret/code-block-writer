@@ -2,7 +2,7 @@ export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
     private _numberSpaces = 4;
-    private _lastWasNewLine = false;
+    private _lastWasNewLine = true;
     private _newline: string;
 
     constructor(opts: { newLine: string } = null) {

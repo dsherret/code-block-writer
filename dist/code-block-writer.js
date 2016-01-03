@@ -4,7 +4,7 @@ var CodeBlockWriter = (function () {
         this._currentIndentation = 0;
         this._text = "";
         this._numberSpaces = 4;
-        this._lastWasNewLine = false;
+        this._lastWasNewLine = true;
         this._newline = (opts && opts.newLine) || "\n";
     }
     CodeBlockWriter.prototype.block = function (block) {
