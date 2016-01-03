@@ -33,6 +33,12 @@ var CodeBlockWriter = (function () {
         this._lastWasNewLine = true;
         return this;
     };
+    CodeBlockWriter.prototype.spaceIfLastNotSpace = function () {
+        if (this._text.length > 0 && this._text[this._text.length - 1] !== " ") {
+            this.write(" ");
+        }
+        return this;
+    };
     CodeBlockWriter.prototype.write = function (str) {
         if (this._lastWasNewLine) {
             this._lastWasNewLine = false;

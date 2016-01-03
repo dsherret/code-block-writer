@@ -43,6 +43,14 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    spaceIfLastNotSpace() {
+        if (this._text.length > 0 && this._text[this._text.length - 1] !== " ") {
+            this.write(" ");
+        }
+
+        return this;
+    }
+
     write(str: string) {
         if (this._lastWasNewLine) {
             this._lastWasNewLine = false;

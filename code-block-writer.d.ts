@@ -9,6 +9,7 @@ declare module "code-block-writer" {
         writeLine(str: string): CodeBlockWriter;
         newLineIfLastNotNewLine(): CodeBlockWriter;
         newLine(): CodeBlockWriter;
+        spaceIfLastNotSpace(): CodeBlockWriter;
         write(str: string): CodeBlockWriter;
         toString(): string;
         private _getCurrentIndentationNumberSpaces();
