@@ -94,12 +94,12 @@ describe("CodeBlockWriter", () => {
         });
     });
 
-    describe("newLineIfLastNotNewLine()", () => {
+    describe("newLineIfLastCharNotNewLine()", () => {
         it("should do a newline if the last text was not a newline", () => {
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.write("test").newLineIfLastNotNewLine();
+                writer.write("test").newLineIfLastCharNotNewLine();
             });
         });
 
@@ -107,7 +107,7 @@ describe("CodeBlockWriter", () => {
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.writeLine("test").newLineIfLastNotNewLine();
+                writer.writeLine("test").newLineIfLastCharNotNewLine();
             });
         });
     });
@@ -126,6 +126,16 @@ describe("CodeBlockWriter", () => {
 
             doTest(expected, writer => {
                 writer.write("test").newLine().newLine();
+            });
+        });
+
+        it("should not do a newline after doing a block", () => {
+            const expected = `test {\n    test\n}\n`;
+
+            doTest(expected, writer => {
+                writer.write("test").block(() => {
+                    writer.newLine().writeLine("test");
+                });
             });
         });
 
@@ -169,6 +179,14 @@ describe("CodeBlockWriter", () => {
             doTest(expected, writer => {
                 writer.write("test").newLine().spaceIfLastNotSpace();
             });
+        });
+    });
+
+    describe("getLength()", () => {
+        it("should return the length", () => {
+            const writer = getWriter();
+            writer.write("1234");
+            assert.equal(writer.getLength(), 4);
         });
     });
 });

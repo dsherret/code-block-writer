@@ -65,17 +65,17 @@ describe("CodeBlockWriter", function () {
             });
         });
     });
-    describe("newLineIfLastNotNewLine()", function () {
+    describe("newLineIfLastCharNotNewLine()", function () {
         it("should do a newline if the last text was not a newline", function () {
             var expected = "test\n";
             doTest(expected, function (writer) {
-                writer.write("test").newLineIfLastNotNewLine();
+                writer.write("test").newLineIfLastCharNotNewLine();
             });
         });
         it("should not do a newline if the last text was a newline", function () {
             var expected = "test\n";
             doTest(expected, function (writer) {
-                writer.writeLine("test").newLineIfLastNotNewLine();
+                writer.writeLine("test").newLineIfLastCharNotNewLine();
             });
         });
     });
@@ -90,6 +90,14 @@ describe("CodeBlockWriter", function () {
             var expected = "test\n\n";
             doTest(expected, function (writer) {
                 writer.write("test").newLine().newLine();
+            });
+        });
+        it("should not do a newline after doing a block", function () {
+            var expected = "test {\n    test\n}\n";
+            doTest(expected, function (writer) {
+                writer.write("test").block(function () {
+                    writer.newLine().writeLine("test");
+                });
             });
         });
         it("should not do a newline if the last line was a blank line (no consecutive blank lines)", function () {
@@ -123,6 +131,13 @@ describe("CodeBlockWriter", function () {
             doTest(expected, function (writer) {
                 writer.write("test").newLine().spaceIfLastNotSpace();
             });
+        });
+    });
+    describe("getLength()", function () {
+        it("should return the length", function () {
+            var writer = getWriter();
+            writer.write("1234");
+            assert.equal(writer.getLength(), 4);
         });
     });
 });

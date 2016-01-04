@@ -6,8 +6,9 @@ declare module "code-block-writer" {
         private _lastWasNewLine;
         constructor(opts?: { newLine: string });
         block(block: () => void): CodeBlockWriter;
+        getLength(): number;
         writeLine(str: string): CodeBlockWriter;
-        newLineIfLastNotNewLine(): CodeBlockWriter;
+        newLineIfLastCharNotNewLine(): CodeBlockWriter;
         newLine(): CodeBlockWriter;
         spaceIfLastNotSpace(): CodeBlockWriter;
         write(str: string): CodeBlockWriter;

@@ -4,35 +4,35 @@ var CodeBlockWriter = (function () {
         this._currentIndentation = 0;
         this._text = "";
         this._numberSpaces = 4;
-        this._lastWasNewLine = true;
+        this._isAtStartOfBlock = false;
         this._newline = (opts && opts.newLine) || "\n";
     }
     CodeBlockWriter.prototype.block = function (block) {
         this.spaceIfLastNotSpace().write("{");
         this._currentIndentation++;
         this.newLine();
+        this._isAtStartOfBlock = true;
         block();
         this._currentIndentation--;
         this.writeLine("}");
         return this;
     };
     CodeBlockWriter.prototype.writeLine = function (str) {
-        this.newLineIfLastNotNewLine();
+        this.newLineIfLastCharNotNewLine();
         this.write(str);
         this.newLine();
         return this;
     };
-    CodeBlockWriter.prototype.newLineIfLastNotNewLine = function () {
-        if (!this._lastWasNewLine) {
+    CodeBlockWriter.prototype.newLineIfLastCharNotNewLine = function () {
+        if (this.getLastChar() !== this._newline) {
             this.newLine();
         }
         return this;
     };
     CodeBlockWriter.prototype.newLine = function () {
-        if (this.isLastLineNotBlankNewLine()) {
+        if (this.isLastLineNotBlankNewLine() && !this._isAtStartOfBlock && this._text.length !== 0) {
             this.write(this._newline);
         }
-        this._lastWasNewLine = true;
         return this;
     };
     CodeBlockWriter.prototype.spaceIfLastNotSpace = function () {
@@ -43,14 +43,17 @@ var CodeBlockWriter = (function () {
         return this;
     };
     CodeBlockWriter.prototype.write = function (str) {
-        if (this._lastWasNewLine) {
-            this._lastWasNewLine = false;
-            if (str !== this._newline) {
+        this._isAtStartOfBlock = false;
+        if (str != null && str.length > 0) {
+            if (str !== this._newline && this.getLastChar() === this._newline) {
                 this.writeIndentation();
             }
+            this._text += str;
         }
-        this._text += str;
         return this;
+    };
+    CodeBlockWriter.prototype.getLength = function () {
+        return this._text.length;
     };
     CodeBlockWriter.prototype.toString = function () {
         return this._text;
@@ -77,7 +80,7 @@ var CodeBlockWriter = (function () {
         return lastChar;
     };
     CodeBlockWriter.prototype.writeIndentation = function () {
-        this.write(Array(this._getCurrentIndentationNumberSpaces() + 1).join(" "));
+        this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
     };
     CodeBlockWriter.prototype._getCurrentIndentationNumberSpaces = function () {
         return this._currentIndentation * this._numberSpaces;

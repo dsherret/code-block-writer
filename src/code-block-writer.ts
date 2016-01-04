@@ -2,8 +2,8 @@ export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
     private _numberSpaces = 4;
-    private _lastWasNewLine = true;
     private _newline: string;
+    private _isAtStartOfBlock = false;
 
     constructor(opts: { newLine: string } = null) {
         this._newline = (opts && opts.newLine) || "\n";
@@ -13,6 +13,7 @@ export default class CodeBlockWriter {
         this.spaceIfLastNotSpace().write("{");
         this._currentIndentation++;
         this.newLine();
+        this._isAtStartOfBlock = true;
         block();
         this._currentIndentation--;
         this.writeLine("}");
@@ -21,15 +22,15 @@ export default class CodeBlockWriter {
     }
 
     writeLine(str: string) {
-        this.newLineIfLastNotNewLine();
+        this.newLineIfLastCharNotNewLine();
         this.write(str);
         this.newLine();
 
         return this;
     }
 
-    newLineIfLastNotNewLine() {
-        if (!this._lastWasNewLine) {
+    newLineIfLastCharNotNewLine() {
+        if (this.getLastChar() !== this._newline) {
             this.newLine();
         }
 
@@ -37,11 +38,9 @@ export default class CodeBlockWriter {
     }
 
     newLine() {
-        if (this.isLastLineNotBlankNewLine()) {
+        if (this.isLastLineNotBlankNewLine() && !this._isAtStartOfBlock && this._text.length !== 0) {
             this.write(this._newline);
         }
-
-        this._lastWasNewLine = true;
 
         return this;
     }
@@ -57,17 +56,21 @@ export default class CodeBlockWriter {
     }
 
     write(str: string) {
-        if (this._lastWasNewLine) {
-            this._lastWasNewLine = false;
+        this._isAtStartOfBlock = false;
 
-            if (str !== this._newline) {
+        if (str != null && str.length > 0) {
+            if (str !== this._newline && this.getLastChar() === this._newline) {
                 this.writeIndentation();
             }
+
+            this._text += str;
         }
 
-        this._text += str;
-
         return this;
+    }
+
+    getLength() {
+        return this._text.length;
     }
 
     toString() {
@@ -104,7 +107,7 @@ export default class CodeBlockWriter {
     }
 
     private writeIndentation() {
-        this.write(Array(this._getCurrentIndentationNumberSpaces() + 1).join(" "));
+        this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
     }
 
     private _getCurrentIndentationNumberSpaces() {
