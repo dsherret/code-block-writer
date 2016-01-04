@@ -66,6 +66,21 @@ describe("CodeBlockWriter", () => {
                 });
             });
         });
+
+        it("should put the brace on the next space if there is a newline before it", () => {
+            const expected =
+`test {
+    inside
+
+    inside
+}
+`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.writeLine("inside").newLine().write("inside");
+                });
+            });
+        });
     });
 
     describe("writeLine()", () => {

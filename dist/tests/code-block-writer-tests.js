@@ -44,6 +44,14 @@ describe("CodeBlockWriter", function () {
                 });
             });
         });
+        it("should put the brace on the next space if there is a newline before it", function () {
+            var expected = "test {\n    inside\n\n    inside\n}\n";
+            doTest(expected, function (writer) {
+                writer.write("test ").block(function () {
+                    writer.writeLine("inside").newLine().write("inside");
+                });
+            });
+        });
     });
     describe("writeLine()", function () {
         it("should write some text on a line", function () {

@@ -38,7 +38,8 @@ export default class CodeBlockWriter {
     }
 
     newLine() {
-        if (this.isLastLineNotBlankNewLine() && !this._isAtStartOfBlock && this._text.length !== 0) {
+        const willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
+        if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
             this.write(this._newline);
         }
 
@@ -77,8 +78,23 @@ export default class CodeBlockWriter {
         return this._text;
     }
 
-    private isLastLineNotBlankNewLine() {
-        return this.getLastLine() !== this._newline;
+    private isCurrentLineBlank() {
+        return this.getCurrentLine().length === 0;
+    }
+
+    private isLastLineBlankLine() {
+        return this.getLastLine() === this._newline;
+    }
+
+    private getCurrentLine() {
+        const lastNewLineIndex = this._text.lastIndexOf(this._newline);
+
+        if (lastNewLineIndex >= 0) {
+            return this._text.substr(lastNewLineIndex + 1);
+        }
+        else {
+            return "";
+        }
     }
 
     private getLastLine() {

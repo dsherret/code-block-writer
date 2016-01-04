@@ -30,7 +30,8 @@ var CodeBlockWriter = (function () {
         return this;
     };
     CodeBlockWriter.prototype.newLine = function () {
-        if (this.isLastLineNotBlankNewLine() && !this._isAtStartOfBlock && this._text.length !== 0) {
+        var willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
+        if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
             this.write(this._newline);
         }
         return this;
@@ -58,8 +59,20 @@ var CodeBlockWriter = (function () {
     CodeBlockWriter.prototype.toString = function () {
         return this._text;
     };
-    CodeBlockWriter.prototype.isLastLineNotBlankNewLine = function () {
-        return this.getLastLine() !== this._newline;
+    CodeBlockWriter.prototype.isCurrentLineBlank = function () {
+        return this.getCurrentLine().length === 0;
+    };
+    CodeBlockWriter.prototype.isLastLineBlankLine = function () {
+        return this.getLastLine() === this._newline;
+    };
+    CodeBlockWriter.prototype.getCurrentLine = function () {
+        var lastNewLineIndex = this._text.lastIndexOf(this._newline);
+        if (lastNewLineIndex >= 0) {
+            return this._text.substr(lastNewLineIndex + 1);
+        }
+        else {
+            return "";
+        }
     };
     CodeBlockWriter.prototype.getLastLine = function () {
         var lastLine;
