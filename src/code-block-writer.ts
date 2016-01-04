@@ -10,7 +10,7 @@ export default class CodeBlockWriter {
     }
 
     block(block: () => void) {
-        this.write(" {");
+        this.spaceIfLastNotSpace().write("{");
         this._currentIndentation++;
         this.newLine();
         block();
@@ -37,14 +37,19 @@ export default class CodeBlockWriter {
     }
 
     newLine() {
-        this.write(this._newline);
+        if (this.isLastLineNotBlankNewLine()) {
+            this.write(this._newline);
+        }
+
         this._lastWasNewLine = true;
 
         return this;
     }
 
     spaceIfLastNotSpace() {
-        if (this._text.length > 0 && this._text[this._text.length - 1] !== " ") {
+        const lastChar = this.getLastChar();
+
+        if (lastChar != null && lastChar !== " " && lastChar !== this._newline) {
             this.write(" ");
         }
 
@@ -56,7 +61,7 @@ export default class CodeBlockWriter {
             this._lastWasNewLine = false;
 
             if (str !== this._newline) {
-                this.write(Array(this._getCurrentIndentationNumberSpaces()).join(" "));
+                this.writeIndentation();
             }
         }
 
@@ -67,6 +72,39 @@ export default class CodeBlockWriter {
 
     toString() {
         return this._text;
+    }
+
+    private isLastLineNotBlankNewLine() {
+        return this.getLastLine() !== this._newline;
+    }
+
+    private getLastLine() {
+        let lastLine: string;
+        const lastNewLineIndex = this._text.lastIndexOf(this._newline);
+
+        if (lastNewLineIndex >= 0) {
+            const secondLastNewLineIndex = this._text.lastIndexOf(this._newline, lastNewLineIndex - 1);
+
+            if (secondLastNewLineIndex >= 0) {
+                return this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
+            }
+        }
+
+        return lastLine;
+    }
+
+    private getLastChar() {
+        let lastChar: string;
+
+        if (this._text.length > 0) {
+            lastChar = this._text[this._text.length - 1];
+        }
+
+        return lastChar;
+    }
+
+    private writeIndentation() {
+        this.write(Array(this._getCurrentIndentationNumberSpaces() + 1).join(" "));
     }
 
     private _getCurrentIndentationNumberSpaces() {

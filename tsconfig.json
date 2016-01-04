@@ -8,8 +8,5 @@
         "removeComments": true,
         "experimentalDecorators": true,
         "outDir": "dist"
-    },
-    "files": [
-        "src/code-block-writer.ts"
-    ]
+    }
 }

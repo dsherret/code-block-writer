@@ -1,6 +1,9 @@
 code-block-writer
 =================
 
+[![Build Status](https://travis-ci.org/dsherret/code-block-writer.svg)](https://travis-ci.org/dsherret/code-block-writer)
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+
 A simple code writer that assists with formatting and visualizing blocks of code.
 
 ## Example
