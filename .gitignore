@@ -4,10 +4,9 @@
 /obj
 /temp
 /bin
-*.v12.suo
+*.suo
 *.csproj
 *.csproj.user
 *.sln
 /coverage
-/.vs/code-block-writer/v14/*.suo
 /.vs
