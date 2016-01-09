@@ -39,6 +39,7 @@ export default class CodeBlockWriter {
 
     newLine() {
         const willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
+
         if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
             this.write(this._newline);
         }

@@ -12,12 +12,28 @@ function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => v
 }
 
 describe("CodeBlockWriter", () => {
+    describe("opts: newLine", () => {
+        it("should use a different newline if specifying one", () => {
+            const writer = new CodeBlockWriter({ newLine: "\r\n" });
+            writer.writeLine("test");
+            assert.equal(writer.toString(), "test\r\n");
+        });
+    });
+
     describe("write", () => {
         it("should write the text", () => {
             const expected = `test`;
 
             doTest(expected, writer => {
                 writer.write("test");
+            });
+        });
+
+        it("should do nothing if providing a null string", () => {
+            const expected = "";
+
+            doTest(expected, writer => {
+                writer.write(null);
             });
         });
     });

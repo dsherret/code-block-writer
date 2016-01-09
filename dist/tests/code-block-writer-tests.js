@@ -9,11 +9,24 @@ function doTest(expected, writerCallback) {
     assert.equal(writer.toString(), expected);
 }
 describe("CodeBlockWriter", function () {
+    describe("opts: newLine", function () {
+        it("should use a different newline if specifying one", function () {
+            var writer = new code_block_writer_1.default({ newLine: "\r\n" });
+            writer.writeLine("test");
+            assert.equal(writer.toString(), "test\r\n");
+        });
+    });
     describe("write", function () {
         it("should write the text", function () {
             var expected = "test";
             doTest(expected, function (writer) {
                 writer.write("test");
+            });
+        });
+        it("should do nothing if providing a null string", function () {
+            var expected = "";
+            doTest(expected, function (writer) {
+                writer.write(null);
             });
         });
     });

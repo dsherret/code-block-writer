@@ -8,3 +8,6 @@
 *.csproj
 *.csproj.user
 *.sln
+/coverage
+/.vs/code-block-writer/v14/*.suo
+/.vs
