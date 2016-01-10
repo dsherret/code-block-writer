@@ -1,21 +1,29 @@
 var assert = require("assert");
 var code_block_writer_1 = require("./../code-block-writer");
-function getWriter() {
-    return new code_block_writer_1.default();
-}
-function doTest(expected, writerCallback) {
-    var writer = getWriter();
-    writerCallback(writer);
-    assert.equal(writer.toString(), expected);
-}
 describe("CodeBlockWriter", function () {
-    describe("opts: newLine", function () {
-        it("should use a different newline if specifying one", function () {
-            var writer = new code_block_writer_1.default({ newLine: "\r\n" });
+    describe("default opts", function () {
+        it("should use a \n newline if none is specified", function () {
+            var writer = new code_block_writer_1.default();
             writer.writeLine("test");
-            assert.equal(writer.toString(), "test\r\n");
+            assert.equal(writer.toString(), "test\n");
         });
     });
+    describe("tests for \n", function () {
+        runTestsForNewLineChar({ newLine: "\n" });
+    });
+    describe("tests for \r\n", function () {
+        runTestsForNewLineChar({ newLine: "\r\n" });
+    });
+});
+function runTestsForNewLineChar(opts) {
+    function getWriter() {
+        return new code_block_writer_1.default(opts);
+    }
+    function doTest(expected, writerCallback) {
+        var writer = getWriter();
+        writerCallback(writer);
+        assert.equal(writer.toString(), expected.replace(/\r?\n/g, opts.newLine));
+    }
     describe("write", function () {
         it("should write the text", function () {
             var expected = "test";
@@ -113,6 +121,12 @@ describe("CodeBlockWriter", function () {
                 writer.write("test").newLine().newLine();
             });
         });
+        it("should not do a newline at the start", function () {
+            var expected = "";
+            doTest(expected, function (writer) {
+                writer.newLine();
+            });
+        });
         it("should not do a newline after doing a block", function () {
             var expected = "test {\n    test\n}\n";
             doTest(expected, function (writer) {
@@ -161,6 +175,6 @@ describe("CodeBlockWriter", function () {
             assert.equal(writer.getLength(), 4);
         });
     });
-});
+}
 
 //# sourceMappingURL=code-block-writer-tests.js.map

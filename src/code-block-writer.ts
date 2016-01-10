@@ -2,11 +2,11 @@ export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
     private _numberSpaces = 4;
-    private _newline: string;
+    private _newLine: string;
     private _isAtStartOfBlock = false;
 
     constructor(opts: { newLine: string } = null) {
-        this._newline = (opts && opts.newLine) || "\n";
+        this._newLine = (opts && opts.newLine) || "\n";
     }
 
     block(block: () => void) {
@@ -30,7 +30,7 @@ export default class CodeBlockWriter {
     }
 
     newLineIfLastCharNotNewLine() {
-        if (this.getLastChar() !== this._newline) {
+        if (!this.isLastCharANewLine()) {
             this.newLine();
         }
 
@@ -41,7 +41,7 @@ export default class CodeBlockWriter {
         const willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
 
         if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
-            this.write(this._newline);
+            this.write(this._newLine);
         }
 
         return this;
@@ -50,7 +50,7 @@ export default class CodeBlockWriter {
     spaceIfLastNotSpace() {
         const lastChar = this.getLastChar();
 
-        if (lastChar != null && lastChar !== " " && lastChar !== this._newline) {
+        if (lastChar != null && lastChar !== " " && !this.isLastCharANewLine()) {
             this.write(" ");
         }
 
@@ -61,7 +61,7 @@ export default class CodeBlockWriter {
         this._isAtStartOfBlock = false;
 
         if (str != null && str.length > 0) {
-            if (str !== this._newline && this.getLastChar() === this._newline) {
+            if (str !== this._newLine && this.isLastCharANewLine()) {
                 this.writeIndentation();
             }
 
@@ -84,14 +84,14 @@ export default class CodeBlockWriter {
     }
 
     private isLastLineBlankLine() {
-        return this.getLastLine() === this._newline;
+        return this.getLastLine() === this._newLine;
     }
 
     private getCurrentLine() {
-        const lastNewLineIndex = this._text.lastIndexOf(this._newline);
+        const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
 
         if (lastNewLineIndex >= 0) {
-            return this._text.substr(lastNewLineIndex + 1);
+            return this._text.substr(lastNewLineIndex + this._newLine.length);
         }
         else {
             return "";
@@ -100,17 +100,21 @@ export default class CodeBlockWriter {
 
     private getLastLine() {
         let lastLine: string;
-        const lastNewLineIndex = this._text.lastIndexOf(this._newline);
+        const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
 
         if (lastNewLineIndex >= 0) {
-            const secondLastNewLineIndex = this._text.lastIndexOf(this._newline, lastNewLineIndex - 1);
+            const secondLastNewLineIndex = this._text.lastIndexOf(this._newLine, lastNewLineIndex - 1);
 
             if (secondLastNewLineIndex >= 0) {
-                return this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
+                lastLine = this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
             }
         }
 
         return lastLine;
+    }
+
+    private isLastCharANewLine() {
+        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
     }
 
     private getLastChar() {

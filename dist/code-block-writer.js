@@ -5,7 +5,7 @@ var CodeBlockWriter = (function () {
         this._text = "";
         this._numberSpaces = 4;
         this._isAtStartOfBlock = false;
-        this._newline = (opts && opts.newLine) || "\n";
+        this._newLine = (opts && opts.newLine) || "\n";
     }
     CodeBlockWriter.prototype.block = function (block) {
         this.spaceIfLastNotSpace().write("{");
@@ -24,7 +24,7 @@ var CodeBlockWriter = (function () {
         return this;
     };
     CodeBlockWriter.prototype.newLineIfLastCharNotNewLine = function () {
-        if (this.getLastChar() !== this._newline) {
+        if (!this.isLastCharANewLine()) {
             this.newLine();
         }
         return this;
@@ -32,13 +32,13 @@ var CodeBlockWriter = (function () {
     CodeBlockWriter.prototype.newLine = function () {
         var willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
         if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
-            this.write(this._newline);
+            this.write(this._newLine);
         }
         return this;
     };
     CodeBlockWriter.prototype.spaceIfLastNotSpace = function () {
         var lastChar = this.getLastChar();
-        if (lastChar != null && lastChar !== " " && lastChar !== this._newline) {
+        if (lastChar != null && lastChar !== " " && !this.isLastCharANewLine()) {
             this.write(" ");
         }
         return this;
@@ -46,7 +46,7 @@ var CodeBlockWriter = (function () {
     CodeBlockWriter.prototype.write = function (str) {
         this._isAtStartOfBlock = false;
         if (str != null && str.length > 0) {
-            if (str !== this._newline && this.getLastChar() === this._newline) {
+            if (str !== this._newLine && this.isLastCharANewLine()) {
                 this.writeIndentation();
             }
             this._text += str;
@@ -63,12 +63,12 @@ var CodeBlockWriter = (function () {
         return this.getCurrentLine().length === 0;
     };
     CodeBlockWriter.prototype.isLastLineBlankLine = function () {
-        return this.getLastLine() === this._newline;
+        return this.getLastLine() === this._newLine;
     };
     CodeBlockWriter.prototype.getCurrentLine = function () {
-        var lastNewLineIndex = this._text.lastIndexOf(this._newline);
+        var lastNewLineIndex = this._text.lastIndexOf(this._newLine);
         if (lastNewLineIndex >= 0) {
-            return this._text.substr(lastNewLineIndex + 1);
+            return this._text.substr(lastNewLineIndex + this._newLine.length);
         }
         else {
             return "";
@@ -76,14 +76,17 @@ var CodeBlockWriter = (function () {
     };
     CodeBlockWriter.prototype.getLastLine = function () {
         var lastLine;
-        var lastNewLineIndex = this._text.lastIndexOf(this._newline);
+        var lastNewLineIndex = this._text.lastIndexOf(this._newLine);
         if (lastNewLineIndex >= 0) {
-            var secondLastNewLineIndex = this._text.lastIndexOf(this._newline, lastNewLineIndex - 1);
+            var secondLastNewLineIndex = this._text.lastIndexOf(this._newLine, lastNewLineIndex - 1);
             if (secondLastNewLineIndex >= 0) {
-                return this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
+                lastLine = this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
             }
         }
         return lastLine;
+    };
+    CodeBlockWriter.prototype.isLastCharANewLine = function () {
+        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
     };
     CodeBlockWriter.prototype.getLastChar = function () {
         var lastChar;

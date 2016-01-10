@@ -1,24 +1,34 @@
 ﻿import * as assert from "assert";
 import CodeBlockWriter from "./../code-block-writer";
 
-function getWriter() {
-    return new CodeBlockWriter();
-}
-
-function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void) {
-    const writer = getWriter();
-    writerCallback(writer);
-    assert.equal(writer.toString(), expected);
-}
-
 describe("CodeBlockWriter", () => {
-    describe("opts: newLine", () => {
-        it("should use a different newline if specifying one", () => {
-            const writer = new CodeBlockWriter({ newLine: "\r\n" });
+    describe("default opts", () => {
+        it("should use a \n newline if none is specified", () => {
+            const writer = new CodeBlockWriter();
             writer.writeLine("test");
-            assert.equal(writer.toString(), "test\r\n");
+            assert.equal(writer.toString(), "test\n");
         });
     });
+
+    describe("tests for \n", () => {
+        runTestsForNewLineChar({ newLine: "\n" });
+    });
+
+    describe("tests for \r\n", () => {
+        runTestsForNewLineChar({ newLine: "\r\n" });
+    });
+});
+
+function runTestsForNewLineChar(opts: { newLine: string }) {
+    function getWriter() {
+        return new CodeBlockWriter(opts);
+    }
+
+    function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void) {
+        const writer = getWriter();
+        writerCallback(writer);
+        assert.equal(writer.toString(), expected.replace(/\r?\n/g, opts.newLine));
+    }
 
     describe("write", () => {
         it("should write the text", () => {
@@ -160,6 +170,14 @@ describe("CodeBlockWriter", () => {
             });
         });
 
+        it("should not do a newline at the start", () => {
+            const expected = ``;
+
+            doTest(expected, writer => {
+                writer.newLine();
+            });
+        });
+
         it("should not do a newline after doing a block", () => {
             const expected = `test {\n    test\n}\n`;
 
@@ -220,4 +238,4 @@ describe("CodeBlockWriter", () => {
             assert.equal(writer.getLength(), 4);
         });
     });
-});
+}
