@@ -77,7 +77,17 @@ export default class CodeBlockWriter {
     }
 
     toString() {
-        return this._text;
+        return this.removeConsecutiveNewLineAtEndOfString(this._text);
+    }
+
+    private removeConsecutiveNewLineAtEndOfString(text: string) {
+        const consecutiveNewline = this._newLine + this._newLine;
+
+        if (text.lastIndexOf(consecutiveNewline) === text.length - consecutiveNewline.length) {
+            text = text.substr(0, text.length - this._newLine.length);
+        }
+
+        return text;
     }
 
     private removeLastIfNewLine() {

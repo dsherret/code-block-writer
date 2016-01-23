@@ -58,7 +58,14 @@ var CodeBlockWriter = (function () {
         return this._text.length;
     };
     CodeBlockWriter.prototype.toString = function () {
-        return this._text;
+        return this.removeConsecutiveNewLineAtEndOfString(this._text);
+    };
+    CodeBlockWriter.prototype.removeConsecutiveNewLineAtEndOfString = function (text) {
+        var consecutiveNewline = this._newLine + this._newLine;
+        if (text.lastIndexOf(consecutiveNewline) === text.length - consecutiveNewline.length) {
+            text = text.substr(0, text.length - this._newLine.length);
+        }
+        return text;
     };
     CodeBlockWriter.prototype.removeLastIfNewLine = function () {
         if (this.isLastLineBlankLine() && this.isCurrentLineBlank()) {

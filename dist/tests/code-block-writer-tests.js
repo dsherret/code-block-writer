@@ -124,9 +124,9 @@ function runTestsForNewLineChar(opts) {
             });
         });
         it("should do a newline after doing a newline", function () {
-            var expected = "test\n\n";
+            var expected = "test\n\ntext";
             doTest(expected, function (writer) {
-                writer.write("test").newLine().newLine();
+                writer.write("test").newLine().newLine().write("text");
             });
         });
         it("should not do a newline at the start", function () {
@@ -144,15 +144,21 @@ function runTestsForNewLineChar(opts) {
             });
         });
         it("should not do a newline if the last line was a blank line (no consecutive blank lines)", function () {
-            var expected = "test\n\n";
+            var expected = "test\n\ntext";
             doTest(expected, function (writer) {
-                writer.write("test").newLine().newLine().newLine();
+                writer.write("test").newLine().newLine().newLine().write("text");
             });
         });
         it("should do a newline if a string causes it to not be a consecutive blank line", function () {
-            var expected = "test\na\n\n";
+            var expected = "test\na\n";
             doTest(expected, function (writer) {
-                writer.write("test").newLine().write("a").newLine().newLine();
+                writer.write("test").newLine().write("a").newLine();
+            });
+        });
+        it("should never have two newlines at the end of a file", function () {
+            var expected = "text\n";
+            doTest(expected, function (writer) {
+                writer.write("text").newLine().newLine();
             });
         });
     });

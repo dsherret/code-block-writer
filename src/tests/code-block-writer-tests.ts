@@ -176,10 +176,10 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
 
         it("should do a newline after doing a newline", () => {
-            const expected = `test\n\n`;
+            const expected = `test\n\ntext`;
 
             doTest(expected, writer => {
-                writer.write("test").newLine().newLine();
+                writer.write("test").newLine().newLine().write("text");
             });
         });
 
@@ -202,18 +202,26 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
 
         it("should not do a newline if the last line was a blank line (no consecutive blank lines)", () => {
-            const expected = `test\n\n`;
+            const expected = `test\n\ntext`;
 
             doTest(expected, writer => {
-                writer.write("test").newLine().newLine().newLine();
+                writer.write("test").newLine().newLine().newLine().write("text");
             });
         });
 
         it("should do a newline if a string causes it to not be a consecutive blank line", () => {
-            const expected = `test\na\n\n`;
+            const expected = `test\na\n`;
 
             doTest(expected, writer => {
-                writer.write("test").newLine().write("a").newLine().newLine();
+                writer.write("test").newLine().write("a").newLine();
+            });
+        });
+
+        it("should never have two newlines at the end of a file", () => {
+            const expected = `text\n`;
+
+            doTest(expected, writer => {
+                writer.write("text").newLine().newLine();
             });
         });
     });
