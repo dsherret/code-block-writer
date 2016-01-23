@@ -107,6 +107,19 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 });
             });
         });
+
+        it("should remove a newline if the last thing before the block was a newline", () => {
+            const expected =
+`test {
+    inside
+}
+`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.writeLine("inside").newLine();
+                });
+            });
+        });
     });
 
     describe("writeLine()", () => {

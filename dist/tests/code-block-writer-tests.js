@@ -73,6 +73,14 @@ function runTestsForNewLineChar(opts) {
                 });
             });
         });
+        it("should remove a newline if the last thing before the block was a newline", function () {
+            var expected = "test {\n    inside\n}\n";
+            doTest(expected, function (writer) {
+                writer.write("test ").block(function () {
+                    writer.writeLine("inside").newLine();
+                });
+            });
+        });
     });
     describe("writeLine()", function () {
         it("should write some text on a line", function () {

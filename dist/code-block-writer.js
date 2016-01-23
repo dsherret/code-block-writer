@@ -13,6 +13,7 @@ var CodeBlockWriter = (function () {
         this.newLine();
         this._isAtStartOfBlock = true;
         block();
+        this.removeLastIfNewLine();
         this._currentIndentation--;
         this.writeLine("}");
         return this;
@@ -58,6 +59,11 @@ var CodeBlockWriter = (function () {
     };
     CodeBlockWriter.prototype.toString = function () {
         return this._text;
+    };
+    CodeBlockWriter.prototype.removeLastIfNewLine = function () {
+        if (this.isLastLineBlankLine() && this.isCurrentLineBlank()) {
+            this._text = this._text.substr(0, this._text.length - this._newLine.length);
+        }
     };
     CodeBlockWriter.prototype.isCurrentLineBlank = function () {
         return this.getCurrentLine().length === 0;

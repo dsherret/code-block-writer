@@ -15,6 +15,7 @@ export default class CodeBlockWriter {
         this.newLine();
         this._isAtStartOfBlock = true;
         block();
+        this.removeLastIfNewLine();
         this._currentIndentation--;
         this.writeLine("}");
 
@@ -77,6 +78,12 @@ export default class CodeBlockWriter {
 
     toString() {
         return this._text;
+    }
+
+    private removeLastIfNewLine() {
+        if (this.isLastLineBlankLine() && this.isCurrentLineBlank()) {
+            this._text = this._text.substr(0, this._text.length - this._newLine.length);
+        }
     }
 
     private isCurrentLineBlank() {
