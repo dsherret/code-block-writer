@@ -10,3 +10,4 @@
 *.sln
 /coverage
 /.vs
+/dist
