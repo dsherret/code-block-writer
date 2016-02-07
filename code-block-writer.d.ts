@@ -16,5 +16,5 @@ declare class CodeBlockWriter {
 }
 
 declare module "code-block-writer" {
-    export = CodeBlockWriter;
+    export default CodeBlockWriter;
 }
