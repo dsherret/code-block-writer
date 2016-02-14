@@ -7,6 +7,10 @@ code-block-writer
 
 A simple code writer that assists with formatting and visualizing blocks of code.
 
+```
+npm install --save code-block-writer
+```
+
 ## Example
 
 ```typescript
