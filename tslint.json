@@ -50,7 +50,10 @@
         "no-require-imports": false,
         "no-string-literal": false,
         "no-switch-case-fall-through": true,
-        "no-trailing-comma": true,
+        "trailing-comma": [true, {
+          "singleline": "never",
+          "multiline": "never"
+        }],
         "no-trailing-whitespace": true,
         "no-unreachable": true,
         "no-unused-expression": true,

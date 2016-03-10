@@ -4,9 +4,14 @@
         "module": "commonjs",
         "declaration": false,
         "sourceMap": false,
-        "noImplicitAny":  true,
+        "noImplicitAny": true,
         "removeComments": true,
         "experimentalDecorators": true,
-        "outDir": "dist"
-    }
+        "outDir": "dist",
+        "rootDir": "src"
+    },
+    "exclude": [
+        "typings/browser.d.ts",
+        "typings/browser"
+    ]
 }
