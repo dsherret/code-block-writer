@@ -1,4 +1,4 @@
-declare class CodeBlockWriter {
+export default class CodeBlockWriter {
     private _currentIndentation;
     private _text;
     private _numberSpaces;
