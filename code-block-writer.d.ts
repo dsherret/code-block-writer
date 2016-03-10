@@ -14,7 +14,3 @@ declare class CodeBlockWriter {
     toString(): string;
     private _getCurrentIndentationNumberSpaces();
 }
-
-declare module "code-block-writer" {
-    export default CodeBlockWriter;
-}

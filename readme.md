@@ -9,6 +9,7 @@ A simple code writer that assists with formatting and visualizing blocks of code
 
 ```
 npm install --save code-block-writer
+typings install npm:code-block-writer --save
 ```
 
 ## Example
