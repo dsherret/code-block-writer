@@ -46,6 +46,20 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.write(null);
             });
         });
+
+        it("should indent if it's passed a newline character inside a block", () => {
+            const expected =
+`test {
+    inside
+    inside
+}
+`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.write(`inside${opts.newLine}inside`);
+                });
+            });
+        });
     });
 
     describe("block()", () => {
@@ -222,6 +236,20 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 
             doTest(expected, writer => {
                 writer.write("text").newLine().newLine();
+            });
+        });
+
+        it("should indent if it's passed a newline character inside a block", () => {
+            const expected =
+`test {
+    inside
+    inside
+}
+`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.writeLine(`inside${opts.newLine}inside`);
+                });
             });
         });
     });
