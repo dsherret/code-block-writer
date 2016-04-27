@@ -287,4 +287,18 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             assert.equal(writer.getLength(), 4);
         });
     });
+
+    describe("conditionalWrite()", () => {
+        it("should write when the condition is true", () => {
+            doTest("test", writer => {
+                writer.conditionalWrite(true, "test");
+            });
+        });
+
+        it("should not write when the condition is false", () => {
+            doTest("", writer => {
+                writer.conditionalWrite(false, "test");
+            });
+        });
+    });
 }

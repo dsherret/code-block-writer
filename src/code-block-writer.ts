@@ -58,6 +58,13 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    conditionalWrite(condition: boolean, str: string) {
+        if (condition) {
+            this.write(str);
+        }
+        return this;
+    }
+
     write(str: string) {
         this.writeIndentingNewLines(str);
         return this;
