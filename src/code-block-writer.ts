@@ -26,21 +26,37 @@ export default class CodeBlockWriter {
         block();
         this.removeLastIfNewLine();
         this._currentIndentation--;
-        this.newLineIfLastCharNotNewLine().write("}");
+        this.newLineIfLastNotNewLine().write("}");
+
+        return this;
+    }
+
+    conditionalWriteLine(condition: boolean, str: string) {
+        if (condition) {
+            this.writeLine(str);
+        }
 
         return this;
     }
 
     writeLine(str: string) {
-        this.newLineIfLastCharNotNewLine();
+        this.newLineIfLastNotNewLine();
         this.writeIndentingNewLines(str);
         this.newLine();
 
         return this;
     }
 
-    newLineIfLastCharNotNewLine() {
+    newLineIfLastNotNewLine() {
         if (!this.isLastCharANewLine()) {
+            this.newLine();
+        }
+
+        return this;
+    }
+
+    conditionalNewLine(condition: boolean) {
+        if (condition) {
             this.newLine();
         }
 
@@ -112,8 +128,9 @@ export default class CodeBlockWriter {
 
     private removeConsecutiveNewLineAtEndOfString(text: string) {
         const consecutiveNewline = this._newLine + this._newLine;
+        const lastIndexOfConsecutiveNewLines = text.lastIndexOf(consecutiveNewline);
 
-        if (text.lastIndexOf(consecutiveNewline) === text.length - consecutiveNewline.length) {
+        if (lastIndexOfConsecutiveNewLines >= 0 && lastIndexOfConsecutiveNewLines === text.length - consecutiveNewline.length) {
             text = text.substr(0, text.length - this._newLine.length);
         }
 

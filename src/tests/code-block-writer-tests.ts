@@ -30,7 +30,15 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         assert.equal(writer.toString(), expected.replace(/\r?\n/g, opts.newLine));
     }
 
-    describe("write", () => {
+    describe("#write()", () => {
+        it("should write a single letter", () => {
+            const expected = `a`;
+
+            doTest(expected, writer => {
+                writer.write("a");
+            });
+        });
+
         it("should write the text", () => {
             const expected = `test`;
 
@@ -62,7 +70,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("block()", () => {
+    describe("#block()", () => {
         it("should write text inside a block", () => {
             const expected =
 `test {
@@ -136,7 +144,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("inlineBlock()", () => {
+    describe("#inlineBlock()", () => {
         it("should do an inline block correctly", () => {
             const expected = `someCall({\n    console.log();\n});`;
 
@@ -148,7 +156,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("writeLine()", () => {
+    describe("#writeLine()", () => {
         it("should write some text on a line", () => {
             const expected = `test\n`;
 
@@ -174,12 +182,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("newLineIfLastCharNotNewLine()", () => {
+    describe("#newLineIfLastNotNewLine()", () => {
         it("should do a newline if the last text was not a newline", () => {
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.write("test").newLineIfLastCharNotNewLine();
+                writer.write("test").newLineIfLastNotNewLine();
             });
         });
 
@@ -187,12 +195,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.writeLine("test").newLineIfLastCharNotNewLine();
+                writer.writeLine("test").newLineIfLastNotNewLine();
             });
         });
     });
 
-    describe("newLine()", () => {
+    describe("#newLine()", () => {
         it("should do a newline when writing", () => {
             const expected = `test\n`;
 
@@ -266,7 +274,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("spaceIfLastNotSpace()", () => {
+    describe("#spaceIfLastNotSpace()", () => {
         it("should do a space if the last character wasn't a space", () => {
             const expected = `test `;
 
@@ -292,7 +300,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("getLength()", () => {
+    describe("#getLength()", () => {
         it("should return the length", () => {
             const writer = getWriter();
             writer.write("1234");
@@ -300,7 +308,21 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
-    describe("conditionalWrite()", () => {
+    describe("#conditionalNewLine()", () => {
+        it("should write when the condition is true", () => {
+            doTest("t\n", writer => {
+                writer.write("t").conditionalNewLine(true);
+            });
+        });
+
+        it("should not write when the condition is false", () => {
+            doTest("t", writer => {
+                writer.write("t").conditionalNewLine(false);
+            });
+        });
+    });
+
+    describe("#conditionalWrite()", () => {
         it("should write when the condition is true", () => {
             doTest("test", writer => {
                 writer.conditionalWrite(true, "test");
@@ -310,6 +332,20 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         it("should not write when the condition is false", () => {
             doTest("", writer => {
                 writer.conditionalWrite(false, "test");
+            });
+        });
+    });
+
+    describe("#conditionalWriteLine()", () => {
+        it("should write when the condition is true", () => {
+            doTest("test\n", writer => {
+                writer.conditionalWriteLine(true, "test");
+            });
+        });
+
+        it("should not write when the condition is false", () => {
+            doTest("", writer => {
+                writer.conditionalWriteLine(false, "test");
             });
         });
     });
