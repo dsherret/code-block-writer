@@ -351,7 +351,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 }
 
-describe("numberSpaces", () => {
+describe("indentNumberOfSpaces", () => {
     const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });
     writer.write("do").block(() => {
         writer.write("something");
@@ -364,6 +364,27 @@ describe("numberSpaces", () => {
 `;
 
     it("should indent 2 spaces", () => {
+        assert.equal(writer.toString(), expected);
+    });
+});
+
+describe("useTabs", () => {
+    const writer = new CodeBlockWriter({ useTabs: true });
+    writer.write("do").block(() => {
+        writer.write("do").block(() => {
+            writer.write("something");
+        });
+    });
+
+    const expected =
+`do {
+\tdo {
+\t\tsomething
+\t}
+}
+`;
+
+    it("should use tabs", () => {
         assert.equal(writer.toString(), expected);
     });
 });

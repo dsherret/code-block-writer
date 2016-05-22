@@ -2,12 +2,14 @@ export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
     private _numberSpaces: number;
+    private _useTabs: boolean;
     private _newLine: string;
     private _isAtStartOfBlock = false;
 
-    constructor(opts: { newLine?: string; indentNumberOfSpaces?: number; } = null) {
+    constructor(opts: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; } = null) {
         this._newLine = (opts && opts.newLine) || "\n";
         this._numberSpaces = (opts && opts.indentNumberOfSpaces) || 4;
+        this._useTabs = (opts && opts.useTabs) || false;
     }
 
     block(block: () => void) {
@@ -192,7 +194,12 @@ export default class CodeBlockWriter {
     }
 
     private writeIndentation() {
-        this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
+        if (this._useTabs) {
+            this._text += Array(this._currentIndentation + 1).join("\t");
+        }
+        else {
+            this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
+        }
     }
 
     private _getCurrentIndentationNumberSpaces() {
