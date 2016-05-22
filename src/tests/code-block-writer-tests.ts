@@ -136,6 +136,18 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
+    describe("inlineBlock()", () => {
+        it("should do an inline block correctly", () => {
+            const expected = `someCall({\n    console.log();\n});`;
+
+            doTest(expected, writer => {
+                writer.write("someCall(").inlineBlock(() => {
+                    writer.write("console.log();");
+                }).write(");");
+            });
+        });
+    });
+
     describe("writeLine()", () => {
         it("should write some text on a line", () => {
             const expected = `test\n`;

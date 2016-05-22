@@ -10,14 +10,22 @@ export default class CodeBlockWriter {
     }
 
     block(block: () => void) {
-        this.spaceIfLastNotSpace().write("{");
+        this.spaceIfLastNotSpace();
+        this.inlineBlock(block);
+        this.newLine();
+
+        return this;
+    }
+
+    inlineBlock(block: () => void) {
+        this.write("{");
         this._currentIndentation++;
         this.newLine();
         this._isAtStartOfBlock = true;
         block();
         this.removeLastIfNewLine();
         this._currentIndentation--;
-        this.writeLine("}");
+        this.newLineIfLastCharNotNewLine().write("}");
 
         return this;
     }
