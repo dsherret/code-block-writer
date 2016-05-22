@@ -9,9 +9,5 @@
         "experimentalDecorators": true,
         "outDir": "dist",
         "rootDir": "src"
-    },
-    "exclude": [
-        "typings/browser.d.ts",
-        "typings/browser"
-    ]
+    }
 }
