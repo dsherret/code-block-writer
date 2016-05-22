@@ -314,3 +314,20 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 }
+
+describe("numberSpaces", () => {
+    const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });
+    writer.write("do").block(() => {
+        writer.write("something");
+    });
+
+    const expected =
+`do {
+  something
+}
+`;
+
+    it("should indent 2 spaces", () => {
+        assert.equal(writer.toString(), expected);
+    });
+});

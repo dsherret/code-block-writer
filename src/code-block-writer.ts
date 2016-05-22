@@ -1,12 +1,13 @@
 export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
-    private _numberSpaces = 4;
+    private _numberSpaces: number;
     private _newLine: string;
     private _isAtStartOfBlock = false;
 
-    constructor(opts: { newLine: string } = null) {
+    constructor(opts: { newLine?: string; indentNumberOfSpaces?: number; } = null) {
         this._newLine = (opts && opts.newLine) || "\n";
+        this._numberSpaces = (opts && opts.indentNumberOfSpaces) || 4;
     }
 
     block(block: () => void) {
