@@ -1,5 +1,6 @@
 export default class CodeBlockWriter {
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; });
+    blankLine(): CodeBlockWriter;
     block(block: () => void): CodeBlockWriter;
     inlineBlock(block: () => void): CodeBlockWriter;
     conditionalNewLine(condition: boolean): CodeBlockWriter;

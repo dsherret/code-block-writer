@@ -51,7 +51,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             const expected = "";
 
             doTest(expected, writer => {
-                writer.write(null);
+                writer.write(null as any as string);
             });
         });
 
@@ -178,6 +178,32 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 
             doTest(expected, writer => {
                 writer.writeLine("test").writeLine("test");
+            });
+        });
+    });
+
+    describe("#blankLine()", () => {
+        it("should do a blank line if the last text was not a new line", () => {
+            const expected = `test\n\ntest`;
+
+            doTest(expected, writer => {
+                writer.write("test").blankLine().write("test");
+            });
+        });
+
+        it("should do a blank line if the last text was a newline", () => {
+            const expected = `test\n\ntest`;
+
+            doTest(expected, writer => {
+                writer.writeLine("test").blankLine().write("test");
+            });
+        });
+
+        it("should not do a blank line if the last was a blank line", () => {
+            const expected = `test\n\ntest`;
+
+            doTest(expected, writer => {
+                writer.writeLine("test").newLine().blankLine().write("test");
             });
         });
     });

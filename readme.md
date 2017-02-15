@@ -17,7 +17,12 @@ npm install --save code-block-writer
 ```typescript
 import CodeBlockWriter from "code-block-writer";
 
-const writer = new CodeBlockWriter({ newLine: "\r\n" }); // optional options (newLine defaults to "\n")
+const writer = new CodeBlockWriter({
+    // optional options
+    newLine: "\r\n",         // default: "\n"
+    indentNumberOfSpaces: 2, // default: 4
+    useTabs: false           // default: false
+});
 const className = "MyClass";
 
 writer.write(`class ${className} extends OtherClass`).block(() => {

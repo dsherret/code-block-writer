@@ -6,7 +6,7 @@ export default class CodeBlockWriter {
     private _newLine: string;
     private _isAtStartOfBlock = false;
 
-    constructor(opts: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; } = null) {
+    constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
         this._numberSpaces = (opts && opts.indentNumberOfSpaces) || 4;
         this._useTabs = (opts && opts.useTabs) || false;
@@ -34,9 +34,8 @@ export default class CodeBlockWriter {
     }
 
     conditionalWriteLine(condition: boolean, str: string) {
-        if (condition) {
+        if (condition)
             this.writeLine(str);
-        }
 
         return this;
     }
@@ -50,17 +49,19 @@ export default class CodeBlockWriter {
     }
 
     newLineIfLastNotNewLine() {
-        if (!this.isLastCharANewLine()) {
+        if (!this.isLastCharANewLine())
             this.newLine();
-        }
 
         return this;
     }
 
+    blankLine() {
+        return this.newLine().newLine();
+    }
+
     conditionalNewLine(condition: boolean) {
-        if (condition) {
+        if (condition)
             this.newLine();
-        }
 
         return this;
     }
@@ -68,9 +69,8 @@ export default class CodeBlockWriter {
     newLine() {
         const willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
 
-        if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0) {
+        if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0)
             this.baseWrite(this._newLine);
-        }
 
         return this;
     }
@@ -78,17 +78,16 @@ export default class CodeBlockWriter {
     spaceIfLastNotSpace() {
         const lastChar = this.getLastChar();
 
-        if (lastChar != null && lastChar !== " " && !this.isLastCharANewLine()) {
+        if (lastChar != null && lastChar !== " " && !this.isLastCharANewLine())
             this.baseWrite(" ");
-        }
 
         return this;
     }
 
     conditionalWrite(condition: boolean, str: string) {
-        if (condition) {
+        if (condition)
             this.write(str);
-        }
+
         return this;
     }
 
@@ -107,9 +106,9 @@ export default class CodeBlockWriter {
 
     private writeIndentingNewLines(str: string) {
         (str || "").split(/\r?\n/).forEach((s, i) => {
-            if (i > 0) {
+            if (i > 0)
                 this.newLine();
-            }
+
             this.baseWrite(s);
         });
     }
@@ -117,13 +116,13 @@ export default class CodeBlockWriter {
     private baseWrite(str: string) {
         this._isAtStartOfBlock = false;
 
-        if (str != null && str.length > 0) {
-            if (str !== this._newLine && this.isLastCharANewLine()) {
-                this.writeIndentation();
-            }
+        if (str == null || str.length === 0)
+            return this;
 
-            this._text += str;
-        }
+        if (str !== this._newLine && this.isLastCharANewLine())
+            this.writeIndentation();
+
+        this._text += str;
 
         return this;
     }
@@ -132,17 +131,15 @@ export default class CodeBlockWriter {
         const consecutiveNewline = this._newLine + this._newLine;
         const lastIndexOfConsecutiveNewLines = text.lastIndexOf(consecutiveNewline);
 
-        if (lastIndexOfConsecutiveNewLines >= 0 && lastIndexOfConsecutiveNewLines === text.length - consecutiveNewline.length) {
+        if (lastIndexOfConsecutiveNewLines >= 0 && lastIndexOfConsecutiveNewLines === text.length - consecutiveNewline.length)
             text = text.substr(0, text.length - this._newLine.length);
-        }
 
         return text;
     }
 
     private removeLastIfNewLine() {
-        if (this.isLastLineBlankLine() && this.isCurrentLineBlank()) {
+        if (this.isLastLineBlankLine() && this.isCurrentLineBlank())
             this._text = this._text.substr(0, this._text.length - this._newLine.length);
-        }
     }
 
     private isCurrentLineBlank() {
@@ -156,27 +153,24 @@ export default class CodeBlockWriter {
     private getCurrentLine() {
         const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
 
-        if (lastNewLineIndex >= 0) {
+        if (lastNewLineIndex >= 0)
             return this._text.substr(lastNewLineIndex + this._newLine.length);
-        }
-        else {
+        else
             return "";
-        }
     }
 
     private getLastLine() {
-        let lastLine: string;
         const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
 
-        if (lastNewLineIndex >= 0) {
-            const secondLastNewLineIndex = this._text.lastIndexOf(this._newLine, lastNewLineIndex - 1);
+        if (lastNewLineIndex < 0)
+            return null;
 
-            if (secondLastNewLineIndex >= 0) {
-                lastLine = this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
-            }
-        }
+        let secondLastNewLineIndex = this._text.lastIndexOf(this._newLine, lastNewLineIndex - 1);
 
-        return lastLine;
+        if (secondLastNewLineIndex === -1)
+            secondLastNewLineIndex = 0;
+
+        return this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
     }
 
     private isLastCharANewLine() {
@@ -184,22 +178,19 @@ export default class CodeBlockWriter {
     }
 
     private getLastChar() {
-        let lastChar: string;
+        let lastChar: string | null = null;
 
-        if (this._text.length > 0) {
+        if (this._text.length > 0)
             lastChar = this._text[this._text.length - 1];
-        }
 
         return lastChar;
     }
 
     private writeIndentation() {
-        if (this._useTabs) {
+        if (this._useTabs)
             this._text += Array(this._currentIndentation + 1).join("\t");
-        }
-        else {
+        else
             this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
-        }
     }
 
     private _getCurrentIndentationNumberSpaces() {
