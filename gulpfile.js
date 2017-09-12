@@ -34,8 +34,8 @@ gulp.task("test", ["pre-test"], function() {
 
 gulp.task("tslint", function() {
     return gulp.src(["./src/**/*.ts", "!./src/typings/**/*.d.ts"])
-        .pipe(tslint())
-        .pipe(tslint.report("verbose"));
+        .pipe(tslint({ formatter: "verbose" }))
+        .pipe(tslint.report());
 });
 
 gulp.task("watch", function() {

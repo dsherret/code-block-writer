@@ -11,6 +11,7 @@ export default class CodeBlockWriter {
     newLineIfLastNotNewLine(): CodeBlockWriter;
     newLine(): CodeBlockWriter;
     spaceIfLastNotSpace(): CodeBlockWriter;
+    indent(): CodeBlockWriter;
     write(str: string): CodeBlockWriter;
     toString(): string;
 }

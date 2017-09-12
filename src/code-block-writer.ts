@@ -1,22 +1,19 @@
 export default class CodeBlockWriter {
+    private readonly _indentationText: string;
+    private readonly _newLine: string;
     private _currentIndentation = 0;
     private _text = "";
-    private _numberSpaces: number;
-    private _useTabs: boolean;
-    private _newLine: string;
     private _isAtStartOfBlock = false;
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
-        this._numberSpaces = (opts && opts.indentNumberOfSpaces) || 4;
-        this._useTabs = (opts && opts.useTabs) || false;
+        this._indentationText = getIndentationText((opts && opts.useTabs) || false, (opts && opts.indentNumberOfSpaces) || 4);
     }
 
     block(block: () => void) {
         this.spaceIfLastNotSpace();
         this.inlineBlock(block);
         this.newLine();
-
         return this;
     }
 
@@ -57,6 +54,10 @@ export default class CodeBlockWriter {
 
     blankLine() {
         return this.newLine().newLine();
+    }
+
+    indent() {
+        return this.write(this._indentationText);
     }
 
     conditionalNewLine(condition: boolean) {
@@ -187,13 +188,12 @@ export default class CodeBlockWriter {
     }
 
     private writeIndentation() {
-        if (this._useTabs)
-            this._text += Array(this._currentIndentation + 1).join("\t");
-        else
-            this._text += Array(this._getCurrentIndentationNumberSpaces() + 1).join(" ");
+        this._text += Array(this._currentIndentation + 1).join(this._indentationText);
     }
+}
 
-    private _getCurrentIndentationNumberSpaces() {
-        return this._currentIndentation * this._numberSpaces;
-    }
+function getIndentationText(useTabs: boolean, numberSpaces: number) {
+    if (useTabs)
+        return "\t";
+    return Array(numberSpaces + 1).join(" ");
 }

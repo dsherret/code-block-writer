@@ -208,6 +208,16 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
+    describe("#indent()", () => {
+        it("should indent as necessary", () => {
+            const expected = `test\n    test`;
+
+            doTest(expected, writer => {
+                writer.writeLine("test").indent().write("test");
+            });
+        });
+    });
+
     describe("#newLineIfLastNotNewLine()", () => {
         it("should do a newline if the last text was not a newline", () => {
             const expected = `test\n`;

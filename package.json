@@ -1,6 +1,6 @@
 {
   "name": "code-block-writer",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "A simple code writer that assists with formatting and visualizing blocks of code.",
   "main": "dist/code-block-writer.js",
   "typings": "code-block-writer.d.ts",
@@ -28,16 +28,16 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "coveralls": "^2.11.6",
+    "coveralls": "^2.13.1",
     "del": "^2.0.2",
     "gulp": "^3.9.1",
-    "gulp-istanbul": "^0.10.3",
+    "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^4.1.1",
-    "gulp-typescript": "^2.9.2",
-    "mocha": "^2.3.3",
-    "tslint": "^3.1.1",
-    "typescript": "^2.1.6"
+    "gulp-tslint": "^8.1.1",
+    "gulp-typescript": "^2.13.3",
+    "mocha": "^3.3.0",
+    "tslint": "^5.6.0",
+    "typescript": "^2.5.2"
   }
 }
