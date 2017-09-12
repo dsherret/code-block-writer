@@ -55,6 +55,7 @@ class MyClass extends OtherClass {
 * `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
 * `newLine()` - Writes a newline.
 * `blankLine()` - Writes a blank line. Does not allow consecutive blank lines.
+* `indent()` - Indents the current line.
 * `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
