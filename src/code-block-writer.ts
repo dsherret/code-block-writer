@@ -106,11 +106,16 @@ export default class CodeBlockWriter {
     }
 
     private writeIndentingNewLines(str: string) {
-        (str || "").split(/\r?\n/).forEach((s, i) => {
+        const items = (str || "").split(/\r?\n/);
+        items.forEach((s, i) => {
+            // don't use .newLine() here because we want to write out all the newlines the user requested
             if (i > 0)
-                this.newLine();
+                this.baseWrite(this._newLine);
 
             this.baseWrite(s);
+
+            if (i > 0 && i === items.length - 1 && s.length === 0)
+                this.baseWrite(this._newLine);
         });
     }
 

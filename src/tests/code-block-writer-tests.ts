@@ -68,6 +68,14 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 });
             });
         });
+
+        it("should write all requested newlines", () => {
+            const expected = "\n\ntest\n\n";
+
+            doTest(expected, writer => {
+                writer.write("\n\ntest\n\n");
+            });
+        });
     });
 
     describe("#block()", () => {
