@@ -4,6 +4,7 @@ export default class CodeBlockWriter {
     private _currentIndentation = 0;
     private _text = "";
     private _isAtStartOfBlock = false;
+    private _newLineOnNextWrite = false;
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
@@ -11,19 +12,20 @@ export default class CodeBlockWriter {
     }
 
     block(block: () => void) {
+        this.newLineIfNewLineOnNextWrite();
         this.spaceIfLastNotSpace();
         this.inlineBlock(block);
-        this.newLine();
+        this._newLineOnNextWrite = true;
         return this;
     }
 
     inlineBlock(block: () => void) {
+        this.newLineIfNewLineOnNextWrite();
         this.write("{");
         this._currentIndentation++;
         this.newLine();
         this._isAtStartOfBlock = true;
         block();
-        this.removeLastIfNewLine();
         this._currentIndentation--;
         this.newLineIfLastNotNewLine().write("}");
 
@@ -38,7 +40,9 @@ export default class CodeBlockWriter {
     }
 
     writeLine(str: string) {
-        this.newLineIfLastNotNewLine();
+        this.newLineIfNewLineOnNextWrite();
+        if (this._text.length > 0)
+            this.newLineIfLastNotNewLine();
         this.writeIndentingNewLines(str);
         this.newLine();
 
@@ -46,6 +50,8 @@ export default class CodeBlockWriter {
     }
 
     newLineIfLastNotNewLine() {
+        this.newLineIfNewLineOnNextWrite();
+
         if (!this.isLastCharANewLine())
             this.newLine();
 
@@ -53,10 +59,11 @@ export default class CodeBlockWriter {
     }
 
     blankLine() {
-        return this.newLine().newLine();
+        return this.newLineIfLastNotNewLine().newLine();
     }
 
     indent() {
+        this.newLineIfNewLineOnNextWrite();
         return this.write(this._indentationText);
     }
 
@@ -68,18 +75,16 @@ export default class CodeBlockWriter {
     }
 
     newLine() {
-        const willCreateAConsecutiveBlankLine = this.isLastLineBlankLine() && this.isCurrentLineBlank();
-
-        if (!willCreateAConsecutiveBlankLine && !this._isAtStartOfBlock && this._text.length !== 0)
-            this.baseWrite(this._newLine);
-
+        this._newLineOnNextWrite = false;
+        this.baseWrite(this._newLine);
         return this;
     }
 
     spaceIfLastNotSpace() {
+        this.newLineIfNewLineOnNextWrite();
         const lastChar = this.getLastChar();
 
-        if (lastChar != null && lastChar !== " " && !this.isLastCharANewLine())
+        if (lastChar !== " ")
             this.baseWrite(" ");
 
         return this;
@@ -93,6 +98,7 @@ export default class CodeBlockWriter {
     }
 
     write(str: string) {
+        this.newLineIfNewLineOnNextWrite();
         this.writeIndentingNewLines(str);
         return this;
     }
@@ -143,42 +149,6 @@ export default class CodeBlockWriter {
         return text;
     }
 
-    private removeLastIfNewLine() {
-        if (this.isLastLineBlankLine() && this.isCurrentLineBlank())
-            this._text = this._text.substr(0, this._text.length - this._newLine.length);
-    }
-
-    private isCurrentLineBlank() {
-        return this.getCurrentLine().length === 0;
-    }
-
-    private isLastLineBlankLine() {
-        return this.getLastLine() === this._newLine;
-    }
-
-    private getCurrentLine() {
-        const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
-
-        if (lastNewLineIndex >= 0)
-            return this._text.substr(lastNewLineIndex + this._newLine.length);
-        else
-            return "";
-    }
-
-    private getLastLine() {
-        const lastNewLineIndex = this._text.lastIndexOf(this._newLine);
-
-        if (lastNewLineIndex < 0)
-            return null;
-
-        let secondLastNewLineIndex = this._text.lastIndexOf(this._newLine, lastNewLineIndex - 1);
-
-        if (secondLastNewLineIndex === -1)
-            secondLastNewLineIndex = 0;
-
-        return this._text.substr(secondLastNewLineIndex, lastNewLineIndex - secondLastNewLineIndex);
-    }
-
     private isLastCharANewLine() {
         return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
     }
@@ -194,6 +164,13 @@ export default class CodeBlockWriter {
 
     private writeIndentation() {
         this._text += Array(this._currentIndentation + 1).join(this._indentationText);
+    }
+
+    private newLineIfNewLineOnNextWrite() {
+        if (!this._newLineOnNextWrite)
+            return;
+        this._newLineOnNextWrite = false;
+        this.newLine();
     }
 }
 

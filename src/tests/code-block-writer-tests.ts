@@ -60,8 +60,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 `test {
     inside
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test ").block(() => {
                     writer.write(`inside${opts.newLine}inside`);
@@ -83,8 +82,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             const expected =
 `test {
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test").block(() => {
                     writer.write("inside");
@@ -98,8 +96,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     inside {
         inside again
     }
-}
-`;
+}`;
 
             doTest(expected, writer => {
                 writer.write("test").block(() => {
@@ -114,8 +111,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             const expected =
 `test {
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test ").block(() => {
                     writer.write("inside");
@@ -129,8 +125,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     inside
 
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test ").block(() => {
                     writer.writeLine("inside").newLine().write("inside");
@@ -138,16 +133,36 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should remove a newline if the last thing before the block was a newline", () => {
+        it("should not add an extra newline if the last character written in the block was a newline", () => {
             const expected =
 `test {
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test ").block(() => {
-                    writer.writeLine("inside").newLine();
+                    writer.writeLine("inside");
                 });
+            });
+        });
+
+        it("should add a newline after the block when writing afterwards", () => {
+            const expected =
+` {
+    t;
+}
+ `;
+            doTest(expected, writer => {
+                writer.block(() => writer.write("t;")).write(" ");
+            });
+        });
+
+        it("should not add a newline after the block when doing a condition call and the conditions are false", () => {
+            const expected =
+` {
+    t;
+}`;
+            doTest(expected, writer => {
+                writer.block(() => writer.write("t;")).conditionalWrite(false, " ").conditionalWriteLine(false, " ").conditionalNewLine(false);
             });
         });
     });
@@ -207,11 +222,11 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a blank line if the last was a blank line", () => {
-            const expected = `test\n\ntest`;
+        it("should do a blank line if the last was a blank line", () => {
+            const expected = `test\n\n\ntest`;
 
             doTest(expected, writer => {
-                writer.writeLine("test").newLine().blankLine().write("test");
+                writer.writeLine("test").blankLine().blankLine().write("test");
             });
         });
     });
@@ -261,16 +276,16 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a newline at the start", () => {
-            const expected = ``;
+        it("should allow doing a newline at the start", () => {
+            const expected = `\n`;
 
             doTest(expected, writer => {
                 writer.newLine();
             });
         });
 
-        it("should not do a newline after doing a block", () => {
-            const expected = `test {\n    test\n}\n`;
+        it("should allow doing a newline after doing a block", () => {
+            const expected = `test {\n\n    test\n}`;
 
             doTest(expected, writer => {
                 writer.write("test").block(() => {
@@ -279,8 +294,8 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a newline if the last line was a blank line (no consecutive blank lines)", () => {
-            const expected = `test\n\ntext`;
+        it("should allow doing a newline if the last line was a blank line (allow consecutive blank lines)", () => {
+            const expected = `test\n\n\ntext`;
 
             doTest(expected, writer => {
                 writer.write("test").newLine().newLine().newLine().write("text");
@@ -308,8 +323,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 `test {
     inside
     inside
-}
-`;
+}`;
             doTest(expected, writer => {
                 writer.write("test ").block(() => {
                     writer.writeLine(`inside${opts.newLine}inside`);
@@ -319,6 +333,14 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 
     describe("#spaceIfLastNotSpace()", () => {
+        it("should do a space at the beginning of the file", () => {
+            const expected = ` `;
+
+            doTest(expected, writer => {
+                writer.spaceIfLastNotSpace();
+            });
+        });
+
         it("should do a space if the last character wasn't a space", () => {
             const expected = `test `;
 
@@ -335,8 +357,8 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a space if the last character was a newline", () => {
-            const expected = `test\n`;
+        it("should do a space if the last character was a newline", () => {
+            const expected = `test\n `;
 
             doTest(expected, writer => {
                 writer.write("test").newLine().spaceIfLastNotSpace();
@@ -404,8 +426,7 @@ describe("indentNumberOfSpaces", () => {
     const expected =
 `do {
   something
-}
-`;
+}`;
 
     it("should indent 2 spaces", () => {
         assert.equal(writer.toString(), expected);
@@ -425,8 +446,7 @@ describe("useTabs", () => {
 \tdo {
 \t\tsomething
 \t}
-}
-`;
+}`;
 
     it("should use tabs", () => {
         assert.equal(writer.toString(), expected);
