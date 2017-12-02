@@ -3,7 +3,7 @@
   "version": "6.1.0",
   "description": "A simple code writer that assists with formatting and visualizing blocks of code.",
   "main": "dist/code-block-writer.js",
-  "typings": "code-block-writer.d.ts",
+  "typings": "dist/code-block-writer.d.ts",
   "scripts": {
     "test": "gulp test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build": "gulp typescript"
@@ -28,14 +28,16 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.53",
     "coveralls": "^2.13.1",
     "del": "^2.0.2",
     "gulp": "^3.9.1",
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^2.2.0",
-    "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^8.1.1",
     "gulp-typescript": "^2.13.3",
+    "merge2": "^1.2.0",
     "mocha": "^3.3.0",
     "tslint": "^5.6.0",
     "typescript": "^2.5.2"

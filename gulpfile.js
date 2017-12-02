@@ -4,7 +4,7 @@ var mocha = require("gulp-mocha");
 var istanbul = require("gulp-istanbul");
 var ts = require("gulp-typescript");
 var tslint = require("gulp-tslint");
-var sourcemaps = require("gulp-sourcemaps");
+var merge = require("merge2");
 var p = require("./package.json");
 
 gulp.task("typescript", ["clean-scripts"], function() {
@@ -12,11 +12,13 @@ gulp.task("typescript", ["clean-scripts"], function() {
         typescript: require("typescript")
     });
 
-    return gulp.src(["./typings/main.d.ts", "./src/**/*.ts"])
-        .pipe(sourcemaps.init())
-        .pipe(ts(tsProject))
-        .pipe(sourcemaps.write("./"))
-        .pipe(gulp.dest("./dist"));
+    var tsResult = gulp.src(["./src/**/*.ts"])
+        .pipe(ts(tsProject));
+
+    return merge([
+        tsResult.dts.pipe(gulp.dest('./dist')),
+        tsResult.js.pipe(gulp.dest("./dist"))
+    ]);
 });
 
 gulp.task("pre-test", ["typescript"], function () {

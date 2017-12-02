@@ -2,13 +2,14 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
-        "declaration": false,
+        "declaration": true,
         "sourceMap": false,
-        "noImplicitAny": true,
         "removeComments": true,
         "experimentalDecorators": true,
         "outDir": "dist",
         "rootDir": "src",
-        "strictNullChecks": true
+        "typeRoots": [ "node_modules/@types/" ],
+        "types": [ "node", "mocha" ],
+        "strict": true
     }
 }
