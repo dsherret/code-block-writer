@@ -53,7 +53,7 @@ export default class CodeBlockWriter {
      * Writes a block using braces.
      * @param block - Write using the writer within this block.
      */
-    block(block: () => void) {
+    block(block?: () => void) {
         this.newLineIfNewLineOnNextWrite();
         this.spaceIfLastNotSpace();
         this.inlineBlock(block);
@@ -65,12 +65,13 @@ export default class CodeBlockWriter {
      * Writes an inline block with braces.
      * @param block - Write using the writer within this block.
      */
-    inlineBlock(block: () => void) {
+    inlineBlock(block?: () => void) {
         this.newLineIfNewLineOnNextWrite();
         this.write("{");
         this._currentIndentation++;
         this.newLine();
-        block();
+        if (block != null)
+            block();
         if (this._currentIndentation > 0)
             this._currentIndentation--;
         this.newLineIfLastNotNewLine().write("}");
@@ -83,7 +84,7 @@ export default class CodeBlockWriter {
      * @param condition - Condition to evaluate.
      * @param str - String to write if the condition is true.
      */
-    conditionalWriteLine(condition: boolean, str: string) {
+    conditionalWriteLine(condition: boolean | undefined, str: string) {
         if (condition)
             this.writeLine(str);
 
@@ -135,7 +136,7 @@ export default class CodeBlockWriter {
      * Writes a newline if the condition is true.
      * @param condition - Condition to evaluate.
      */
-    conditionalNewLine(condition: boolean) {
+    conditionalNewLine(condition: boolean | undefined) {
         if (condition)
             this.newLine();
 
@@ -169,7 +170,7 @@ export default class CodeBlockWriter {
      * @param condition - Condition to evaluate.
      * @param str - Text to write.
      */
-    conditionalWrite(condition: boolean, str: string) {
+    conditionalWrite(condition: boolean | undefined, str: string) {
         if (condition)
             this.write(str);
 

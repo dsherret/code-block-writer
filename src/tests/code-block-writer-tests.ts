@@ -87,6 +87,15 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 
     describe("#block()", () => {
+        it("should allow an empty block", () => {
+            const expected =
+`test {
+}`;
+            doTest(expected, writer => {
+                writer.write("test").block();
+            });
+        });
+
         it("should write text inside a block", () => {
             const expected =
 `test {
@@ -197,6 +206,14 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 
     describe("#inlineBlock()", () => {
+        it("should allow an empty inline block", () => {
+            const expected = `someCall({\n});`;
+
+            doTest(expected, writer => {
+                writer.write("someCall(").inlineBlock().write(");");
+            });
+        });
+
         it("should do an inline block correctly", () => {
             const expected = `someCall({\n    console.log();\n});`;
 
@@ -415,6 +432,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.write("t").conditionalNewLine(false);
             });
         });
+
+        it("should not write when the condition is undefined", () => {
+            doTest("t", writer => {
+                writer.write("t").conditionalNewLine(undefined);
+            });
+        });
     });
 
     describe("#conditionalWrite()", () => {
@@ -429,6 +452,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.conditionalWrite(false, "test");
             });
         });
+
+        it("should not write when the condition is undefined", () => {
+            doTest("", writer => {
+                writer.conditionalWrite(undefined, "test");
+            });
+        });
     });
 
     describe("#conditionalWriteLine()", () => {
@@ -441,6 +470,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         it("should not write when the condition is false", () => {
             doTest("", writer => {
                 writer.conditionalWriteLine(false, "test");
+            });
+        });
+
+        it("should not write when the condition is undefined", () => {
+            doTest("", writer => {
+                writer.conditionalWriteLine(undefined, "test");
             });
         });
     });
