@@ -3,6 +3,8 @@ import {CommentChar} from "./CommentChar";
 export default class CodeBlockWriter {
     private readonly _indentationText: string;
     private readonly _newLine: string;
+    private readonly _useTabs: boolean;
+    private readonly _indentNumberOfSpaces: number;
     private _currentIndentation = 0;
     private _text = "";
     private _newLineOnNextWrite = false;
@@ -11,7 +13,40 @@ export default class CodeBlockWriter {
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
-        this._indentationText = getIndentationText((opts && opts.useTabs) || false, (opts && opts.indentNumberOfSpaces) || 4);
+        this._useTabs = (opts && opts.useTabs) || false;
+        this._indentNumberOfSpaces = (opts && opts.indentNumberOfSpaces) || 4;
+        this._indentationText = getIndentationText(this._useTabs, this._indentNumberOfSpaces);
+    }
+
+    /**
+     * Sets the current indentation level.
+     * @param indentationLevel - Indentation level to be at.
+     */
+    setIndentationLevel(indentationLevel: number): this;
+    /**
+     * Sets the current indentation using the provided indentation text.
+     * @param indentationText - Gets the indentation level from the indentation text.
+     */
+    setIndentationLevel(indentationText: string): this;
+    setIndentationLevel(countOrText: string | number) {
+        if (typeof countOrText === "number") {
+            if (countOrText < 0)
+                throw new Error("Passed in indentation level should be greater than or equal to 0.");
+            this._currentIndentation = countOrText;
+            return this;
+        }
+        else if (typeof countOrText === "string") {
+            if (!/^[ \t]*$/.test(countOrText))
+                throw new Error("Provided string must be empty or only contain spaces or tabs.");
+
+            const {spacesCount, tabsCount} = getSpacesAndTabsCount(countOrText);
+            this._currentIndentation = tabsCount + Math.round(Math.max(0, spacesCount - 1) / this._indentNumberOfSpaces);
+
+            return this;
+        }
+        else {
+            throw new Error("Argument provided must be a string or number.");
+        }
     }
 
     /**
@@ -36,7 +71,8 @@ export default class CodeBlockWriter {
         this._currentIndentation++;
         this.newLine();
         block();
-        this._currentIndentation--;
+        if (this._currentIndentation > 0)
+            this._currentIndentation--;
         this.newLineIfLastNotNewLine().write("}");
 
         return this;
@@ -184,13 +220,15 @@ export default class CodeBlockWriter {
             if (i > 0)
                 this.baseWriteNewline();
 
-            if (s.length > 0) {
-                if (this.isLastCharANewLine() && !this.isInString())
-                    this.writeIndentation();
+            if (s.length === 0)
+                return;
 
-                this.updateStringStack(s);
-                this._text += s;
-            }
+            const isAtStartOfLine = this.isLastCharANewLine() || this._text.length === 0;
+            if (isAtStartOfLine && !this.isInString())
+                this.writeIndentation();
+
+            this.updateStringStack(s);
+            this._text += s;
         });
     }
 
@@ -255,4 +293,18 @@ function getIndentationText(useTabs: boolean, numberSpaces: number) {
     if (useTabs)
         return "\t";
     return Array(numberSpaces + 1).join(" ");
+}
+
+function getSpacesAndTabsCount(str: string) {
+    let spacesCount = 0;
+    let tabsCount = 0;
+
+    for (const char of str) {
+        if (char === "\t")
+            tabsCount++;
+        else if (char === " ")
+            spacesCount++;
+    }
+
+    return {spacesCount, tabsCount};
 }

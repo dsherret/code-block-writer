@@ -75,6 +75,15 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.write("\n\ntest\n\n");
             });
         });
+
+        it("should not write indentation between newlines", () => {
+            const expected = "    test\n\n    test";
+
+            doTest(expected, writer => {
+                writer.setIndentationLevel(1);
+                writer.write("test\n\ntest");
+            });
+        });
     });
 
     describe("#block()", () => {
@@ -437,8 +446,113 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 }
 
+describe("#setIdentationLevel", () => {
+    it("should throw when providing a negative number", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.setIndentationLevel(-1));
+    });
+
+    it("should throw when not providing a number or string", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.setIndentationLevel({} as any));
+    });
+
+    it("should not throw when providing an empty string", () => {
+        const writer = new CodeBlockWriter();
+        assert.doesNotThrow(() => writer.setIndentationLevel(""));
+    });
+
+    it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.setIndentationLevel("  \ta"));
+    });
+
+    it("should be able to set the indentation level and it maintains it over newlines", () => {
+        const writer = new CodeBlockWriter();
+        writer.setIndentationLevel(2);
+        writer.writeLine("t");
+        writer.writeLine("t");
+
+        assert.equal(writer.toString(), "        t\n        t\n");
+    });
+
+    it("should be able to set the indentation level to 0 within a block", () => {
+        const writer = new CodeBlockWriter();
+        writer.write("t").block(() => {
+            writer.setIndentationLevel(0);
+            writer.writeLine("t");
+            writer.writeLine("t");
+        }).write("t").block(() => {
+            writer.write("t");
+        });
+
+        assert.equal(writer.toString(), "t {\nt\nt\n}\nt {\n    t\n}");
+    });
+
+    function doSpacesTest(numberSpaces: number) {
+        const writer = new CodeBlockWriter({ indentNumberOfSpaces: numberSpaces });
+        const indent = Array(numberSpaces + 1).join(" ");
+        writer.setIndentationLevel(indent + indent);
+        writer.write("t").block(() => writer.write("t"));
+
+        assert.equal(writer.toString(), `${indent + indent}t {\n${indent + indent + indent}t\n${indent + indent}}`);
+    }
+
+    it("should be able to set the indentation level using a string with two spaces", () => {
+        doSpacesTest(2);
+    });
+
+    it("should be able to set the indentation level using a string with four spaces", () => {
+        doSpacesTest(4);
+    });
+
+    it("should be able to set the indentation level using a string with eight spaces", () => {
+        doSpacesTest(8);
+    });
+
+    it("should indent by the provided number of tabs", () => {
+        const writer = new CodeBlockWriter({ useTabs: true });
+        writer.setIndentationLevel("\t\t");
+        writer.write("s");
+
+        assert.equal(writer.toString(), `\t\ts`);
+    });
+
+    it("should indent to the nearest indent when mixing tabs and spaces (round down)", () => {
+        const writer = new CodeBlockWriter({ useTabs: true });
+        writer.setIndentationLevel("\t \t ");
+        writer.write("s");
+
+        assert.equal(writer.toString(), `\t\ts`);
+    });
+
+    it("should indent to the nearest indent when mixing tabs and spaces (round down, 2 spaces)", () => {
+        const writer = new CodeBlockWriter({ useTabs: true, indentNumberOfSpaces: 2 });
+        writer.setIndentationLevel("\t \t");
+        writer.write("s");
+
+        assert.equal(writer.toString(), `\t\ts`);
+    });
+
+    it("should indent to the nearest indent when mixing tabs and spaces (round up)", () => {
+        const writer = new CodeBlockWriter({ useTabs: true });
+        writer.setIndentationLevel("\t \t  ");
+        writer.write("s");
+
+        assert.equal(writer.toString(), `\t\t\ts`);
+    });
+
+    it("should indent to the nearest indent when mixing tabs and spaces (2 spaces)", () => {
+        const writer = new CodeBlockWriter({ useTabs: true, indentNumberOfSpaces: 2 });
+        writer.setIndentationLevel("\t \t     ");
+        writer.write("s");
+
+        assert.equal(writer.toString(), `\t\t\t\t\ts`);
+    });
+});
+
 describe("#isInString", () => {
-    function doInStringTest(str: string, expectedValues: boolean[]) {
+    function doTest(str: string, expectedValues: boolean[]) {
         assert.equal(str.length + 1, expectedValues.length);
         const writer = new CodeBlockWriter();
         assert.equal(writer.isInString(), expectedValues[0]);
@@ -449,64 +563,64 @@ describe("#isInString", () => {
     }
 
     it("should be in a string while in double quotes", () => {
-        doInStringTest(`s"y"`, [false, false, true, true, false]);
+        doTest(`s"y"`, [false, false, true, true, false]);
     });
 
     it("should be in a string while in single quotes", () => {
-        doInStringTest(`s'y'`, [false, false, true, true, false]);
+        doTest(`s'y'`, [false, false, true, true, false]);
     });
 
     it("should be in a string while in backticks", () => {
-        doInStringTest("s`y`", [false, false, true, true, false]);
+        doTest("s`y`", [false, false, true, true, false]);
     });
 
     it("should not be affected by other string quotes while in double quotes", () => {
-        doInStringTest(`"'\`\${}"`, [false, true, true, true, true, true, true, false]);
+        doTest(`"'\`\${}"`, [false, true, true, true, true, true, true, false]);
     });
 
     it("should not be affected by other string quotes while in single quotes", () => {
-        doInStringTest(`'"\`\${}'`, [false, true, true, true, true, true, true, false]);
+        doTest(`'"\`\${}'`, [false, true, true, true, true, true, true, false]);
     });
 
     it("should not be affected by other string quotes while in back ticks", () => {
-        doInStringTest(`\`'"\``, [false, true, true, true, false]);
+        doTest(`\`'"\``, [false, true, true, true, false]);
     });
 
     it("should not be in a string while in backticks within braces", () => {
-        doInStringTest("`y${t}`", [false, true, true, true, false, false, true, false]);
+        doTest("`y${t}`", [false, true, true, true, false, false, true, false]);
     });
 
     it("should be in a string while in backticks within braces within a single quote string", () => {
-        doInStringTest("`${'t'}`", [false, true, true, false, true, true, false, true, false]);
+        doTest("`${'t'}`", [false, true, true, false, true, true, false, true, false]);
     });
 
     it("should be in a string while in backticks within braces within a double quote string", () => {
-        doInStringTest("`${\"t\"}`", [false, true, true, false, true, true, false, true, false]);
+        doTest("`${\"t\"}`", [false, true, true, false, true, true, false, true, false]);
     });
 
     it("should be in a string while in backticks within braces within back ticks", () => {
-        doInStringTest("`${`t`}`", [false, true, true, false, true, true, false, true, false]);
+        doTest("`${`t`}`", [false, true, true, false, true, true, false, true, false]);
     });
 
     it("should not be in a string while in backticks within braces within back ticks within braces", () => {
-        doInStringTest("`${`${t}`}`", [false, true, true, false, true, true, false, false, true, false, true, false]);
+        doTest("`${`${t}`}`", [false, true, true, false, true, true, false, false, true, false, true, false]);
     });
 
     it("should not be in a string while comments", () => {
-        doInStringTest("//'t'", [false, false, false, false, false, false]);
+        doTest("//'t'", [false, false, false, false, false, false]);
     });
 
     it("should be in a string while the previous line was a comment and now this is a string", () => {
-        doInStringTest("//t\n't'", [false, false, false, false, false, true, true, false]);
+        doTest("//t\n't'", [false, false, false, false, false, true, true, false]);
     });
 
     it("should not be in a string for star comments", () => {
-        doInStringTest("/*\n't'\n*/'t'", [false, false, false, false, false, false, false, false, false, false, true, true, false]);
+        doTest("/*\n't'\n*/'t'", [false, false, false, false, false, false, false, false, false, false, true, true, false]);
     });
 });
 
 describe("#isInComment", () => {
-    function doInCommentTest(str: string, expectedValues: boolean[]) {
+    function doTest(str: string, expectedValues: boolean[]) {
         assert.equal(str.length + 1, expectedValues.length);
         const writer = new CodeBlockWriter();
         assert.equal(writer.isInComment(), expectedValues[0]);
@@ -517,11 +631,11 @@ describe("#isInComment", () => {
     }
 
     it("should be in a comment for star comments", () => {
-        doInCommentTest("/*\nt\n*/", [false, false, true, true, true, true, true, false]);
+        doTest("/*\nt\n*/", [false, false, true, true, true, true, true, false]);
     });
 
     it("should be in a comment for line comments", () => {
-        doInCommentTest("// t\nt", [false, false, true, true, true, false, false]);
+        doTest("// t\nt", [false, false, true, true, true, false, false]);
     });
 });
 
