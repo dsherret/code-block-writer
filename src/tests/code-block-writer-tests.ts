@@ -165,6 +165,26 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.block(() => writer.write("t;")).conditionalWrite(false, " ").conditionalWriteLine(false, " ").conditionalNewLine(false);
             });
         });
+
+        it("should not indent when in a string", () => {
+            const expected = "block {\n    const t = `\nt`;\n    const u = 1;\n}";
+
+            doTest(expected, writer => {
+                writer.write("block").block(() => {
+                    writer.write("const t = `\nt`;\nconst u = 1;");
+                });
+            });
+        });
+
+        it("should indent when in a comment", () => {
+            const expected = "block {\n    const t = /*\n    const u = 1;*/\n}";
+
+            doTest(expected, writer => {
+                writer.write("block").block(() => {
+                    writer.write("const t = /*\nconst u = 1;*/");
+                });
+            });
+        });
     });
 
     describe("#inlineBlock()", () => {
@@ -416,6 +436,94 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 }
+
+describe("#isInString", () => {
+    function doInStringTest(str: string, expectedValues: boolean[]) {
+        assert.equal(str.length + 1, expectedValues.length);
+        const writer = new CodeBlockWriter();
+        assert.equal(writer.isInString(), expectedValues[0]);
+        for (let i = 0; i < str.length; i++) {
+            writer.write(str[i]);
+            assert.equal(writer.isInString(), expectedValues[i + 1]);
+        }
+    }
+
+    it("should be in a string while in double quotes", () => {
+        doInStringTest(`s"y"`, [false, false, true, true, false]);
+    });
+
+    it("should be in a string while in single quotes", () => {
+        doInStringTest(`s'y'`, [false, false, true, true, false]);
+    });
+
+    it("should be in a string while in backticks", () => {
+        doInStringTest("s`y`", [false, false, true, true, false]);
+    });
+
+    it("should not be affected by other string quotes while in double quotes", () => {
+        doInStringTest(`"'\`\${}"`, [false, true, true, true, true, true, true, false]);
+    });
+
+    it("should not be affected by other string quotes while in single quotes", () => {
+        doInStringTest(`'"\`\${}'`, [false, true, true, true, true, true, true, false]);
+    });
+
+    it("should not be affected by other string quotes while in back ticks", () => {
+        doInStringTest(`\`'"\``, [false, true, true, true, false]);
+    });
+
+    it("should not be in a string while in backticks within braces", () => {
+        doInStringTest("`y${t}`", [false, true, true, true, false, false, true, false]);
+    });
+
+    it("should be in a string while in backticks within braces within a single quote string", () => {
+        doInStringTest("`${'t'}`", [false, true, true, false, true, true, false, true, false]);
+    });
+
+    it("should be in a string while in backticks within braces within a double quote string", () => {
+        doInStringTest("`${\"t\"}`", [false, true, true, false, true, true, false, true, false]);
+    });
+
+    it("should be in a string while in backticks within braces within back ticks", () => {
+        doInStringTest("`${`t`}`", [false, true, true, false, true, true, false, true, false]);
+    });
+
+    it("should not be in a string while in backticks within braces within back ticks within braces", () => {
+        doInStringTest("`${`${t}`}`", [false, true, true, false, true, true, false, false, true, false, true, false]);
+    });
+
+    it("should not be in a string while comments", () => {
+        doInStringTest("//'t'", [false, false, false, false, false, false]);
+    });
+
+    it("should be in a string while the previous line was a comment and now this is a string", () => {
+        doInStringTest("//t\n't'", [false, false, false, false, false, true, true, false]);
+    });
+
+    it("should not be in a string for star comments", () => {
+        doInStringTest("/*\n't'\n*/'t'", [false, false, false, false, false, false, false, false, false, false, true, true, false]);
+    });
+});
+
+describe("#isInComment", () => {
+    function doInCommentTest(str: string, expectedValues: boolean[]) {
+        assert.equal(str.length + 1, expectedValues.length);
+        const writer = new CodeBlockWriter();
+        assert.equal(writer.isInComment(), expectedValues[0]);
+        for (let i = 0; i < str.length; i++) {
+            writer.write(str[i]);
+            assert.equal(writer.isInComment(), expectedValues[i + 1]);
+        }
+    }
+
+    it("should be in a comment for star comments", () => {
+        doInCommentTest("/*\nt\n*/", [false, false, true, true, true, true, true, false]);
+    });
+
+    it("should be in a comment for line comments", () => {
+        doInCommentTest("// t\nt", [false, false, true, true, true, false, false]);
+    });
+});
 
 describe("indentNumberOfSpaces", () => {
     const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });

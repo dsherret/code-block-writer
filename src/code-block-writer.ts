@@ -1,10 +1,13 @@
+import {CommentChar} from "./CommentChar";
+
 export default class CodeBlockWriter {
     private readonly _indentationText: string;
     private readonly _newLine: string;
     private _currentIndentation = 0;
     private _text = "";
-    private _isAtStartOfBlock = false;
     private _newLineOnNextWrite = false;
+    private _currentCommentChar: CommentChar | undefined = undefined;
+    private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
@@ -24,7 +27,6 @@ export default class CodeBlockWriter {
         this.write("{");
         this._currentIndentation++;
         this.newLine();
-        this._isAtStartOfBlock = true;
         block();
         this._currentIndentation--;
         this.newLineIfLastNotNewLine().write("}");
@@ -76,7 +78,7 @@ export default class CodeBlockWriter {
 
     newLine() {
         this._newLineOnNextWrite = false;
-        this.baseWrite(this._newLine);
+        this.baseWriteNewline();
         return this;
     }
 
@@ -85,7 +87,7 @@ export default class CodeBlockWriter {
         const lastChar = this.getLastChar();
 
         if (lastChar !== " ")
-            this.baseWrite(" ");
+            this.writeIndentingNewLines(" ");
 
         return this;
     }
@@ -107,6 +109,14 @@ export default class CodeBlockWriter {
         return this._text.length;
     }
 
+    isInComment() {
+        return this._currentCommentChar !== undefined;
+    }
+
+    isInString() {
+        return this._stringCharStack.length > 0 && this._stringCharStack[this._stringCharStack.length - 1] !== "{";
+    }
+
     toString() {
         return this.removeConsecutiveNewLineAtEndOfString(this._text);
     }
@@ -114,29 +124,54 @@ export default class CodeBlockWriter {
     private writeIndentingNewLines(str: string) {
         const items = (str || "").split(/\r?\n/);
         items.forEach((s, i) => {
-            // don't use .newLine() here because we want to write out all the newlines the user requested
             if (i > 0)
-                this.baseWrite(this._newLine);
+                this.baseWriteNewline();
 
-            this.baseWrite(s);
+            if (s.length > 0) {
+                if (this.isLastCharANewLine() && !this.isInString())
+                    this.writeIndentation();
+
+                this.updateStringStack(s);
+                this._text += s;
+            }
 
             if (i > 0 && i === items.length - 1 && s.length === 0)
-                this.baseWrite(this._newLine);
+                this.baseWriteNewline();
         });
     }
 
-    private baseWrite(str: string) {
-        this._isAtStartOfBlock = false;
+    private baseWriteNewline() {
+        if (this._currentCommentChar === CommentChar.Line)
+            this._currentCommentChar = undefined;
+        this._text += this._newLine;
+    }
 
-        if (str == null || str.length === 0)
-            return this;
+    private updateStringStack(str: string) {
+        for (let i = 0; i < str.length; i++) {
+            const currentChar = str[i];
+            const pastChar = i === 0 ? this.getLastChar() : str[i - 1];
+            const lastCharOnStack = this._stringCharStack.length === 0 ? undefined : this._stringCharStack[this._stringCharStack.length - 1];
 
-        if (str !== this._newLine && this.isLastCharANewLine())
-            this.writeIndentation();
+            if (this._currentCommentChar == null && pastChar === "/" && currentChar === "/")
+                this._currentCommentChar = CommentChar.Line;
+            else if (this._currentCommentChar == null && pastChar === "/" && currentChar === "*")
+                this._currentCommentChar = CommentChar.Star;
+            else if (this._currentCommentChar === CommentChar.Star && pastChar === "*" && currentChar === "/")
+                this._currentCommentChar = undefined;
 
-        this._text += str;
-
-        return this;
+            if (this.isInComment())
+                continue;
+            else if (currentChar === "\"" || currentChar === "'" || currentChar === "`") {
+                if (lastCharOnStack === currentChar)
+                    this._stringCharStack.pop();
+                else if (lastCharOnStack === "{" || lastCharOnStack === undefined)
+                    this._stringCharStack.push(currentChar);
+            }
+            else if (pastChar === "$" && currentChar === "{" && lastCharOnStack === "`")
+                this._stringCharStack.push(currentChar);
+            else if (currentChar === "}" && lastCharOnStack === "{")
+                this._stringCharStack.pop();
+        }
     }
 
     private removeConsecutiveNewLineAtEndOfString(text: string) {
@@ -154,12 +189,10 @@ export default class CodeBlockWriter {
     }
 
     private getLastChar() {
-        let lastChar: string | null = null;
+        if (this._text.length === 0)
+            return undefined;
 
-        if (this._text.length > 0)
-            lastChar = this._text[this._text.length - 1];
-
-        return lastChar;
+        return this._text[this._text.length - 1];
     }
 
     private writeIndentation() {

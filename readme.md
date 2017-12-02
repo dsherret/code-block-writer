@@ -61,4 +61,6 @@ class MyClass extends OtherClass {
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
 * `conditionalWrite(condition: boolean, str: string)` - Writes if the condition is matched.
 * `conditionalWriteLine(condition: boolean, str: string)` - Writes some text and adds a newline if the condition is matched.
+* `isInComment()` - Gets if the writer is currently in a comment.
+* `isInString()` - Gets if the writer is currently in a string.
 * `toString()` - Gets the string.
