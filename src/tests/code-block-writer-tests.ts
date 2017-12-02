@@ -330,8 +330,8 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should never have two newlines at the end of a file", () => {
-            const expected = `text\n`;
+        it("should be allowed to have two newlines at the end of a file", () => {
+            const expected = `text\n\n`;
 
             doTest(expected, writer => {
                 writer.write("text").newLine().newLine();

@@ -175,7 +175,7 @@ export default class CodeBlockWriter {
      * Gets the writer's text.
      */
     toString() {
-        return this.removeConsecutiveNewLineAtEndOfString(this._text);
+        return this._text;
     }
 
     private writeIndentingNewLines(str: string) {
@@ -191,9 +191,6 @@ export default class CodeBlockWriter {
                 this.updateStringStack(s);
                 this._text += s;
             }
-
-            if (i > 0 && i === items.length - 1 && s.length === 0)
-                this.baseWriteNewline();
         });
     }
 
@@ -229,16 +226,6 @@ export default class CodeBlockWriter {
             else if (currentChar === "}" && lastCharOnStack === "{")
                 this._stringCharStack.pop();
         }
-    }
-
-    private removeConsecutiveNewLineAtEndOfString(text: string) {
-        const consecutiveNewline = this._newLine + this._newLine;
-        const lastIndexOfConsecutiveNewLines = text.lastIndexOf(consecutiveNewline);
-
-        if (lastIndexOfConsecutiveNewLines >= 0 && lastIndexOfConsecutiveNewLines === text.length - consecutiveNewline.length)
-            text = text.substr(0, text.length - this._newLine.length);
-
-        return text;
     }
 
     private isLastCharANewLine() {
