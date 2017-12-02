@@ -14,6 +14,10 @@ export default class CodeBlockWriter {
         this._indentationText = getIndentationText((opts && opts.useTabs) || false, (opts && opts.indentNumberOfSpaces) || 4);
     }
 
+    /**
+     * Writes a block using braces.
+     * @param block - Write using the writer within this block.
+     */
     block(block: () => void) {
         this.newLineIfNewLineOnNextWrite();
         this.spaceIfLastNotSpace();
@@ -22,6 +26,10 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes an inline block with braces.
+     * @param block - Write using the writer within this block.
+     */
     inlineBlock(block: () => void) {
         this.newLineIfNewLineOnNextWrite();
         this.write("{");
@@ -34,6 +42,11 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Conditionally writes a line of text.
+     * @param condition - Condition to evaluate.
+     * @param str - String to write if the condition is true.
+     */
     conditionalWriteLine(condition: boolean, str: string) {
         if (condition)
             this.writeLine(str);
@@ -41,6 +54,10 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes a line of text.
+     * @param str - String to write.
+     */
     writeLine(str: string) {
         this.newLineIfNewLineOnNextWrite();
         if (this._text.length > 0)
@@ -51,6 +68,9 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes a newline if the last line was not a newline.
+     */
     newLineIfLastNotNewLine() {
         this.newLineIfNewLineOnNextWrite();
 
@@ -60,15 +80,25 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes a blank line.
+     */
     blankLine() {
         return this.newLineIfLastNotNewLine().newLine();
     }
 
+    /**
+     * Indents the code one level for the current line.
+     */
     indent() {
         this.newLineIfNewLineOnNextWrite();
         return this.write(this._indentationText);
     }
 
+    /**
+     * Writes a newline if the condition is true.
+     * @param condition - Condition to evaluate.
+     */
     conditionalNewLine(condition: boolean) {
         if (condition)
             this.newLine();
@@ -76,12 +106,18 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes a newline.
+     */
     newLine() {
         this._newLineOnNextWrite = false;
         this.baseWriteNewline();
         return this;
     }
 
+    /**
+     * Writes a space if the last character was not a space.
+     */
     spaceIfLastNotSpace() {
         this.newLineIfNewLineOnNextWrite();
         const lastChar = this.getLastChar();
@@ -92,6 +128,11 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes the provided text if the condition is true.
+     * @param condition - Condition to evaluate.
+     * @param str - Text to write.
+     */
     conditionalWrite(condition: boolean, str: string) {
         if (condition)
             this.write(str);
@@ -99,24 +140,40 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /**
+     * Writes the provided text.
+     * @param str - Text to write.
+     */
     write(str: string) {
         this.newLineIfNewLineOnNextWrite();
         this.writeIndentingNewLines(str);
         return this;
     }
 
+    /**
+     * Gets the length of the string in the writer.
+     */
     getLength() {
         return this._text.length;
     }
 
+    /**
+     * Gets if the writer is currently in a comment.
+     */
     isInComment() {
         return this._currentCommentChar !== undefined;
     }
 
+    /**
+     * Gets if the writer is currently in a string.
+     */
     isInString() {
         return this._stringCharStack.length > 0 && this._stringCharStack[this._stringCharStack.length - 1] !== "{";
     }
 
+    /**
+     * Gets the writer's text.
+     */
     toString() {
         return this.removeConsecutiveNewLineAtEndOfString(this._text);
     }
