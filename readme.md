@@ -6,7 +6,7 @@ code-block-writer
 [![Coverage Status](https://coveralls.io/repos/dsherret/code-block-writer/badge.svg?branch=master&service=github)](https://coveralls.io/github/dsherret/code-block-writer?branch=master)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-A simple code writer that assists with formatting and visualizing blocks of code.
+A simple code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
 
 ```
 npm install --save code-block-writer
