@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.2.0"></a>
+# [6.2.0](https://github.com/dsherret/code-block-writer/compare/v6.1.1...v6.2.0) (2017-12-05)
+
+
+### Features
+
+* [#14](https://github.com/dsherret/code-block-writer/issues/14) - Add .quote() and .quote(text: string) ([efe2280](https://github.com/dsherret/code-block-writer/commit/efe2280))
+
+
+
 <a name="6.1.1"></a>
 ## [6.1.1](https://github.com/dsherret/code-block-writer/compare/v6.1.0...v6.1.1) (2017-12-02)
 
