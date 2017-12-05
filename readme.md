@@ -36,14 +36,14 @@ writer.write(`class ${className} extends OtherClass`).block(() => {
 console.log(writer.toString());
 ```
 
-Outputs:
+Outputs (using "\r\n" for newlines):
 
 ```text
 class MyClass extends OtherClass {
-   @MyDecorator(1, 2)
-   myMethod(myParam: any) {
-       return this.post('myArgument');
-   }
+  @MyDecorator(1, 2)
+  myMethod(myParam: any) {
+    return this.post('myArgument');
+  }
 }
 ```
 
