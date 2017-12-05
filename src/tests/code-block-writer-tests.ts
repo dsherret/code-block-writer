@@ -20,12 +20,15 @@ describe("CodeBlockWriter", () => {
 });
 
 function runTestsForNewLineChar(opts: { newLine: string }) {
-    function getWriter() {
-        return new CodeBlockWriter(opts);
+    function getWriter(additionalOpts: { useSingleQuote?: boolean; } = {}) {
+        return new CodeBlockWriter({
+            newLine: opts.newLine,
+            useSingleQuote: additionalOpts.useSingleQuote
+        });
     }
 
-    function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void) {
-        const writer = getWriter();
+    function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void, additionalOpts: { useSingleQuote?: boolean; } = {}) {
+        const writer = getWriter(additionalOpts);
         writerCallback(writer);
         assert.equal(writer.toString(), expected.replace(/\r?\n/g, opts.newLine));
     }
@@ -374,6 +377,29 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.write("test ").block(() => {
                     writer.writeLine(`inside${opts.newLine}inside`);
                 });
+            });
+        });
+    });
+
+    describe("#quote()", () => {
+        it("should write out a double quote character", () => {
+            const expected = `"`;
+            doTest(expected, writer => {
+                writer.quote();
+            });
+        });
+
+        it("should write out a single quote character", () => {
+            const expected = `'`;
+            doTest(expected, writer => {
+                writer.quote();
+            }, { useSingleQuote: true });
+        });
+
+        it("should write out text surrounded by quotes", () => {
+            const expected = `"test"`;
+            doTest(expected, writer => {
+                writer.quote("test");
             });
         });
     });

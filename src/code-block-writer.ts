@@ -4,6 +4,7 @@ export default class CodeBlockWriter {
     private readonly _indentationText: string;
     private readonly _newLine: string;
     private readonly _useTabs: boolean;
+    private readonly _quoteChar: string;
     private readonly _indentNumberOfSpaces: number;
     private _currentIndentation = 0;
     private _text = "";
@@ -11,11 +12,12 @@ export default class CodeBlockWriter {
     private _currentCommentChar: CommentChar | undefined = undefined;
     private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
 
-    constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; }) {
+    constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; useSingleQuote?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
         this._useTabs = (opts && opts.useTabs) || false;
         this._indentNumberOfSpaces = (opts && opts.indentNumberOfSpaces) || 4;
         this._indentationText = getIndentationText(this._useTabs, this._indentNumberOfSpaces);
+        this._quoteChar = (opts && opts.useSingleQuote) ? "'" : `"`;
     }
 
     /**
@@ -153,6 +155,21 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes a quote character.
+     */
+    quote(): this;
+    /**
+     * Writes text surrounded in quotes.
+     * @param text - Text to write.
+     */
+    quote(text: string): this;
+    quote(text?: string) {
+        this.newLineIfNewLineOnNextWrite();
+        this.writeIndentingNewLines(text == null ? this._quoteChar : this._quoteChar + text + this._quoteChar);
+        return this;
+    }
+
+    /**
      * Writes a space if the last character was not a space.
      */
     spaceIfLastNotSpace() {
@@ -168,22 +185,22 @@ export default class CodeBlockWriter {
     /**
      * Writes the provided text if the condition is true.
      * @param condition - Condition to evaluate.
-     * @param str - Text to write.
+     * @param text - Text to write.
      */
-    conditionalWrite(condition: boolean | undefined, str: string) {
+    conditionalWrite(condition: boolean | undefined, text: string) {
         if (condition)
-            this.write(str);
+            this.write(text);
 
         return this;
     }
 
     /**
      * Writes the provided text.
-     * @param str - Text to write.
+     * @param text - Text to write.
      */
-    write(str: string) {
+    write(text: string) {
         this.newLineIfNewLineOnNextWrite();
-        this.writeIndentingNewLines(str);
+        this.writeIndentingNewLines(text);
         return this;
     }
 
@@ -215,8 +232,8 @@ export default class CodeBlockWriter {
         return this._text;
     }
 
-    private writeIndentingNewLines(str: string) {
-        const items = (str || "").split(/\r?\n/);
+    private writeIndentingNewLines(text: string) {
+        const items = (text || "").split(/\r?\n/);
         items.forEach((s, i) => {
             if (i > 0)
                 this.baseWriteNewline();

@@ -21,14 +21,15 @@ const writer = new CodeBlockWriter({
     // optional options
     newLine: "\r\n",         // default: "\n"
     indentNumberOfSpaces: 2, // default: 4
-    useTabs: false           // default: false
+    useTabs: false,          // default: false
+    useSingleQuote: true     // default: false
 });
 const className = "MyClass";
 
 writer.write(`class ${className} extends OtherClass`).block(() => {
-    writer.writeLine(`@MyDecorator("myArgument1", "myArgument2")`);
+    writer.writeLine(`@MyDecorator(1, 2)`);
     writer.write(`myMethod(myParam: any)`).block(() => {
-        writer.write(`return this.post("myArgument");`);
+        writer.write("return this.post(").quote("myArgument").write(");");
     });
 });
 
@@ -39,9 +40,9 @@ Outputs:
 
 ```text
 class MyClass extends OtherClass {
-   @MyDecorator("myArgument1", "myArgument2")
+   @MyDecorator(1, 2)
    myMethod(myParam: any) {
-       return this.post("myArgument");
+       return this.post('myArgument');
    }
 }
 ```
@@ -55,6 +56,8 @@ class MyClass extends OtherClass {
 * `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
 * `newLine()` - Writes a newline.
 * `blankLine()` - Writes a blank line. Does not allow consecutive blank lines.
+* `quote()` - Writes a quote character.
+* `quote(text: string)` - Writes text surrounded in quotes.
 * `indent()` - Indents the current line.
 * `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
