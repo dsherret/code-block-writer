@@ -239,7 +239,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     });
 
     describe("#indentBlock()", () => {
-        it("should write text inside a block", () => {
+        it("should indent text inside a block", () => {
             const expected =
                 `test
     inside`;
@@ -250,7 +250,28 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should write text inside a block inside a block", () => {
+        it("should not do a newline if the last was a new line", () => {
+            const expected =
+                `test
+    inside`;
+            doTest(expected, writer => {
+                writer.writeLine("test").indentBlock(() => {
+                    writer.write("inside");
+                });
+            });
+        });
+
+        it("should not do a newline on the first line", () => {
+            const expected =
+                `    inside`;
+            doTest(expected, writer => {
+                writer.indentBlock(() => {
+                    writer.write("inside");
+                });
+            });
+        });
+
+        it("should indent text inside a block inside a block", () => {
             const expected =
                 `test
     inside
