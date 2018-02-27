@@ -87,6 +87,16 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
                 writer.write("test\n\ntest");
             });
         });
+
+        it("should indent if passed an empty string at the start of a newline within a block", () => {
+            const expected = `test {\n    inside\n    \n}`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.writeLine(`inside`);
+                    writer.write("");
+                });
+            });
+        });
     });
 
     describe("#block()", () => {
@@ -250,6 +260,16 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 
             doTest(expected, writer => {
                 writer.writeLine("test").writeLine("test");
+            });
+        });
+
+        it("should indent if passed an empty string at the start of a newline within a block", () => {
+            const expected = `test {\n    inside\n    \n}`;
+            doTest(expected, writer => {
+                writer.write("test ").block(() => {
+                    writer.writeLine(`inside`);
+                    writer.writeLine("");
+                });
             });
         });
     });

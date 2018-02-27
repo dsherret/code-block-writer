@@ -261,7 +261,13 @@ export default class CodeBlockWriter {
     }
 
     private writeIndentingNewLines(text: string) {
-        const items = (text || "").split(/\r?\n/);
+        text = text || "";
+        if (text.length === 0) {
+            writeIndividual.call(this, "");
+            return;
+        }
+
+        const items = text.split(/\r?\n/);
         items.forEach((s, i) => {
             if (i > 0)
                 this.baseWriteNewline();
@@ -269,6 +275,10 @@ export default class CodeBlockWriter {
             if (s.length === 0)
                 return;
 
+            writeIndividual.call(this, s);
+        });
+
+        function writeIndividual(this: CodeBlockWriter, s: string) {
             if (!this.isInString()) {
                 const isAtStartOfLine = this.isLastNewLine() || this._text.length === 0;
                 if (isAtStartOfLine)
@@ -281,7 +291,7 @@ export default class CodeBlockWriter {
 
             this.updateStringStack(s);
             this._text += s;
-        });
+        }
     }
 
     private baseWriteNewline() {
