@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.3.1"></a>
+## [6.3.1](https://github.com/dsherret/code-block-writer/compare/v6.3.0...v6.3.1) (2018-02-27)
+
+
+### Bug Fixes
+
+* Include js docs. ([c01c697](https://github.com/dsherret/code-block-writer/commit/c01c697))
+
+
+
 <a name="6.3.0"></a>
 # [6.3.0](https://github.com/dsherret/code-block-writer/compare/v6.2.0...v6.3.0) (2018-02-27)
 
