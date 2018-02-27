@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.5.1"></a>
+## [6.5.1](https://github.com/dsherret/code-block-writer/compare/v6.5.0...v6.5.1) (2018-02-27)
+
+
+### Bug Fixes
+
+* Should do a conditional newline when starting an indent block. ([109c71f](https://github.com/dsherret/code-block-writer/commit/109c71f))
+
+
+
 <a name="6.5.0"></a>
 # [6.5.0](https://github.com/dsherret/code-block-writer/compare/v6.4.1...v6.5.0) (2018-02-27)
 
