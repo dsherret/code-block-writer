@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.5.2"></a>
+## [6.5.2](https://github.com/dsherret/code-block-writer/compare/v6.5.1...v6.5.2) (2018-02-27)
+
+
+### Bug Fixes
+
+* isLastNewLine() should return true when it's \n and newline kind is \r\n. ([347f783](https://github.com/dsherret/code-block-writer/commit/347f783))
+
+
+
 <a name="6.5.1"></a>
 ## [6.5.1](https://github.com/dsherret/code-block-writer/compare/v6.5.0...v6.5.1) (2018-02-27)
 
