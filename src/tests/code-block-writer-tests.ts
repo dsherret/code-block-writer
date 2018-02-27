@@ -612,6 +612,69 @@ describe("#setIdentationLevel", () => {
     });
 });
 
+describe("#queueIdentationLevel", () => {
+    it("should throw when providing a negative number", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.queueIndentationLevel(-1));
+    });
+
+    it("should throw when not providing a number or string", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.queueIndentationLevel({} as any));
+    });
+
+    it("should not throw when providing an empty string", () => {
+        const writer = new CodeBlockWriter();
+        assert.doesNotThrow(() => writer.queueIndentationLevel(""));
+    });
+
+    it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
+        const writer = new CodeBlockWriter();
+        assert.throws(() => writer.queueIndentationLevel("  \ta"));
+    });
+
+    it("should be able to queue the indentation level", () => {
+        const writer = new CodeBlockWriter();
+        writer.queueIndentationLevel(1);
+        writer.writeLine("t");
+        writer.writeLine("t");
+
+        assert.equal(writer.toString(), "t\n    t\n");
+    });
+
+    it("should be able to queue the indentation mid line and it will write the next line with indentation", () => {
+        const writer = new CodeBlockWriter();
+        writer.write("t");
+        writer.queueIndentationLevel(1);
+        writer.write("t");
+        writer.writeLine("t");
+
+        assert.equal(writer.toString(), "tt\n    t\n");
+    });
+
+    it("should be able to set and queue an indentation", () => {
+        const writer = new CodeBlockWriter();
+        writer.setIndentationLevel(1);
+        writer.queueIndentationLevel(2);
+        writer.writeLine("t");
+        writer.writeLine("t");
+
+        assert.equal(writer.toString(), "    t\n        t\n");
+    });
+
+    it("should be able to set after queueng an indentation", () => {
+        const writer = new CodeBlockWriter();
+        writer.queueIndentationLevel(1);
+        writer.writeLine("t");
+        writer.writeLine("t");
+        writer.setIndentationLevel(2);
+        writer.writeLine("t");
+        writer.writeLine("t");
+
+        assert.equal(writer.toString(), "t\n    t\n        t\n        t\n");
+    });
+});
+
 describe("#isInString", () => {
     function doTest(str: string, expectedValues: boolean[]) {
         assert.equal(str.length + 1, expectedValues.length);

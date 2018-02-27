@@ -7,6 +7,7 @@ export default class CodeBlockWriter {
     private readonly _quoteChar: string;
     private readonly _indentNumberOfSpaces: number;
     private _currentIndentation = 0;
+    private _queuedIndentation: number | undefined;
     private _text = "";
     private _newLineOnNextWrite = false;
     private _currentCommentChar: CommentChar | undefined = undefined;
@@ -21,6 +22,21 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Queues the indentation level for the next lines written.
+     * @param indentationLevel - Indentation level to be at.
+     */
+    queueIndentationLevel(indentationLevel: number): this;
+    /**
+     * Queues the indentation level for the next lines written using the provided indentation text.
+     * @param indentationText - Gets the indentation level from the indentation text.
+     */
+    queueIndentationLevel(indentationText: string): this;
+    queueIndentationLevel(countOrText: string | number) {
+        this._queuedIndentation = this.getIndentationLevelFromArg(countOrText);
+        return this;
+    }
+
+    /**
      * Sets the current indentation level.
      * @param indentationLevel - Indentation level to be at.
      */
@@ -30,25 +46,13 @@ export default class CodeBlockWriter {
      * @param indentationText - Gets the indentation level from the indentation text.
      */
     setIndentationLevel(indentationText: string): this;
+    /**
+     * @internal
+     */
+    setIndentationLevel(countOrText: string | number): this;
     setIndentationLevel(countOrText: string | number) {
-        if (typeof countOrText === "number") {
-            if (countOrText < 0)
-                throw new Error("Passed in indentation level should be greater than or equal to 0.");
-            this._currentIndentation = countOrText;
-            return this;
-        }
-        else if (typeof countOrText === "string") {
-            if (!/^[ \t]*$/.test(countOrText))
-                throw new Error("Provided string must be empty or only contain spaces or tabs.");
-
-            const {spacesCount, tabsCount} = getSpacesAndTabsCount(countOrText);
-            this._currentIndentation = tabsCount + Math.round(Math.max(0, spacesCount - 1) / this._indentNumberOfSpaces);
-
-            return this;
-        }
-        else {
-            throw new Error("Argument provided must be a string or number.");
-        }
+        this._currentIndentation = this.getIndentationLevelFromArg(countOrText);
+        return this;
     }
 
     /**
@@ -241,9 +245,15 @@ export default class CodeBlockWriter {
             if (s.length === 0)
                 return;
 
-            const isAtStartOfLine = this.isLastCharANewLine() || this._text.length === 0;
-            if (isAtStartOfLine && !this.isInString())
-                this.writeIndentation();
+            if (!this.isInString()) {
+                const isAtStartOfLine = this.isLastCharANewLine() || this._text.length === 0;
+                if (isAtStartOfLine)
+                    this.writeIndentation();
+                if (this._queuedIndentation != null) {
+                    this._currentIndentation = this._queuedIndentation;
+                    this._queuedIndentation = undefined;
+                }
+            }
 
             this.updateStringStack(s);
             this._text += s;
@@ -304,6 +314,23 @@ export default class CodeBlockWriter {
             return;
         this._newLineOnNextWrite = false;
         this.newLine();
+    }
+
+    private getIndentationLevelFromArg(countOrText: string | number) {
+        if (typeof countOrText === "number") {
+            if (countOrText < 0)
+                throw new Error("Passed in indentation level should be greater than or equal to 0.");
+            return countOrText;
+        }
+        else if (typeof countOrText === "string") {
+            if (!/^[ \t]*$/.test(countOrText))
+                throw new Error("Provided string must be empty or only contain spaces or tabs.");
+
+            const {spacesCount, tabsCount} = getSpacesAndTabsCount(countOrText);
+            return tabsCount + Math.round(Math.max(0, spacesCount - 1) / this._indentNumberOfSpaces);
+        }
+        else
+            throw new Error("Argument provided must be a string or number.");
     }
 }
 
