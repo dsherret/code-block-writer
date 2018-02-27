@@ -238,6 +238,56 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
         });
     });
 
+    describe("#indentBlock()", () => {
+        it("should write text inside a block", () => {
+            const expected =
+                `test
+    inside`;
+            doTest(expected, writer => {
+                writer.write("test").indentBlock(() => {
+                    writer.write("inside");
+                });
+            });
+        });
+
+        it("should write text inside a block inside a block", () => {
+            const expected =
+                `test
+    inside
+        inside again
+test`;
+
+            doTest(expected, writer => {
+                writer.write("test").indentBlock(() => {
+                    writer.write("inside").indentBlock(() => {
+                        writer.write("inside again");
+                    });
+                });
+                writer.write("test");
+            });
+        });
+
+        it("should not indent when in a string", () => {
+            const expected = "block\n    const t = `\nt`;\n    const u = 1;";
+
+            doTest(expected, writer => {
+                writer.write("block").indentBlock(() => {
+                    writer.write("const t = `\nt`;\nconst u = 1;");
+                });
+            });
+        });
+
+        it("should indent when in a comment", () => {
+            const expected = "block\n    const t = /*\n    const u = 1;*/";
+
+            doTest(expected, writer => {
+                writer.write("block").indentBlock(() => {
+                    writer.write("const t = /*\nconst u = 1;*/");
+                });
+            });
+        });
+    });
+
     describe("#writeLine()", () => {
         it("should write some text on a line", () => {
             const expected = `test\n`;

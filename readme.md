@@ -49,8 +49,8 @@ class MyClass extends OtherClass {
 
 ## Methods
 
-* `block(block: () => void)` - Indents all the code written within and surrounds it in braces.
-* `inlineBlock(block: () => void)` - Same as block, but doesn't add a space before the first brace and doesn't add a newline at the end.
+* `block(block?: () => void)` - Indents all the code written within and surrounds it in braces.
+* `inlineBlock(block?: () => void)` - Same as block, but doesn't add a space before the first brace and doesn't add a newline at the end.
 * `getLength()` - Get the current number of characters.
 * `writeLine(str: string)` - Writes some text and adds a newline.
 * `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
@@ -59,6 +59,7 @@ class MyClass extends OtherClass {
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
 * `indent()` - Indents the current line.
+* `indentBlock(block: () => void)` - Indents a block of code.
 * `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
