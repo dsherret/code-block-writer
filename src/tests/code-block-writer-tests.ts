@@ -834,9 +834,8 @@ describe("#isInString", () => {
     });
 });
 
-function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T) {
+function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T, writer = new CodeBlockWriter()) {
     assert.equal(str.length + 1, expectedValues.length);
-    const writer = new CodeBlockWriter();
     assert.equal(func(writer), expectedValues[0]);
     for (let i = 0; i < str.length; i++) {
         writer.write(str[i]);
@@ -869,12 +868,17 @@ describe("#isLastSpace", () => {
 });
 
 describe("#isLastNewLine", () => {
-    function doTest(str: string, expectedValues: boolean[]) {
-        runSequentialCheck(str, expectedValues, writer => writer.isLastNewLine());
+    function doTest(str: string, expectedValues: boolean[], customWriter?: CodeBlockWriter) {
+        runSequentialCheck(str, expectedValues, (writer) => writer.isLastNewLine(), customWriter);
     }
 
     it("should be true when a new line", () => {
         doTest(" \nt", [false, false, true, false]);
+    });
+
+    it("should be true for \n when specifying \r\n", () => {
+        const writer = new CodeBlockWriter({ newLine: "\r\n" });
+        doTest(" \nt", [false, false, true, false], writer);
     });
 });
 

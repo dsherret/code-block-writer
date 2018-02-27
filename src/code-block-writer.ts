@@ -248,7 +248,7 @@ export default class CodeBlockWriter {
      * Gets if the last chars written were for a newline.
      */
     isLastNewLine() {
-        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
+        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1 || this._text[this._text.length - 1] === "\n";
     }
 
     /**
