@@ -68,4 +68,7 @@ class MyClass extends OtherClass {
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isInString()` - Gets if the writer is currently in a string.
+* `isLastNewLine()` - Gets if the writer last wrote a newline.
+* `isLastSpace()` - Gets if the writer last wrote a space.
+* `getLastChar()` - Gets the last character written.
 * `toString()` - Gets the string.

@@ -117,7 +117,7 @@ export default class CodeBlockWriter {
     newLineIfLastNotNewLine() {
         this.newLineIfNewLineOnNextWrite();
 
-        if (!this.isLastCharANewLine())
+        if (!this.isLastNewLine())
             this.newLine();
 
         return this;
@@ -180,7 +180,7 @@ export default class CodeBlockWriter {
         this.newLineIfNewLineOnNextWrite();
         const lastChar = this.getLastChar();
 
-        if (lastChar !== " ")
+        if (!this.isLastSpace())
             this.writeIndentingNewLines(" ");
 
         return this;
@@ -230,6 +230,30 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets if the last chars written were for a newline.
+     */
+    isLastNewLine() {
+        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
+    }
+
+    /**
+     * Gets if the last char written was a space.
+     */
+    isLastSpace() {
+        return this.getLastChar() === " ";
+    }
+
+    /**
+     * Gets the last char written.
+     */
+    getLastChar() {
+        if (this._text.length === 0)
+            return undefined;
+
+        return this._text[this._text.length - 1];
+    }
+
+    /**
      * Gets the writer's text.
      */
     toString() {
@@ -246,7 +270,7 @@ export default class CodeBlockWriter {
                 return;
 
             if (!this.isInString()) {
-                const isAtStartOfLine = this.isLastCharANewLine() || this._text.length === 0;
+                const isAtStartOfLine = this.isLastNewLine() || this._text.length === 0;
                 if (isAtStartOfLine)
                     this.writeIndentation();
                 if (this._queuedIndentation != null) {
@@ -292,17 +316,6 @@ export default class CodeBlockWriter {
             else if (currentChar === "}" && lastCharOnStack === "{")
                 this._stringCharStack.pop();
         }
-    }
-
-    private isLastCharANewLine() {
-        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1;
-    }
-
-    private getLastChar() {
-        if (this._text.length === 0)
-            return undefined;
-
-        return this._text[this._text.length - 1];
     }
 
     private writeIndentation() {

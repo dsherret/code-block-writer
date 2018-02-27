@@ -743,15 +743,19 @@ describe("#isInString", () => {
     });
 });
 
+function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T) {
+    assert.equal(str.length + 1, expectedValues.length);
+    const writer = new CodeBlockWriter();
+    assert.equal(func(writer), expectedValues[0]);
+    for (let i = 0; i < str.length; i++) {
+        writer.write(str[i]);
+        assert.equal(func(writer), expectedValues[i + 1], `For char: ${JSON.stringify(str[i])} (${i})`);
+    }
+}
+
 describe("#isInComment", () => {
     function doTest(str: string, expectedValues: boolean[]) {
-        assert.equal(str.length + 1, expectedValues.length);
-        const writer = new CodeBlockWriter();
-        assert.equal(writer.isInComment(), expectedValues[0]);
-        for (let i = 0; i < str.length; i++) {
-            writer.write(str[i]);
-            assert.equal(writer.isInComment(), expectedValues[i + 1]);
-        }
+        runSequentialCheck(str, expectedValues, writer => writer.isInComment());
     }
 
     it("should be in a comment for star comments", () => {
@@ -760,6 +764,36 @@ describe("#isInComment", () => {
 
     it("should be in a comment for line comments", () => {
         doTest("// t\nt", [false, false, true, true, true, false, false]);
+    });
+});
+
+describe("#isLastSpace", () => {
+    function doTest(str: string, expectedValues: boolean[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.isLastSpace());
+    }
+
+    it("should be true when a space", () => {
+        doTest("t t\t\n\r", [false, false, true, false, false, false, false]);
+    });
+});
+
+describe("#isLastNewLine", () => {
+    function doTest(str: string, expectedValues: boolean[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.isLastNewLine());
+    }
+
+    it("should be true when a new line", () => {
+        doTest(" \nt", [false, false, true, false]);
+    });
+});
+
+describe("#getLastChar", () => {
+    function doTest(str: string, expectedValues: (string | undefined)[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.getLastChar());
+    }
+
+    it("should get the last char", () => {
+        doTest(" \nt", [undefined, " ", "\n", "t"]);
     });
 });
 
