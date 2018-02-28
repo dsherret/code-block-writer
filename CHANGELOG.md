@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.6.0"></a>
+# [6.6.0](https://github.com/dsherret/code-block-writer/compare/v6.5.3...v6.6.0) (2018-02-28)
+
+
+### Features
+
+* Add .getIndentationLevel() ([949acb0](https://github.com/dsherret/code-block-writer/commit/949acb0))
+
+
+
 <a name="6.5.3"></a>
 ## [6.5.3](https://github.com/dsherret/code-block-writer/compare/v6.5.2...v6.5.3) (2018-02-28)
 
