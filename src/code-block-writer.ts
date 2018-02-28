@@ -86,7 +86,8 @@ export default class CodeBlockWriter {
      */
     indentBlock(block: () => void): this {
         this._indentBlockInternal(block);
-        this._newLineOnNextWrite = true;
+        if (!this.isLastNewLine())
+            this._newLineOnNextWrite = true;
         return this;
     }
 

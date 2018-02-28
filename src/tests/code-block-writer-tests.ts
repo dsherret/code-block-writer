@@ -250,7 +250,17 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a newline if the last was a new line", () => {
+        it("should not do a newline on the first line", () => {
+            const expected =
+                `    inside`;
+            doTest(expected, writer => {
+                writer.indentBlock(() => {
+                    writer.write("inside");
+                });
+            });
+        });
+
+        it("should not do a newline at the start if the last was a new line", () => {
             const expected =
                 `test
     inside`;
@@ -261,13 +271,12 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should not do a newline on the first line", () => {
-            const expected =
-                `    inside`;
+        it("should not do a newline at the end if the last was a new line", () => {
+            const expected = `    inside\ntest`;
             doTest(expected, writer => {
                 writer.indentBlock(() => {
-                    writer.write("inside");
-                });
+                    writer.writeLine("inside");
+                }).write("test");
             });
         });
 
