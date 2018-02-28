@@ -66,6 +66,7 @@ class MyClass extends OtherClass {
 * `conditionalWrite(condition: boolean, str: string)` - Writes if the condition is matched.
 * `conditionalWriteLine(condition: boolean, str: string)` - Writes some text and adds a newline if the condition is matched.
 * `setIndentationLevel(indentationLevel: number)` - Sets the current indentation level.
+* `getIndentationLevel()` - Gets the current indentation level.
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isInString()` - Gets if the writer is currently in a string.

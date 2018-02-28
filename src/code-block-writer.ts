@@ -56,6 +56,13 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets the current indentation level.
+     */
+    getIndentationLevel() {
+        return this._currentIndentation;
+    }
+
+    /**
      * Writes a block using braces.
      * @param block - Write using the writer within this block.
      */

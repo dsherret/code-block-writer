@@ -635,6 +635,7 @@ describe("#setIdentationLevel", () => {
         writer.writeLine("t");
 
         assert.equal(writer.toString(), "        t\n        t\n");
+        assert.equal(writer.getIndentationLevel(), 2);
     });
 
     it("should be able to set the indentation level to 0 within a block", () => {
@@ -657,6 +658,7 @@ describe("#setIdentationLevel", () => {
         writer.write("t").block(() => writer.write("t"));
 
         assert.equal(writer.toString(), `${indent + indent}t {\n${indent + indent + indent}t\n${indent + indent}}`);
+        assert.equal(writer.getIndentationLevel(), 2);
     }
 
     it("should be able to set the indentation level using a string with two spaces", () => {
