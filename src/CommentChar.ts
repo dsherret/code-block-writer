@@ -1,4 +1,5 @@
-﻿export enum CommentChar {
+﻿/** @internal */
+export enum CommentChar {
     Line,
     Star
 }

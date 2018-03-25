@@ -538,6 +538,27 @@ test`;
         });
     });
 
+    describe("#space()", () => {
+        it("should do a space when saying to", () => {
+            const expected = `   `;
+            doTest(expected, writer => {
+                writer.space().space().space();
+            });
+        });
+
+        it("should do a space when saying to do multiple", () => {
+            const expected = `     `;
+            doTest(expected, writer => {
+                writer.space(5);
+            });
+        });
+
+        it("should throw if providing a negative number", () => {
+            const writer = new CodeBlockWriter();
+            assert.throws(() => writer.space(-1));
+        });
+    });
+
     describe("#getLength()", () => {
         it("should return the length", () => {
             const writer = getWriter();

@@ -1,3 +1,4 @@
+import {stringRepeat} from "./utils/stringUtils";
 import {CommentChar} from "./CommentChar";
 
 export default class CodeBlockWriter {
@@ -10,6 +11,7 @@ export default class CodeBlockWriter {
     private _queuedIndentation: number | undefined;
     private _text = "";
     private _newLineOnNextWrite = false;
+    /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
     private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
 
@@ -201,11 +203,20 @@ export default class CodeBlockWriter {
      */
     spaceIfLastNotSpace() {
         this._newLineIfNewLineOnNextWrite();
-        const lastChar = this.getLastChar();
 
         if (!this.isLastSpace())
             this._writeIndentingNewLines(" ");
 
+        return this;
+    }
+
+    /**
+     * Writes a space.
+     * @param times - Number of times to write a space.
+     */
+    space(times = 1) {
+        this._newLineIfNewLineOnNextWrite();
+        this._writeIndentingNewLines(stringRepeat(" ", times));
         return this;
     }
 

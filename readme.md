@@ -59,7 +59,8 @@ class MyClass extends OtherClass {
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
 * `indent()` - Indents the current line.
-* `indentBlock(block: () => void)` - Indents a block of code.
+* `indentBlock(block?: () => void)` - Indents a block of code.
+* `space(times?: number)` - Writes a space. Optionally writes multiple spaces if providing a number.
 * `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.

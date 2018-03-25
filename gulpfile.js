@@ -45,7 +45,7 @@ gulp.task("watch", function() {
 });
 
 gulp.task("clean-scripts", function(cb) {
-    return del(["./dist/**/*{.js,.js.map}"], cb);
+    return del(["./dist/**/*{.js,.js.map,.d.ts}"], cb);
 });
 
 gulp.task("default", ["tslint", "typescript"]);
