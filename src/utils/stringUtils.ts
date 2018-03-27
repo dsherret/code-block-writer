@@ -17,3 +17,20 @@ export function es5StringRepeat(str: string, times: number) {
         newStr += str;
     return newStr;
 }
+
+export function escapeForWithinString(str: string, quoteKind: string) {
+    return escapeChar(str, quoteKind).replace(/(\r?\n)/g, "\\$1");
+}
+
+export function escapeChar(str: string, char: string) {
+    if (char.length !== 1)
+        throw new Error(`Specified char must be one character long.`);
+
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === char)
+            result += "\\";
+        result += str[i];
+    }
+    return result;
+}

@@ -1,4 +1,4 @@
-import {stringRepeat} from "./utils/stringUtils";
+import {stringRepeat, escapeForWithinString} from "./utils/stringUtils";
 import {CommentChar} from "./CommentChar";
 
 export default class CodeBlockWriter {
@@ -194,7 +194,7 @@ export default class CodeBlockWriter {
     quote(text: string): this;
     quote(text?: string) {
         this._newLineIfNewLineOnNextWrite();
-        this._writeIndentingNewLines(text == null ? this._quoteChar : this._quoteChar + text + this._quoteChar);
+        this._writeIndentingNewLines(text == null ? this._quoteChar : this._quoteChar + escapeForWithinString(text, this._quoteChar) + this._quoteChar);
         return this;
     }
 

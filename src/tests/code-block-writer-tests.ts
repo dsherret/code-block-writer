@@ -502,6 +502,13 @@ test`;
                 writer.quote("test");
             });
         });
+
+        it("should write out text surrounded by quotes and escape quotes and new lines", () => {
+            const expected = `"te\\"\\\r\nst"`;
+            doTest(expected, writer => {
+                writer.quote("te\"\r\nst");
+            });
+        });
     });
 
     describe("#spaceIfLastNotSpace()", () => {
