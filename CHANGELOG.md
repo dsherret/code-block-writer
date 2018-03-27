@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.7.1"></a>
+## [6.7.1](https://github.com/dsherret/code-block-writer/compare/v6.7.0...v6.7.1) (2018-03-27)
+
+
+### Bug Fixes
+
+* Writing within quote should escape string chars. ([bd9ddaa](https://github.com/dsherret/code-block-writer/commit/bd9ddaa))
+
+
+
 <a name="6.7.0"></a>
 # [6.7.0](https://github.com/dsherret/code-block-writer/compare/v6.6.0...v6.7.0) (2018-03-25)
 
