@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.7.2"></a>
+## [6.7.2](https://github.com/dsherret/code-block-writer/compare/v6.7.1...v6.7.2) (2018-03-31)
+
+
+### Bug Fixes
+
+* Should not be in a string when using a string char in a regular expression literal. ([70e88a5](https://github.com/dsherret/code-block-writer/commit/70e88a5))
+
+
+
 <a name="6.7.1"></a>
 ## [6.7.1](https://github.com/dsherret/code-block-writer/compare/v6.7.0...v6.7.1) (2018-03-27)
 
