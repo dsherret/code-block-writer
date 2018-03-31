@@ -14,6 +14,7 @@ export default class CodeBlockWriter {
     /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
     private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
+    private _isInRegEx = false;
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; useSingleQuote?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
@@ -323,7 +324,7 @@ export default class CodeBlockWriter {
                 }
             }
 
-            this._updateStringStack(s);
+            this._updateInternalState(s);
             this._text += s;
         }
     }
@@ -334,12 +335,25 @@ export default class CodeBlockWriter {
         this._text += this._newLine;
     }
 
-    private _updateStringStack(str: string) {
+    private _updateInternalState(str: string) {
         for (let i = 0; i < str.length; i++) {
             const currentChar = str[i];
-            const pastChar = i === 0 ? this.getLastChar() : str[i - 1];
-            const lastCharOnStack = this._stringCharStack.length === 0 ? undefined : this._stringCharStack[this._stringCharStack.length - 1];
+            const pastChar = i === 0 ? this._text[this._text.length - 1] : str[i - 1];
+            const pastPastChar = i < 1 ? this._text[this._text.length - 2 + i] : str[i - 2];
 
+            // handle regex
+            if (this._isInRegEx) {
+                if (pastChar === "/" && pastPastChar !== "\\" || pastChar === "\n")
+                    this._isInRegEx = false;
+                else
+                    continue;
+            }
+            else if (!this.isInString() && !this.isInComment() && isRegExStart(currentChar, pastChar, pastPastChar)) {
+                this._isInRegEx = true;
+                continue;
+            }
+
+            // handle comments
             if (this._currentCommentChar == null && pastChar === "/" && currentChar === "/")
                 this._currentCommentChar = CommentChar.Line;
             else if (this._currentCommentChar == null && pastChar === "/" && currentChar === "*")
@@ -349,16 +363,27 @@ export default class CodeBlockWriter {
 
             if (this.isInComment())
                 continue;
-            else if (currentChar === "\"" || currentChar === "'" || currentChar === "`") {
-                if (lastCharOnStack === currentChar)
+
+            // handle strings
+            const lastStringCharOnStack = this._stringCharStack.length === 0 ? undefined : this._stringCharStack[this._stringCharStack.length - 1];
+            if (currentChar === "\"" || currentChar === "'" || currentChar === "`") {
+                if (lastStringCharOnStack === currentChar)
                     this._stringCharStack.pop();
-                else if (lastCharOnStack === "{" || lastCharOnStack === undefined)
+                else if (lastStringCharOnStack === "{" || lastStringCharOnStack === undefined)
                     this._stringCharStack.push(currentChar);
             }
-            else if (pastChar === "$" && currentChar === "{" && lastCharOnStack === "`")
+            else if (pastChar === "$" && currentChar === "{" && lastStringCharOnStack === "`")
                 this._stringCharStack.push(currentChar);
-            else if (currentChar === "}" && lastCharOnStack === "{")
+            else if (currentChar === "}" && lastStringCharOnStack === "{")
                 this._stringCharStack.pop();
+        }
+
+        function isRegExStart(currentChar: string, pastChar: string, pastPastChar: string) {
+            return pastChar === "/"
+                && currentChar !== "/"
+                && currentChar !== "*"
+                && pastPastChar !== "*"
+                && pastPastChar !== "/";
         }
     }
 

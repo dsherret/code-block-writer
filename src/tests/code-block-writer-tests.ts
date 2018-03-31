@@ -812,7 +812,7 @@ describe("#isInString", () => {
         assert.equal(writer.isInString(), expectedValues[0]);
         for (let i = 0; i < str.length; i++) {
             writer.write(str[i]);
-            assert.equal(writer.isInString(), expectedValues[i + 1]);
+            assert.equal(writer.isInString(), expectedValues[i + 1], `at expected position ${i + 1}`);
         }
     }
 
@@ -870,6 +870,22 @@ describe("#isInString", () => {
 
     it("should not be in a string for star comments", () => {
         doTest("/*\n't'\n*/'t'", [false, false, false, false, false, false, false, false, false, false, true, true, false]);
+    });
+
+    it("should not be in a string for regex using a single quote", () => {
+        doTest("/'test/", [false, false, false, false, false, false, false, false]);
+    });
+
+    it("should not be in a string for regex using a double quote", () => {
+        doTest("/\"test/", [false, false, false, false, false, false, false, false]);
+    });
+
+    it("should not be in a string for regex using a back tick", () => {
+        doTest("/`test/", [false, false, false, false, false, false, false, false]);
+    });
+
+    it("should be in a string for a string after a regex", () => {
+        doTest("/`/'t'", [false, false, false, false, true, true, false]);
     });
 });
 
