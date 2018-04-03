@@ -53,9 +53,10 @@ class MyClass extends OtherClass {
 * `inlineBlock(block?: () => void)` - Same as block, but doesn't add a space before the first brace and doesn't add a newline at the end.
 * `getLength()` - Get the current number of characters.
 * `writeLine(str: string)` - Writes some text and adds a newline.
-* `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
 * `newLine()` - Writes a newline.
+* `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
 * `blankLine()` - Writes a blank line. Does not allow consecutive blank lines.
+* `blankLineIfLastNotBlankLine()` - Writes a blank line if what was written last wasn't a blank line.
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
 * `indent()` - Indents the current line.

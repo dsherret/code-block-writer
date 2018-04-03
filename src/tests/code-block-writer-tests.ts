@@ -354,6 +354,32 @@ test`;
         });
     });
 
+    describe("#blankLineIfLastNotBlankLine()", () => {
+        it("should do a blank line if the last text was not a newline", () => {
+            const expected = `test\n\n`;
+
+            doTest(expected, writer => {
+                writer.write("test").blankLineIfLastNotBlankLine();
+            });
+        });
+
+        it("should do a blank line if the last text was a newline", () => {
+            const expected = `test\n\n`;
+
+            doTest(expected, writer => {
+                writer.writeLine("test").blankLineIfLastNotBlankLine();
+            });
+        });
+
+        it("should not do a blank line if the last text was a blank line", () => {
+            const expected = `test\n\n`;
+
+            doTest(expected, writer => {
+                writer.write("test").blankLine().blankLineIfLastNotBlankLine();
+            });
+        });
+    });
+
     describe("#blankLine()", () => {
         it("should do a blank line if the last text was not a new line", () => {
             const expected = `test\n\ntest`;

@@ -149,6 +149,15 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes a blank line if the last written text was not a blank line.
+     */
+    blankLineIfLastNotBlankLine() {
+        if (!this.isLastBlankLine())
+            this.blankLine();
+        return this;
+    }
+
+    /**
      * Writes a blank line if the condition is true.
      * @param condition - Condition to evaluate.
      */
