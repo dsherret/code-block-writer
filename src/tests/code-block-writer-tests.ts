@@ -354,12 +354,12 @@ test`;
         });
     });
 
-    describe("#blankLineIfLastNotBlankLine()", () => {
+    describe("#blankLineIfLastNot()", () => {
         it("should do a blank line if the last text was not a newline", () => {
             const expected = `test\n\n`;
 
             doTest(expected, writer => {
-                writer.write("test").blankLineIfLastNotBlankLine();
+                writer.write("test").blankLineIfLastNot();
             });
         });
 
@@ -367,7 +367,7 @@ test`;
             const expected = `test\n\n`;
 
             doTest(expected, writer => {
-                writer.writeLine("test").blankLineIfLastNotBlankLine();
+                writer.writeLine("test").blankLineIfLastNot();
             });
         });
 
@@ -375,7 +375,7 @@ test`;
             const expected = `test\n\n`;
 
             doTest(expected, writer => {
-                writer.write("test").blankLine().blankLineIfLastNotBlankLine();
+                writer.write("test").blankLine().blankLineIfLastNot();
             });
         });
     });
@@ -436,12 +436,12 @@ test`;
         });
     });
 
-    describe("#newLineIfLastNotNewLine()", () => {
+    describe("#newLineIfLastNot()", () => {
         it("should do a newline if the last text was not a newline", () => {
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.write("test").newLineIfLastNotNewLine();
+                writer.write("test").newLineIfLastNot();
             });
         });
 
@@ -449,7 +449,7 @@ test`;
             const expected = `test\n`;
 
             doTest(expected, writer => {
-                writer.writeLine("test").newLineIfLastNotNewLine();
+                writer.writeLine("test").newLineIfLastNot();
             });
         });
     });
@@ -557,12 +557,12 @@ test`;
         });
     });
 
-    describe("#spaceIfLastNotSpace()", () => {
+    describe("#spaceIfLastNot()", () => {
         it("should do a space at the beginning of the file", () => {
             const expected = ` `;
 
             doTest(expected, writer => {
-                writer.spaceIfLastNotSpace();
+                writer.spaceIfLastNot();
             });
         });
 
@@ -570,7 +570,7 @@ test`;
             const expected = `test `;
 
             doTest(expected, writer => {
-                writer.write("test").spaceIfLastNotSpace();
+                writer.write("test").spaceIfLastNot();
             });
         });
 
@@ -578,7 +578,7 @@ test`;
             const expected = `test `;
 
             doTest(expected, writer => {
-                writer.write("test").spaceIfLastNotSpace().spaceIfLastNotSpace();
+                writer.write("test").spaceIfLastNot().spaceIfLastNot();
             });
         });
 
@@ -586,7 +586,7 @@ test`;
             const expected = `test\n `;
 
             doTest(expected, writer => {
-                writer.write("test").newLine().spaceIfLastNotSpace();
+                writer.write("test").newLine().spaceIfLastNot();
             });
         });
     });

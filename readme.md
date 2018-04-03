@@ -54,15 +54,15 @@ class MyClass extends OtherClass {
 * `getLength()` - Get the current number of characters.
 * `writeLine(str: string)` - Writes some text and adds a newline.
 * `newLine()` - Writes a newline.
-* `newLineIfLastNotNewLine()` - Writes a newline if what was written last wasn't a newline.
+* `newLineIfLastNot()` - Writes a newline if what was written last wasn't a newline.
 * `blankLine()` - Writes a blank line. Does not allow consecutive blank lines.
-* `blankLineIfLastNotBlankLine()` - Writes a blank line if what was written last wasn't a blank line.
+* `blankLineIfLastNot()` - Writes a blank line if what was written last wasn't a blank line.
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
 * `indent()` - Indents the current line.
 * `indentBlock(block?: () => void)` - Indents a block of code.
 * `space(times?: number)` - Writes a space. Optionally writes multiple spaces if providing a number.
-* `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
+* `spaceIfLastNot()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
 * `conditionalBlankLine(condition: boolean)` - Writes a blank line if the condition is matched.

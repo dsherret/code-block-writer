@@ -71,7 +71,7 @@ export default class CodeBlockWriter {
      */
     block(block?: () => void) {
         this._newLineIfNewLineOnNextWrite();
-        this.spaceIfLastNotSpace();
+        this.spaceIfLastNot();
         this.inlineBlock(block);
         this._newLineOnNextWrite = true;
         return this;
@@ -85,7 +85,7 @@ export default class CodeBlockWriter {
         this._newLineIfNewLineOnNextWrite();
         this.write("{");
         this._indentBlockInternal(block);
-        this.newLineIfLastNotNewLine().write("}");
+        this.newLineIfLastNot().write("}");
 
         return this;
     }
@@ -104,7 +104,7 @@ export default class CodeBlockWriter {
     private _indentBlockInternal(block?: () => void) {
         this._currentIndentation++;
         if (this.getLastChar() != null)
-            this.newLineIfLastNotNewLine();
+            this.newLineIfLastNot();
         if (block != null)
             block();
         if (this._currentIndentation > 0)
@@ -129,7 +129,7 @@ export default class CodeBlockWriter {
     writeLine(str: string) {
         this._newLineIfNewLineOnNextWrite();
         if (this._text.length > 0)
-            this.newLineIfLastNotNewLine();
+            this.newLineIfLastNot();
         this._writeIndentingNewLines(str);
         this.newLine();
 
@@ -138,8 +138,17 @@ export default class CodeBlockWriter {
 
     /**
      * Writes a newline if the last line was not a newline.
+     * @deprecated Use `newLineIfLastNot()`.
      */
     newLineIfLastNotNewLine() {
+        console.warn(`newLineIfLastNotNewLine() is deprecated. Use newLineIfLastNot() instead.`)
+        return this.newLineIfLastNot();
+    }
+
+    /**
+     * Writes a newline if the last line was not a newline.
+     */
+    newLineIfLastNot() {
         this._newLineIfNewLineOnNextWrite();
 
         if (!this.isLastNewLine())
@@ -150,8 +159,17 @@ export default class CodeBlockWriter {
 
     /**
      * Writes a blank line if the last written text was not a blank line.
+     * @deprecated Use `blankLineIfLastNot()`
      */
     blankLineIfLastNotBlankLine() {
+        console.warn(`blankLineIfLastNotBlankLine() is deprecated. Use blankLineIfLastNot() instead.`)
+        return this.blankLineIfLastNot();
+    }
+
+    /**
+     * Writes a blank line if the last written text was not a blank line.
+     */
+    blankLineIfLastNot() {
         if (!this.isLastBlankLine())
             this.blankLine();
         return this;
@@ -171,7 +189,7 @@ export default class CodeBlockWriter {
      * Writes a blank line.
      */
     blankLine() {
-        return this.newLineIfLastNotNewLine().newLine();
+        return this.newLineIfLastNot().newLine();
     }
 
     /**
@@ -218,8 +236,17 @@ export default class CodeBlockWriter {
 
     /**
      * Writes a space if the last character was not a space.
+     * @deprecated Use `spaceIfLastNot()`.
      */
     spaceIfLastNotSpace() {
+        console.warn(`spaceIfLastNotSpace() is deprecated. Use spaceIfLastNot() instead.`)
+        return this.spaceIfLastNot();
+    }
+
+    /**
+     * Writes a space if the last character was not a space.
+     */
+    spaceIfLastNot() {
         this._newLineIfNewLineOnNextWrite();
 
         if (!this.isLastSpace())
