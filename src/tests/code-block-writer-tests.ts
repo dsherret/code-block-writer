@@ -380,6 +380,26 @@ test`;
         });
     });
 
+    describe("#conditionalBlankLine()", () => {
+        it("should write when the condition is true", () => {
+            doTest("t\n\n", writer => {
+                writer.write("t").conditionalBlankLine(true);
+            });
+        });
+
+        it("should not write when the condition is false", () => {
+            doTest("t", writer => {
+                writer.write("t").conditionalBlankLine(false);
+            });
+        });
+
+        it("should not write when the condition is undefined", () => {
+            doTest("t", writer => {
+                writer.write("t").conditionalBlankLine(undefined);
+            });
+        });
+    });
+
     describe("#indent()", () => {
         it("should indent as necessary", () => {
             const expected = `test\n    test`;

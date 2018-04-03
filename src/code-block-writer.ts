@@ -119,7 +119,6 @@ export default class CodeBlockWriter {
     conditionalWriteLine(condition: boolean | undefined, str: string) {
         if (condition)
             this.writeLine(str);
-
         return this;
     }
 
@@ -150,6 +149,16 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes a blank line if the condition is true.
+     * @param condition - Condition to evaluate.
+     */
+    conditionalBlankLine(condition: boolean | undefined) {
+        if (condition)
+            this.blankLine();
+        return this;
+    }
+
+    /**
      * Writes a blank line.
      */
     blankLine() {
@@ -171,7 +180,6 @@ export default class CodeBlockWriter {
     conditionalNewLine(condition: boolean | undefined) {
         if (condition)
             this.newLine();
-
         return this;
     }
 

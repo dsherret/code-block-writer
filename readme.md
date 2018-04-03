@@ -64,6 +64,7 @@ class MyClass extends OtherClass {
 * `spaceIfLastNotSpace()` - Writes a space if the last was not a space.
 * `write(str: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
+* `conditionalBlankLine(condition: boolean)` - Writes a blank line if the condition is matched.
 * `conditionalWrite(condition: boolean, str: string)` - Writes if the condition is matched.
 * `conditionalWriteLine(condition: boolean, str: string)` - Writes some text and adds a newline if the condition is matched.
 * `setIndentationLevel(indentationLevel: number)` - Sets the current indentation level.
