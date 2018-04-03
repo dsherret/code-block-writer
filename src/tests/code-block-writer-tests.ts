@@ -951,9 +951,23 @@ describe("#isLastNewLine", () => {
         doTest(" \nt", [false, false, true, false]);
     });
 
-    it("should be true for \n when specifying \r\n", () => {
+    it("should be true for \\n when specifying \\r\\n", () => {
         const writer = new CodeBlockWriter({ newLine: "\r\n" });
         doTest(" \nt", [false, false, true, false], writer);
+    });
+});
+
+describe("#isLastBlankLine", () => {
+    function doTest(str: string, expectedValues: boolean[], customWriter?: CodeBlockWriter) {
+        runSequentialCheck(str, expectedValues, (writer) => writer.isLastBlankLine(), customWriter);
+    }
+
+    it("should be true when a blank line", () => {
+        doTest(" \n\nt", [false, false, false, true, false]);
+    });
+
+    it("should be true when using \\r\\n", () => {
+        doTest(" \n\r\nt", [false, false, false, false, true, false]);
     });
 });
 

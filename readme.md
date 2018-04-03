@@ -73,6 +73,7 @@ class MyClass extends OtherClass {
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isInString()` - Gets if the writer is currently in a string.
 * `isLastNewLine()` - Gets if the writer last wrote a newline.
+* `isLastBlankLine()` - Gets if the writer last wrote a blank line.
 * `isLastSpace()` - Gets if the writer last wrote a space.
 * `getLastChar()` - Gets the last character written.
 * `toString()` - Gets the string.

@@ -280,6 +280,24 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets if the last chars written were for a blank line.
+     */
+    isLastBlankLine() {
+        let foundCount = 0;
+        for (let i = this._text.length - 1; i >= 0; i--) {
+            const currentChar = this._text[i];
+            if (currentChar === "\n") {
+                foundCount++;
+                if (foundCount === 2)
+                    return true;
+            }
+            else if (currentChar !== "\r")
+                return false;
+        }
+        return false;
+    }
+
+    /**
      * Gets if the last char written was a space.
      */
     isLastSpace() {
