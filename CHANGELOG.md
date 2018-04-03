@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.8.0"></a>
+# [6.8.0](https://github.com/dsherret/code-block-writer/compare/v6.7.2...v6.8.0) (2018-04-03)
+
+
+### Features
+
+* Add conditionalBlankLine. ([7801d42](https://github.com/dsherret/code-block-writer/commit/7801d42))
+
+
+
 <a name="6.7.2"></a>
 ## [6.7.2](https://github.com/dsherret/code-block-writer/compare/v6.7.1...v6.7.2) (2018-03-31)
 
