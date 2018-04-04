@@ -141,7 +141,6 @@ export default class CodeBlockWriter {
      * @deprecated Use `newLineIfLastNot()`.
      */
     newLineIfLastNotNewLine() {
-        console.warn(`newLineIfLastNotNewLine() is deprecated. Use newLineIfLastNot() instead.`);
         return this.newLineIfLastNot();
     }
 
@@ -162,7 +161,6 @@ export default class CodeBlockWriter {
      * @deprecated Use `blankLineIfLastNot()`
      */
     blankLineIfLastNotBlankLine() {
-        console.warn(`blankLineIfLastNotBlankLine() is deprecated. Use blankLineIfLastNot() instead.`);
         return this.blankLineIfLastNot();
     }
 
@@ -239,7 +237,6 @@ export default class CodeBlockWriter {
      * @deprecated Use `spaceIfLastNot()`.
      */
     spaceIfLastNotSpace() {
-        console.warn(`spaceIfLastNotSpace() is deprecated. Use spaceIfLastNot() instead.`);
         return this.spaceIfLastNot();
     }
 
