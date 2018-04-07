@@ -964,7 +964,45 @@ describe("#isLastSpace", () => {
     }
 
     it("should be true when a space", () => {
-        doTest("t t\t\n\r", [false, false, true, false, false, false, false]);
+        doTest("t t\t\r\n", [false, false, true, false, false, false, false]);
+    });
+});
+
+describe("#isOnFirstLineOfBlock", () => {
+    function doTest(str: string, expectedValues: boolean[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.isOnFirstLineOfBlock());
+    }
+
+    it("should be true up until the new line", () => {
+        doTest("t \t\n", [true, true, true, true, false]);
+    });
+
+    it("should be true when on a new block", () => {
+        const writer = new CodeBlockWriter();
+        writer.writeLine("testing");
+        assertState(false);
+        writer.inlineBlock(() => {
+            assertState(true);
+            writer.newLine();
+            assertState(false);
+            writer.indentBlock(() => {
+                assertState(true);
+                writer.write("testing\n");
+                assertState(false);
+                writer.write("more\n");
+                assertState(false);
+            });
+            assertState(false);
+            writer.block(() => {
+                assertState(true);
+            });
+            assertState(false);
+        });
+        assertState(false);
+
+        function assertState(state: boolean) {
+            assert.equal(writer.isOnFirstLineOfBlock(), state);
+        }
     });
 });
 

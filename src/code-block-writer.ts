@@ -15,6 +15,7 @@ export default class CodeBlockWriter {
     private _currentCommentChar: CommentChar | undefined = undefined;
     private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
     private _isInRegEx = false;
+    private _isOnFirstLineOfBlock = true;
 
     constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; useSingleQuote?: boolean; }) {
         this._newLine = (opts && opts.newLine) || "\n";
@@ -105,8 +106,10 @@ export default class CodeBlockWriter {
         this._currentIndentation++;
         if (this.getLastChar() != null)
             this.newLineIfLastNot();
+        this._isOnFirstLineOfBlock = true;
         if (block != null)
             block();
+        this._isOnFirstLineOfBlock = false;
         if (this._currentIndentation > 0)
             this._currentIndentation--;
     }
@@ -302,6 +305,13 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets if the writer is currently on the first line of the text, block, or indentation block.
+     */
+    isOnFirstLineOfBlock() {
+        return this._isOnFirstLineOfBlock;
+    }
+
+    /**
      * Gets if the writer is currently in a string.
      */
     isInString() {
@@ -395,6 +405,7 @@ export default class CodeBlockWriter {
         if (this._currentCommentChar === CommentChar.Line)
             this._currentCommentChar = undefined;
         this._text += this._newLine;
+        this._isOnFirstLineOfBlock = false;
     }
 
     private _updateInternalState(str: string) {
