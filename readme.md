@@ -72,6 +72,7 @@ class MyClass extends OtherClass {
 * `getIndentationLevel()` - Gets the current indentation level.
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
 * `isInComment()` - Gets if the writer is currently in a comment.
+* `isAtStartOfFirstLineOfBlock()` - Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
 * `isOnFirstLineOfBlock()` - Gets if the writer is currently on the first line of the text, block, or indentation block.
 * `isInString()` - Gets if the writer is currently in a string.
 * `isLastNewLine()` - Gets if the writer last wrote a newline.

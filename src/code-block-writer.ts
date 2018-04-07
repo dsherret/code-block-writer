@@ -302,6 +302,13 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
+     */
+    isAtStartOfFirstLineOfBlock() {
+        return this.isOnFirstLineOfBlock() && (this.isLastNewLine() || this.getLastChar() == null);
+    }
+
+    /**
      * Gets if the writer is currently on the first line of the text, block, or indentation block.
      */
     isOnFirstLineOfBlock() {

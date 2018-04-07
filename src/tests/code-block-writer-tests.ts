@@ -979,6 +979,7 @@ describe("#isOnFirstLineOfBlock", () => {
 
     it("should be true when on a new block", () => {
         const writer = new CodeBlockWriter();
+        assertState(true);
         writer.writeLine("testing");
         assertState(false);
         writer.inlineBlock(() => {
@@ -1002,6 +1003,47 @@ describe("#isOnFirstLineOfBlock", () => {
 
         function assertState(state: boolean) {
             assert.equal(writer.isOnFirstLineOfBlock(), state);
+        }
+    });
+});
+
+describe("#isAtStartOfFirstLineOfBlock", () => {
+    function doTest(str: string, expectedValues: boolean[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.isAtStartOfFirstLineOfBlock());
+    }
+
+    it("should be true only for the first", () => {
+        doTest("t \t\n", [true, false, false, false, false]);
+    });
+
+    it("should be true when on a new block at the start", () => {
+        const writer = new CodeBlockWriter();
+        assertState(true);
+        writer.writeLine("testing");
+        assertState(false);
+        writer.inlineBlock(() => {
+            assertState(true);
+            writer.write(" ");
+            assertState(false);
+            writer.newLine();
+            assertState(false);
+            writer.indentBlock(() => {
+                assertState(true);
+                writer.write("testing\n");
+                assertState(false);
+                writer.write("more\n");
+                assertState(false);
+            });
+            assertState(false);
+            writer.block(() => {
+                assertState(true);
+            });
+            assertState(false);
+        });
+        assertState(false);
+
+        function assertState(state: boolean) {
+            assert.equal(writer.isAtStartOfFirstLineOfBlock(), state);
         }
     });
 });
