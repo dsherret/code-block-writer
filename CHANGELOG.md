@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.11.0"></a>
+# [6.11.0](https://github.com/dsherret/code-block-writer/compare/v6.10.0...v6.11.0) (2018-04-07)
+
+
+### Features
+
+* Add .isOnFirstLineOfBlock() ([b2a10c6](https://github.com/dsherret/code-block-writer/commit/b2a10c6))
+
+
+
 <a name="6.10.0"></a>
 # [6.10.0](https://github.com/dsherret/code-block-writer/compare/v6.9.0...v6.10.0) (2018-04-03)
 
