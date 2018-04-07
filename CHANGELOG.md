@@ -12,6 +12,15 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 
+<a name="6.10.1"></a>
+# [6.10.1](https://github.com/dsherret/code-block-writer/compare/v6.9.0...v6.10.1) (2018-04-04)
+
+
+### Bug Fixes
+
+* Remove warning for now. ([ee36fac](https://github.com/dsherret/code-block-writer/commit/ee36fac))
+
+
 <a name="6.10.0"></a>
 # [6.10.0](https://github.com/dsherret/code-block-writer/compare/v6.9.0...v6.10.0) (2018-04-03)
 
