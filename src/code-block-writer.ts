@@ -1,6 +1,13 @@
 import {stringRepeat, escapeForWithinString} from "./utils/stringUtils";
 import {CommentChar} from "./CommentChar";
 
+export interface Options {
+    newLine: string;
+    indentNumberOfSpaces: number;
+    useTabs: boolean;
+    useSingleQuote: boolean;
+}
+
 export default class CodeBlockWriter {
     private readonly _indentationText: string;
     private readonly _newLine: string;
@@ -17,12 +24,24 @@ export default class CodeBlockWriter {
     private _isInRegEx = false;
     private _isOnFirstLineOfBlock = true;
 
-    constructor(opts?: { newLine?: string; indentNumberOfSpaces?: number; useTabs?: boolean; useSingleQuote?: boolean; }) {
+    constructor(opts?: Partial<Options>) {
         this._newLine = (opts && opts.newLine) || "\n";
         this._useTabs = (opts && opts.useTabs) || false;
         this._indentNumberOfSpaces = (opts && opts.indentNumberOfSpaces) || 4;
         this._indentationText = getIndentationText(this._useTabs, this._indentNumberOfSpaces);
         this._quoteChar = (opts && opts.useSingleQuote) ? "'" : `"`;
+    }
+
+    /**
+     * Gets the options.
+     */
+    getOptions(): Options {
+        return {
+            indentNumberOfSpaces: this._indentNumberOfSpaces,
+            newLine: this._newLine,
+            useTabs: this._useTabs,
+            useSingleQuote: this._quoteChar === "'"
+        };
     }
 
     /**

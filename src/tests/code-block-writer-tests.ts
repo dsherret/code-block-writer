@@ -1122,3 +1122,15 @@ describe("useTabs", () => {
         assert.equal(writer.toString(), expected);
     });
 });
+
+describe("#getOptions", () => {
+    it("should have the options that were passed in", () => {
+        const writer = new CodeBlockWriter({ useTabs: true, indentNumberOfSpaces: 8, newLine: "\r\n", useSingleQuote: false });
+        assert.deepEqual(writer.getOptions(), {
+            useTabs: true,
+            indentNumberOfSpaces: 8,
+            newLine: "\r\n",
+            useSingleQuote: false
+        });
+    });
+});

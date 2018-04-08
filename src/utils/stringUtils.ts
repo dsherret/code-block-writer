@@ -18,10 +18,12 @@ export function es5StringRepeat(str: string, times: number) {
     return newStr;
 }
 
+/** @internal */
 export function escapeForWithinString(str: string, quoteKind: string) {
     return escapeChar(str, quoteKind).replace(/(\r?\n)/g, "\\$1");
 }
 
+/** @internal */
 export function escapeChar(str: string, char: string) {
     if (char.length !== 1)
         throw new Error(`Specified char must be one character long.`);

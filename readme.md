@@ -79,4 +79,5 @@ class MyClass extends OtherClass {
 * `isLastBlankLine()` - Gets if the writer last wrote a blank line.
 * `isLastSpace()` - Gets if the writer last wrote a space.
 * `getLastChar()` - Gets the last character written.
+* `getOptions()` - Gets the writer options.
 * `toString()` - Gets the string.
