@@ -6,7 +6,8 @@
   "typings": "dist/code-block-writer.d.ts",
   "scripts": {
     "test": "gulp test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "build": "gulp typescript"
+    "build": "gulp typescript",
+    "lint": "gulp tslint"
   },
   "repository": {
     "type": "git",
