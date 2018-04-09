@@ -1,5 +1,5 @@
 import * as assert from "assert";
-import {es5StringRepeat, stringRepeat, escapeChar, escapeForWithinString} from "../../utils/stringUtils";
+import {es5StringRepeat, stringRepeat, escapeChar, escapeForWithinString, getStringFromStrOrFunc} from "../../utils/stringUtils";
 
 describe("string repeat", () => {
     function doTests(func: (str: string, times: number) => string) {
@@ -54,5 +54,15 @@ describe("escapeChar", () => {
 
     it("should escape regardless of if the character is already escaped", () => {
         doTest(`"testing \\"this\\" out"`, `"`, `\\"testing \\\\"this\\\\" out\\"`);
+    });
+});
+
+describe("getStringFromStrOrFunc", () => {
+    it("should return a string when given a string", () => {
+        assert.equal(getStringFromStrOrFunc("test"), "test");
+    });
+
+    it("should return a string when given a function", () => {
+        assert.equal(getStringFromStrOrFunc(() => "test"), "test");
     });
 });

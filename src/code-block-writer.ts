@@ -1,5 +1,5 @@
-import {stringRepeat, escapeForWithinString} from "./utils/stringUtils";
-import {CommentChar} from "./CommentChar";
+import { stringRepeat, escapeForWithinString, getStringFromStrOrFunc } from "./utils/stringUtils";
+import { CommentChar } from "./CommentChar";
 
 export interface Options {
     newLine: string;
@@ -136,11 +136,13 @@ export default class CodeBlockWriter {
     /**
      * Conditionally writes a line of text.
      * @param condition - Condition to evaluate.
-     * @param str - String to write if the condition is true.
+     * @param strOrFunc - String to write if the condition is true.
+     * Alternatively, a function which returns a string to write.
      */
-    conditionalWriteLine(condition: boolean | undefined, str: string) {
+    conditionalWriteLine(condition: boolean | undefined, strOrFunc: string | (() => string)) {
         if (condition)
-            this.writeLine(str);
+            this.writeLine(getStringFromStrOrFunc(strOrFunc));
+
         return this;
     }
 
@@ -287,11 +289,11 @@ export default class CodeBlockWriter {
     /**
      * Writes the provided text if the condition is true.
      * @param condition - Condition to evaluate.
-     * @param text - Text to write.
+     * @param textOrFunc - Text to write or a function which returns the text.
      */
-    conditionalWrite(condition: boolean | undefined, text: string) {
+    conditionalWrite(condition: boolean | undefined, textOrFunc: string | (() => string)) {
         if (condition)
-            this.write(text);
+            this.write(getStringFromStrOrFunc(textOrFunc));
 
         return this;
     }
@@ -504,7 +506,7 @@ export default class CodeBlockWriter {
             if (!/^[ \t]*$/.test(countOrText))
                 throw new Error("Provided string must be empty or only contain spaces or tabs.");
 
-            const {spacesCount, tabsCount} = getSpacesAndTabsCount(countOrText);
+            const { spacesCount, tabsCount } = getSpacesAndTabsCount(countOrText);
             return tabsCount + Math.round(Math.max(0, spacesCount - 1) / this._indentNumberOfSpaces);
         }
         else
@@ -529,5 +531,5 @@ function getSpacesAndTabsCount(str: string) {
             spacesCount++;
     }
 
-    return {spacesCount, tabsCount};
+    return { spacesCount, tabsCount };
 }
