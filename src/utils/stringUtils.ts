@@ -36,3 +36,8 @@ export function escapeChar(str: string, char: string) {
     }
     return result;
 }
+
+/** @internal */
+export function getStringFromStrOrFunc(strOrFunc: string | (() => string)) {
+    return strOrFunc instanceof Function ? strOrFunc() : strOrFunc;
+}
