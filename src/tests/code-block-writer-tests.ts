@@ -641,41 +641,79 @@ test`;
     });
 
     describe("#conditionalWrite()", () => {
-        it("should write when the condition is true", () => {
+        it("should write the given string when the condition is true", () => {
             doTest("test", writer => {
                 writer.conditionalWrite(true, "test");
             });
         });
 
-        it("should not write when the condition is false", () => {
+        it("should not write the given string when the condition is false", () => {
             doTest("", writer => {
                 writer.conditionalWrite(false, "test");
             });
         });
 
-        it("should not write when the condition is undefined", () => {
+        it("should not write the given string when the condition is undefined", () => {
             doTest("", writer => {
                 writer.conditionalWrite(undefined, "test");
+            });
+        });
+
+        it("should write the result of the given function when the condition is true", () => {
+            doTest("test", writer => {
+                writer.conditionalWrite(true, () => "test");
+            });
+        });
+
+        it("should not write the result of the given function when the condition is false", () => {
+            doTest("", writer => {
+                writer.conditionalWrite(false, () => "test");
+            });
+        });
+
+        it("should not evaluate the given function when the condition is false", () => {
+            const test: any = null;
+            doTest("", writer => {
+                writer.conditionalWrite(false, () => test.test);
             });
         });
     });
 
     describe("#conditionalWriteLine()", () => {
-        it("should write when the condition is true", () => {
+        it("should write the given string when the condition is true", () => {
             doTest("test\n", writer => {
                 writer.conditionalWriteLine(true, "test");
             });
         });
 
-        it("should not write when the condition is false", () => {
+        it("should not write the given string when the condition is false", () => {
             doTest("", writer => {
                 writer.conditionalWriteLine(false, "test");
             });
         });
 
-        it("should not write when the condition is undefined", () => {
+        it("should not write the given string when the condition is undefined", () => {
             doTest("", writer => {
                 writer.conditionalWriteLine(undefined, "test");
+            });
+        });
+
+        it("should write the result of the given function when the condition is true", () => {
+            doTest("test\n", writer => {
+                writer.conditionalWriteLine(true, () => "test");
+            });
+        });
+
+        it("should not write the result of the given function when the condition is false", () => {
+            doTest("", writer => {
+                writer.conditionalWriteLine(false, () => "test");
+            });
+        });
+
+        it("should not evaluate the given function when the condition is false", () => {
+            const test: any = null;
+            doTest("", writer => {
+                writer.conditionalWriteLine(false, () => test.test);
             });
         });
     });
