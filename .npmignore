@@ -1,5 +1,6 @@
 /node_modules
 /.vscode
+/.nyc_output
 *.js.map
 /obj
 /temp
@@ -10,5 +11,5 @@
 *.sln
 /coverage
 /.vs
-/typings
 /dist/tests
+/typings
