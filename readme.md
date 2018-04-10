@@ -63,11 +63,13 @@ class MyClass extends OtherClass {
 * `indentBlock(block?: () => void)` - Indents a block of code.
 * `space(times?: number)` - Writes a space. Optionally writes multiple spaces if providing a number.
 * `spaceIfLastNot()` - Writes a space if the last was not a space.
-* `write(str: string)` - Writes some text.
+* `write(text: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
 * `conditionalBlankLine(condition: boolean)` - Writes a blank line if the condition is matched.
-* `conditionalWrite(condition: boolean, str: string)` - Writes if the condition is matched.
-* `conditionalWriteLine(condition: boolean, str: string)` - Writes some text and adds a newline if the condition is matched.
+* `conditionalWrite(condition: boolean, text: string)` - Writes if the condition is matched.
+* `conditionalWrite(condition: boolean, textFunc: () => string)` - Writes if the condition is matched.
+* `conditionalWriteLine(condition: boolean, text: string)` - Writes some text and adds a newline if the condition is matched.
+* `conditionalWriteLine(condition: boolean, textFunc: () => string)` - Writes some text and adds a newline if the condition is matched.
 * `setIndentationLevel(indentationLevel: number)` - Sets the current indentation level.
 * `getIndentationLevel()` - Gets the current indentation level.
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
