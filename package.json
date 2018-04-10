@@ -5,9 +5,11 @@
   "main": "dist/code-block-writer.js",
   "typings": "dist/code-block-writer.d.ts",
   "scripts": {
-    "test": "gulp test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
-    "build": "gulp typescript",
-    "lint": "gulp tslint"
+    "test": "nyc --reporter=lcov mocha --opts mocha.opts",
+    "test-ci": "npm run test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "build": "rimraf dist && tsc",
+    "lint": "tslint src/**/*.ts",
+    "dopublish": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,17 @@
     "url": "https://github.com/dsherret/code-block-writer/issues"
   },
   "homepage": "https://github.com/dsherret/code-block-writer#readme",
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": ["src/**/*.ts", "!src/tests/**/*.ts"],
+    "reporter": [
+      "html"
+    ],
+    "all": true
+  },
   "typescript": {
     "definition": "code-block-writer.d.ts"
   },
@@ -33,13 +46,11 @@
     "@types/node": "^8.0.53",
     "coveralls": "^2.13.1",
     "del": "^2.0.2",
-    "gulp": "^3.9.1",
-    "gulp-istanbul": "^1.1.1",
-    "gulp-mocha": "^2.2.0",
-    "gulp-tslint": "^8.1.1",
-    "gulp-typescript": "^2.13.3",
     "merge2": "^1.2.0",
     "mocha": "^3.3.0",
+    "nyc": "^11.6.0",
+    "source-map-support": "^0.5.4",
+    "ts-node": "^5.0.1",
     "tslint": "^5.6.0",
     "typescript": "^2.8.1"
   }
