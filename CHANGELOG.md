@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.14.0"></a>
+# [6.14.0](https://github.com/dsherret/code-block-writer/compare/v6.13.0...v6.14.0) (2018-04-10)
+
+
+### Features
+
+* allow passing a function into conditional write methods ([d299c84](https://github.com/dsherret/code-block-writer/commit/d299c84))
+
+
+
 <a name="6.13.0"></a>
 # [6.13.0](https://github.com/dsherret/code-block-writer/compare/v6.12.0...v6.13.0) (2018-04-08)
 
