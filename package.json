@@ -1,6 +1,6 @@
 {
   "name": "code-block-writer",
-  "version": "6.14.0",
+  "version": "7.0.0",
   "description": "A simple code writer that assists with formatting and visualizing blocks of code.",
   "main": "dist/code-block-writer.js",
   "typings": "dist/code-block-writer.d.ts",
