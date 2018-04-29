@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.0.0"></a>
+# [7.0.0](https://github.com/dsherret/code-block-writer/compare/v6.13.0...v7.0.0) (2018-04-29)
+
+
+### Code Refactoring
+
+* Remove deprecated methods. ([e7fca86](https://github.com/dsherret/code-block-writer/commit/e7fca86))
+
+
+### Features
+
+* allow passing a function into conditional write methods ([d299c84](https://github.com/dsherret/code-block-writer/commit/d299c84))
+
+
+### BREAKING CHANGES
+
+* `newLineIfLastNotNewLine`, `blankLineIfLastNotBlankLine`, `spaceIfLastNotSpace` are removed. Use the shorter method names like `spaceIfLastNot`.
+
+
+
 <a name="6.14.0"></a>
 # [6.14.0](https://github.com/dsherret/code-block-writer/compare/v6.13.0...v6.14.0) (2018-04-10)
 
