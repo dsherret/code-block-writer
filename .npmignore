@@ -11,4 +11,10 @@
 *.sln
 /coverage
 /.vs
+/src
+/tslint.json
+/tsconfig.json
+/gulpfile.js
+/CHANGELOG.md
+/.travis.yml
 /dist/tests
