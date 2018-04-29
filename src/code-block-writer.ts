@@ -168,14 +168,6 @@ export default class CodeBlockWriter {
 
     /**
      * Writes a newline if the last line was not a newline.
-     * @deprecated Use `newLineIfLastNot()`.
-     */
-    newLineIfLastNotNewLine() {
-        return this.newLineIfLastNot();
-    }
-
-    /**
-     * Writes a newline if the last line was not a newline.
      */
     newLineIfLastNot() {
         this._newLineIfNewLineOnNextWrite();
@@ -184,14 +176,6 @@ export default class CodeBlockWriter {
             this.newLine();
 
         return this;
-    }
-
-    /**
-     * Writes a blank line if the last written text was not a blank line.
-     * @deprecated Use `blankLineIfLastNot()`
-     */
-    blankLineIfLastNotBlankLine() {
-        return this.blankLineIfLastNot();
     }
 
     /**
@@ -260,14 +244,6 @@ export default class CodeBlockWriter {
         this._newLineIfNewLineOnNextWrite();
         this._writeIndentingNewLines(text == null ? this._quoteChar : this._quoteChar + escapeForWithinString(text, this._quoteChar) + this._quoteChar);
         return this;
-    }
-
-    /**
-     * Writes a space if the last character was not a space.
-     * @deprecated Use `spaceIfLastNot()`.
-     */
-    spaceIfLastNotSpace() {
-        return this.spaceIfLastNot();
     }
 
     /**

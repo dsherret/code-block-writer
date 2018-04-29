@@ -48,8 +48,6 @@
     "@types/mocha": "^2.2.44",
     "@types/node": "^8.0.53",
     "coveralls": "^2.13.1",
-    "del": "^2.0.2",
-    "merge2": "^1.2.0",
     "mocha": "^3.3.0",
     "nyc": "^11.6.0",
     "source-map-support": "^0.5.4",
