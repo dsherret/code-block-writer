@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.1.0"></a>
+# [7.1.0](https://github.com/dsherret/code-block-writer/compare/v7.0.0...v7.1.0) (2018-05-08)
+
+
+### Features
+
+* Add .tab(), .tabIfLastNot(), .isLastTab() ([0e6f6e9](https://github.com/dsherret/code-block-writer/commit/0e6f6e9))
+
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/dsherret/code-block-writer/compare/v6.13.0...v7.0.0) (2018-04-29)
 
