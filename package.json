@@ -6,7 +6,6 @@
   "typings": "dist/code-block-writer.d.ts",
   "scripts": {
     "test": "nyc --reporter=lcov mocha --opts mocha.opts",
-    "test-ci": "npm run test && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build": "rimraf dist && tsc",
     "lint": "tslint src/**/*.ts",
     "dopublish": "npm run build && npm publish"
