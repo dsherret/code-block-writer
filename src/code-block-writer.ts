@@ -269,6 +269,28 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes a tab if the last character was not a tab.
+     */
+    tabIfLastNot() {
+        this._newLineIfNewLineOnNextWrite();
+
+        if (!this.isLastTab())
+            this._writeIndentingNewLines("\t");
+
+        return this;
+    }
+
+    /**
+     * Writes a tab.
+     * @param times - Number of times to write a tab.
+     */
+    tab(times = 1) {
+        this._newLineIfNewLineOnNextWrite();
+        this._writeIndentingNewLines(stringRepeat("\t", times));
+        return this;
+    }
+
+    /**
      * Conditionally writes text.
      * @param condition - Condition to evaluate.
      * @param textFunc - A function that returns a string to write if the condition is true.
@@ -362,6 +384,13 @@ export default class CodeBlockWriter {
      */
     isLastSpace() {
         return this.getLastChar() === " ";
+    }
+
+    /**
+     * Gets if the last char written was a tab.
+     */
+    isLastTab() {
+        return this.getLastChar() === "\t";
     }
 
     /**

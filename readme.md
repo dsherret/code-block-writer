@@ -63,6 +63,8 @@ class MyClass extends OtherClass {
 * `indentBlock(block?: () => void)` - Indents a block of code.
 * `space(times?: number)` - Writes a space. Optionally writes multiple spaces if providing a number.
 * `spaceIfLastNot()` - Writes a space if the last was not a space.
+* `tab(times?: number)` - Writes a tab. Optionally writes multiple tabs if providing a number.
+* `tabIfLastNot()` - Writes a tab if the last was not a tab.
 * `write(text: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
 * `conditionalBlankLine(condition: boolean)` - Writes a blank line if the condition is matched.
@@ -80,6 +82,7 @@ class MyClass extends OtherClass {
 * `isLastNewLine()` - Gets if the writer last wrote a newline.
 * `isLastBlankLine()` - Gets if the writer last wrote a blank line.
 * `isLastSpace()` - Gets if the writer last wrote a space.
+* `isLastTab()` - Gets if the writer last wrote a tab.
 * `getLastChar()` - Gets the last character written.
 * `getOptions()` - Gets the writer options.
 * `toString()` - Gets the string.
