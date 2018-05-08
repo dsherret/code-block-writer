@@ -612,6 +612,61 @@ test`;
         });
     });
 
+    describe("#tabIfLastNot()", () => {
+        it("should do a tab at the beginning of the file", () => {
+            const expected = `\t`;
+
+            doTest(expected, writer => {
+                writer.tabIfLastNot();
+            });
+        });
+
+        it("should do a tab if the last character wasn't a tab", () => {
+            const expected = `test\t`;
+
+            doTest(expected, writer => {
+                writer.write("test").tabIfLastNot();
+            });
+        });
+
+        it("should not do a tab if the last character was a tab", () => {
+            const expected = `test\t`;
+
+            doTest(expected, writer => {
+                writer.write("test").tabIfLastNot().tabIfLastNot();
+            });
+        });
+
+        it("should do a tab if the last character was a newline", () => {
+            const expected = `test\n\t`;
+
+            doTest(expected, writer => {
+                writer.write("test").newLine().tabIfLastNot();
+            });
+        });
+    });
+
+    describe("#tab()", () => {
+        it("should do a tab when saying to", () => {
+            const expected = `\t\t\t`;
+            doTest(expected, writer => {
+                writer.tab().tab().tab();
+            });
+        });
+
+        it("should do a tab when saying to do multiple", () => {
+            const expected = `\t\t\t\t\t`;
+            doTest(expected, writer => {
+                writer.tab(5);
+            });
+        });
+
+        it("should throw if providing a negative number", () => {
+            const writer = new CodeBlockWriter();
+            assert.throws(() => writer.tab(-1));
+        });
+    });
+
     describe("#getLength()", () => {
         it("should return the length", () => {
             const writer = getWriter();
@@ -1003,6 +1058,16 @@ describe("#isLastSpace", () => {
 
     it("should be true when a space", () => {
         doTest("t t\t\r\n", [false, false, true, false, false, false, false]);
+    });
+});
+
+describe("#isLastTab", () => {
+    function doTest(str: string, expectedValues: boolean[]) {
+        runSequentialCheck(str, expectedValues, writer => writer.isLastTab());
+    }
+
+    it("should be true when a tab", () => {
+        doTest("t t\t\r\n", [false, false, false, false, true, false, false]);
     });
 });
 
