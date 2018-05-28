@@ -879,6 +879,29 @@ describe("#setIdentationLevel", () => {
 
         assert.equal(writer.toString(), `\t\t\t\t\ts`);
     });
+
+    function doPortionTest(level: number, expected: string) {
+        const writer = new CodeBlockWriter({ useTabs: false, indentNumberOfSpaces: 4 });
+        writer.setIndentationLevel(level);
+        writer.write("s");
+        assert.equal(writer.toString(), expected + `s`);
+    }
+
+    it("should indent a quarter of an indent when using spaces and specifying a quarter", () => {
+        doPortionTest(0.25, " ");
+    });
+
+    it("should indent half an indent when using spaces and specifying halfway", () => {
+        doPortionTest(0.5, "  ");
+    });
+
+    it("should indent a third of an indent when using spaces and specifying a third", () => {
+        doPortionTest(0.75, "   ");
+    });
+
+    it("should round the indent when specifying a position between two indexes", () => {
+        doPortionTest(0.125, " ");
+    });
 });
 
 describe("#queueIdentationLevel", () => {

@@ -24,12 +24,12 @@ export default class CodeBlockWriter {
     private _isInRegEx = false;
     private _isOnFirstLineOfBlock = true;
 
-    constructor(opts?: Partial<Options>) {
-        this._newLine = (opts && opts.newLine) || "\n";
-        this._useTabs = (opts && opts.useTabs) || false;
-        this._indentNumberOfSpaces = (opts && opts.indentNumberOfSpaces) || 4;
+    constructor(opts: Partial<Options> = {}) {
+        this._newLine = opts.newLine || "\n";
+        this._useTabs = opts.useTabs || false;
+        this._indentNumberOfSpaces = opts.indentNumberOfSpaces || 4;
         this._indentationText = getIndentationText(this._useTabs, this._indentNumberOfSpaces);
-        this._quoteChar = (opts && opts.useSingleQuote) ? "'" : `"`;
+        this._quoteChar = opts.useSingleQuote ? "'" : `"`;
     }
 
     /**
@@ -129,8 +129,7 @@ export default class CodeBlockWriter {
         if (block != null)
             block();
         this._isOnFirstLineOfBlock = false;
-        if (this._currentIndentation > 0)
-            this._currentIndentation--;
+        this._currentIndentation = Math.max(0, this._currentIndentation - 1);
     }
 
     /**
@@ -504,7 +503,20 @@ export default class CodeBlockWriter {
     }
 
     private _writeIndentation() {
-        this._text += Array(this._currentIndentation + 1).join(this._indentationText);
+        const flooredIndentation = Math.floor(this._currentIndentation);
+        for (let i = 0; i < flooredIndentation; i++)
+            this._text += this._indentationText;
+
+        const overflow = this._currentIndentation - flooredIndentation;
+        if (this._useTabs) {
+            if (overflow > 0.5)
+                this._text += this._indentationText;
+        }
+        else {
+            const portion = Math.round(this._indentationText.length * overflow);
+            for (let i = 0; i < portion; i++)
+                this._text += this._indentationText[i];
+        }
     }
 
     private _newLineIfNewLineOnNextWrite() {
@@ -525,7 +537,7 @@ export default class CodeBlockWriter {
                 throw new Error("Provided string must be empty or only contain spaces or tabs.");
 
             const { spacesCount, tabsCount } = getSpacesAndTabsCount(countOrText);
-            return tabsCount + Math.round(Math.max(0, spacesCount - 1) / this._indentNumberOfSpaces);
+            return tabsCount + spacesCount / this._indentNumberOfSpaces;
         }
         else
             throw new Error("Argument provided must be a string or number.");
