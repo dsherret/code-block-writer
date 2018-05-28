@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.2.0"></a>
+# [7.2.0](https://github.com/dsherret/code-block-writer/compare/v7.1.0...v7.2.0) (2018-05-28)
+
+
+### Features
+
+* Allow passing in a decimal indentation level. ([c77fa14](https://github.com/dsherret/code-block-writer/commit/c77fa14))
+
+
+
 <a name="7.1.0"></a>
 # [7.1.0](https://github.com/dsherret/code-block-writer/compare/v7.0.0...v7.1.0) (2018-05-08)
 
