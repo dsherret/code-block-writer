@@ -925,6 +925,14 @@ describe("#queueIdentationLevel", () => {
         assert.throws(() => writer.queueIndentationLevel("  \ta"));
     });
 
+    it("should write with indentation when queuing and immediately doing a newline", () => {
+        const writer = new CodeBlockWriter();
+        writer.queueIndentationLevel(1);
+        writer.newLine().write("t");
+
+        assert.equal(writer.toString(), "\n    t");
+    });
+
     it("should be able to queue the indentation level", () => {
         const writer = new CodeBlockWriter();
         writer.queueIndentationLevel(1);
