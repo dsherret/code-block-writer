@@ -432,14 +432,11 @@ export default class CodeBlockWriter {
                 const isAtStartOfLine = this.isLastNewLine() || this._text.length === 0;
                 if (isAtStartOfLine)
                     this._writeIndentation();
-                if (this._queuedIndentation != null) {
-                    this._currentIndentation = this._queuedIndentation;
-                    this._queuedIndentation = undefined;
-                }
             }
 
             this._updateInternalState(s);
             this._text += s;
+            this.dequeueQueuedIndentation();
         }
     }
 
@@ -448,6 +445,15 @@ export default class CodeBlockWriter {
             this._currentCommentChar = undefined;
         this._text += this._newLine;
         this._isOnFirstLineOfBlock = false;
+        this.dequeueQueuedIndentation();
+    }
+
+    private dequeueQueuedIndentation() {
+        if (this._queuedIndentation == null)
+            return;
+
+        this._currentIndentation = this._queuedIndentation;
+        this._queuedIndentation = undefined;
     }
 
     private _updateInternalState(str: string) {
