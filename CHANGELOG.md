@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.2.1"></a>
+## [7.2.1](https://github.com/dsherret/code-block-writer/compare/v7.2.0...v7.2.1) (2018-07-14)
+
+
+### Bug Fixes
+
+* Queued indentation would not by applied when not writing anything and doing a .newline(). ([2d33d46](https://github.com/dsherret/code-block-writer/commit/2d33d46))
+
+
+
 <a name="7.2.0"></a>
 # [7.2.0](https://github.com/dsherret/code-block-writer/compare/v7.1.0...v7.2.0) (2018-05-28)
 
