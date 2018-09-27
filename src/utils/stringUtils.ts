@@ -18,9 +18,11 @@ export function es5StringRepeat(str: string, times: number) {
     return newStr;
 }
 
+const newlineRegex = /(\r?\n)/g;
+
 /** @internal */
 export function escapeForWithinString(str: string, quoteKind: string) {
-    return escapeChar(str, quoteKind).replace(/(\r?\n)/g, "\\$1");
+    return escapeChar(str, quoteKind).replace(newlineRegex, "\\$1");
 }
 
 /** @internal */
