@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.2.2"></a>
+## [7.2.2](https://github.com/dsherret/code-block-writer/compare/v7.2.1...v7.2.2) (2018-09-27)
+
+
+### Performance Improvements
+
+* [#21](https://github.com/dsherret/code-block-writer/issues/21) - Make regex static. ([c27e208](https://github.com/dsherret/code-block-writer/commit/c27e208))
+
+
+
 <a name="7.2.1"></a>
 ## [7.2.1](https://github.com/dsherret/code-block-writer/compare/v7.2.0...v7.2.1) (2018-07-14)
 
