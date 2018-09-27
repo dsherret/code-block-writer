@@ -88,3 +88,8 @@ class MyClass extends OtherClass {
 * `getLastChar()` - Gets the last character written.
 * `getOptions()` - Gets the writer options.
 * `toString()` - Gets the string.
+
+## Other Features
+
+* Does not indent within strings.
+* Escapes newlines within double and single quotes created with `.quote(text)`.
