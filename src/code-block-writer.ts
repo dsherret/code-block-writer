@@ -46,7 +46,7 @@ export default class CodeBlockWriter {
 
     /**
      * Queues the indentation level for the next lines written.
-     * @param indentationLevel - Indentation level to be at.
+     * @param indentationLevel - Indentation level to queue.
      */
     queueIndentationLevel(indentationLevel: number): this;
     /**
@@ -153,13 +153,13 @@ export default class CodeBlockWriter {
 
     /**
      * Writes a line of text.
-     * @param str - String to write.
+     * @param text - String to write.
      */
-    writeLine(str: string) {
+    writeLine(text: string) {
         this._newLineIfNewLineOnNextWrite();
         if (this._text.length > 0)
             this.newLineIfLastNot();
-        this._writeIndentingNewLines(str);
+        this._writeIndentingNewLines(text);
         this.newLine();
 
         return this;
@@ -409,6 +409,7 @@ export default class CodeBlockWriter {
         return this._text;
     }
 
+    private static readonly _newLineRegEx = /\r?\n/;
     private _writeIndentingNewLines(text: string) {
         text = text || "";
         if (text.length === 0) {
@@ -416,7 +417,7 @@ export default class CodeBlockWriter {
             return;
         }
 
-        const items = text.split(/\r?\n/);
+        const items = text.split(CodeBlockWriter._newLineRegEx);
         items.forEach((s, i) => {
             if (i > 0)
                 this._baseWriteNewline();
@@ -460,7 +461,7 @@ export default class CodeBlockWriter {
         for (let i = 0; i < str.length; i++) {
             const currentChar = str[i];
             const pastChar = i === 0 ? this._text[this._text.length - 1] : str[i - 1];
-            const pastPastChar = i < 1 ? this._text[this._text.length - 2 + i] : str[i - 2];
+            const pastPastChar = i === 0 ? this._text[this._text.length - 2] : str[i - 2];
 
             // handle regex
             if (this._isInRegEx) {
@@ -532,6 +533,7 @@ export default class CodeBlockWriter {
         this.newLine();
     }
 
+    private static readonly _spacesOrTabsRegEx = /^[ \t]*$/;
     private _getIndentationLevelFromArg(countOrText: string | number) {
         if (typeof countOrText === "number") {
             if (countOrText < 0)
@@ -539,7 +541,7 @@ export default class CodeBlockWriter {
             return countOrText;
         }
         else if (typeof countOrText === "string") {
-            if (!/^[ \t]*$/.test(countOrText))
+            if (!CodeBlockWriter._spacesOrTabsRegEx.test(countOrText))
                 throw new Error("Provided string must be empty or only contain spaces or tabs.");
 
             const { spacesCount, tabsCount } = getSpacesAndTabsCount(countOrText);
