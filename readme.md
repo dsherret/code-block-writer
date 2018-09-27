@@ -52,7 +52,7 @@ class MyClass extends OtherClass {
 * `block(block?: () => void)` - Indents all the code written within and surrounds it in braces.
 * `inlineBlock(block?: () => void)` - Same as block, but doesn't add a space before the first brace and doesn't add a newline at the end.
 * `getLength()` - Get the current number of characters.
-* `writeLine(str: string)` - Writes some text and adds a newline.
+* `writeLine(text: string)` - Writes some text and adds a newline.
 * `newLine()` - Writes a newline.
 * `newLineIfLastNot()` - Writes a newline if what was written last wasn't a newline.
 * `blankLine()` - Writes a blank line. Does not allow consecutive blank lines.
@@ -73,8 +73,10 @@ class MyClass extends OtherClass {
 * `conditionalWriteLine(condition: boolean, text: string)` - Writes some text and adds a newline if the condition is matched.
 * `conditionalWriteLine(condition: boolean, textFunc: () => string)` - Writes some text and adds a newline if the condition is matched.
 * `setIndentationLevel(indentationLevel: number)` - Sets the current indentation level.
+* `setIndentationLevel(whitespaceText: string)` - Sets the current indentation level based on the provided whitespace text.
 * `getIndentationLevel()` - Gets the current indentation level.
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
+* `queueIndentationLevel(whitespaceText: string)` - Queues an indentation level to be used once a new line is written based on the provided whitespace text.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isAtStartOfFirstLineOfBlock()` - Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
 * `isOnFirstLineOfBlock()` - Gets if the writer is currently on the first line of the text, block, or indentation block.
