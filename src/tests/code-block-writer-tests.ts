@@ -192,7 +192,11 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
     t;
 }`;
             doTest(expected, writer => {
-                writer.block(() => writer.write("t;")).conditionalWrite(false, " ").conditionalWriteLine(false, " ").conditionalNewLine(false);
+                writer.block(() => writer.write("t;"))
+                    .conditionalWrite(false, " ")
+                    .conditionalWriteLine(false, " ")
+                    .conditionalNewLine(false)
+                    .conditionalBlankLine(false);
             });
         });
 
