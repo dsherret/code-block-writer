@@ -91,7 +91,8 @@ export default class CodeBlockWriter {
      */
     block(block?: () => void) {
         this._newLineIfNewLineOnNextWrite();
-        this.spaceIfLastNot();
+        if (this.getLength() > 0 && !this.isLastNewLine())
+            this.spaceIfLastNot();
         this.inlineBlock(block);
         this._newLineOnNextWrite = true;
         return this;
