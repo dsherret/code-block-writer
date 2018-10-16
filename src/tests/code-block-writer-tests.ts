@@ -150,16 +150,15 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
             });
         });
 
-        it("should put the brace on the next space if there is a newline before it", () => {
+        it("should put the brace on the next line if there is a newline before it", () => {
             const expected =
-`test {
-    inside
-
+`test
+{
     inside
 }`;
             doTest(expected, writer => {
-                writer.write("test ").block(() => {
-                    writer.writeLine("inside").newLine().write("inside");
+                writer.writeLine("test").block(() => {
+                    writer.writeLine("inside");
                 });
             });
         });
@@ -178,7 +177,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 
         it("should add a newline after the block when writing afterwards", () => {
             const expected =
-` {
+`{
     t;
 }
  `;
@@ -189,7 +188,7 @@ function runTestsForNewLineChar(opts: { newLine: string }) {
 
         it("should not add a newline after the block when doing a condition call and the conditions are false", () => {
             const expected =
-` {
+`{
     t;
 }`;
             doTest(expected, writer => {
@@ -972,6 +971,14 @@ describe("#queueIdentationLevel", () => {
         writer.writeLine("t");
 
         assert.equal(writer.toString(), "t\n    t\n        t\n        t\n");
+    });
+});
+
+describe("#getIndentationLevel", () => {
+    it("should get the indentation level", () => {
+        const writer = new CodeBlockWriter();
+        writer.setIndentationLevel(5);
+        assert.equal(writer.getIndentationLevel(), 5);
     });
 });
 
