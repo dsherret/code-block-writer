@@ -320,6 +320,29 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes text to exit a comment if in a comment.
+     */
+    closeComment() {
+        const commentChar = this._currentCommentChar;
+
+        switch (commentChar) {
+            case CommentChar.Line:
+                this.newLine();
+                break;
+            case CommentChar.Star:
+                if (!this.isLastNewLine())
+                    this.spaceIfLastNot();
+                this.write("*/");
+                break;
+            default:
+                const assertUndefined: undefined = commentChar;
+                break;
+        }
+
+        return this;
+    }
+
+    /**
      * Gets the length of the string in the writer.
      */
     getLength() {
