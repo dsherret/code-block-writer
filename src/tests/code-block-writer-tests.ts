@@ -775,6 +775,38 @@ test`;
             });
         });
     });
+
+    describe("#closeComment()", () => {
+        it("should not do anything if not in a comment", () => {
+            doTest("test", writer => {
+                writer.write("test").closeComment();
+            });
+        });
+
+        it("should do a newline if in a slash slash comment", () => {
+            doTest("// test\n", writer => {
+                writer.write("// test").closeComment();
+            });
+        });
+
+        it("should add a space at the end if on same line in a star slash comment", () => {
+            doTest("/* test */", writer => {
+                writer.write("/* test").closeComment();
+            });
+        });
+
+        it("should not add a space at the end if on same line and a space exists in a star slash comment", () => {
+            doTest("/* test */", writer => {
+                writer.write("/* test ").closeComment();
+            });
+        });
+
+        it("should not add a space at the start of the line in a star slash comment", () => {
+            doTest("/* test\n*/", writer => {
+                writer.writeLine("/* test").closeComment();
+            });
+        });
+    });
 }
 
 describe("#setIdentationLevel", () => {
