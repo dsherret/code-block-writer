@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.3.0"></a>
+# [7.3.0](https://github.com/dsherret/code-block-writer/compare/v7.2.2...v7.3.0) (2019-03-16)
+
+
+### Bug Fixes
+
+* Should not write space on block if last was a newline. ([37706b9](https://github.com/dsherret/code-block-writer/commit/37706b9))
+
+
+### Features
+
+* [#23](https://github.com/dsherret/code-block-writer/issues/23) - Add closeComment(). ([cf9f722](https://github.com/dsherret/code-block-writer/commit/cf9f722))
+
+
+
 <a name="7.2.2"></a>
 ## [7.2.2](https://github.com/dsherret/code-block-writer/compare/v7.2.1...v7.2.2) (2018-09-27)
 
