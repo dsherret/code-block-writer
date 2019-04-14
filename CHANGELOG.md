@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="7.3.1"></a>
+## [7.3.1](https://github.com/dsherret/code-block-writer/compare/v7.3.0...v7.3.1) (2019-04-14)
+
+
+### Bug Fixes
+
+* `isInString()` was not handling escaped string characters. ([a357278](https://github.com/dsherret/code-block-writer/commit/a357278))
+
+
+
 <a name="7.3.0"></a>
 # [7.3.0](https://github.com/dsherret/code-block-writer/compare/v7.2.2...v7.3.0) (2019-03-16)
 
