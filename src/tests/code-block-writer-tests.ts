@@ -1100,6 +1100,22 @@ describe("#isInString", () => {
     it("should be in a string for a string after a regex", () => {
         doTest("/`/'t'", [false, false, false, false, true, true, false]);
     });
+
+    it("should handle escaped single quotes", () => {
+        doTest(`'\\''`, [false, true, true, true, false]);
+    });
+
+    it("should handle escaped double quotes", () => {
+        doTest(`"\\""`, [false, true, true, true, false]);
+    });
+
+    it("should handle escaped back ticks", () => {
+        doTest("`\\``", [false, true, true, true, false]);
+    });
+
+    it("should handle escaped template spans", () => {
+        doTest("`\\${t}`", [false, true, true, true, true, true, true, false]);
+    });
 });
 
 function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T, writer = new CodeBlockWriter()) {

@@ -512,13 +512,13 @@ export default class CodeBlockWriter {
 
             // handle strings
             const lastStringCharOnStack = this._stringCharStack.length === 0 ? undefined : this._stringCharStack[this._stringCharStack.length - 1];
-            if (currentChar === "\"" || currentChar === "'" || currentChar === "`") {
+            if (pastChar !== "\\" && (currentChar === "\"" || currentChar === "'" || currentChar === "`")) {
                 if (lastStringCharOnStack === currentChar)
                     this._stringCharStack.pop();
                 else if (lastStringCharOnStack === "{" || lastStringCharOnStack === undefined)
                     this._stringCharStack.push(currentChar);
             }
-            else if (pastChar === "$" && currentChar === "{" && lastStringCharOnStack === "`")
+            else if (pastPastChar !== "\\" && pastChar === "$" && currentChar === "{" && lastStringCharOnStack === "`")
                 this._stringCharStack.push(currentChar);
             else if (currentChar === "}" && lastStringCharOnStack === "{")
                 this._stringCharStack.pop();
