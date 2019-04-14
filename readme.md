@@ -94,3 +94,7 @@ class MyClass extends OtherClass {
 
 * Does not indent within strings.
 * Escapes newlines within double and single quotes created with `.quote(text)`.
+
+## C# Version
+
+See [CodeBlockWriterSharp](https://github.com/dsherret/CodeBlockWriterSharp).
