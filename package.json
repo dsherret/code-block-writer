@@ -15,9 +15,9 @@
     "url": "git+https://github.com/dsherret/code-block-writer.git"
   },
   "keywords": [
-    "decorators",
     "typescript",
-    "routes"
+    "writer",
+    "printer"
   ],
   "author": "David Sherret",
   "license": "MIT",
