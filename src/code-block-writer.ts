@@ -16,7 +16,7 @@ export default class CodeBlockWriter {
     private readonly _indentNumberOfSpaces: number;
     private _currentIndentation = 0;
     private _queuedIndentation: number | undefined;
-    private _text = "";
+    private _texts: string[] = [];
     private _newLineOnNextWrite = false;
     /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
@@ -158,7 +158,7 @@ export default class CodeBlockWriter {
      */
     writeLine(text: string) {
         this._newLineIfNewLineOnNextWrite();
-        if (this._text.length > 0)
+        if (this.getLastChar() != null)
             this.newLineIfLastNot();
         this._writeIndentingNewLines(text);
         this.newLine();
@@ -346,7 +346,7 @@ export default class CodeBlockWriter {
      * Gets the length of the string in the writer.
      */
     getLength() {
-        return this._text.length;
+        return this.toString().length;
     }
 
     /**
@@ -381,7 +381,8 @@ export default class CodeBlockWriter {
      * Gets if the last chars written were for a newline.
      */
     isLastNewLine() {
-        return this._text.indexOf(this._newLine, this._text.length - this._newLine.length) !== -1 || this._text[this._text.length - 1] === "\n";
+        const lastChar = this.getLastChar();
+        return lastChar === "\n" || lastChar === "\r";
     }
 
     /**
@@ -389,8 +390,9 @@ export default class CodeBlockWriter {
      */
     isLastBlankLine() {
         let foundCount = 0;
-        for (let i = this._text.length - 1; i >= 0; i--) {
-            const currentChar = this._text[i];
+        const text = this.toString();
+        for (let i = text.length - 1; i >= 0; i--) {
+            const currentChar = text[i];
             if (currentChar === "\n") {
                 foundCount++;
                 if (foundCount === 2)
@@ -420,24 +422,39 @@ export default class CodeBlockWriter {
      * Gets the last char written.
      */
     getLastChar() {
-        if (this._text.length === 0)
-            return undefined;
+        return this._getLastCharWithOffset(0);
+    }
 
-        return this._text[this._text.length - 1];
+    private _getLastCharWithOffset(offset: number) {
+        for (let i = this._texts.length - 1; i >= 0; i--) {
+            const currentText = this._texts[i];
+            for (let j = currentText.length - 1; j >= 0; j--) {
+                if (offset === 0)
+                    return currentText[j];
+                offset--;
+            }
+        }
+        return undefined;
     }
 
     /**
      * Gets the writer's text.
      */
     toString() {
-        return this._text;
+        if (this._texts.length > 1) {
+            const text = this._texts.join("");
+            this._texts.length = 0;
+            this._texts.push(text);
+        }
+
+        return this._texts[0] || "";
     }
 
     private static readonly _newLineRegEx = /\r?\n/;
     private _writeIndentingNewLines(text: string) {
         text = text || "";
         if (text.length === 0) {
-            writeIndividual.call(this, "");
+            writeIndividual(this, "");
             return;
         }
 
@@ -449,26 +466,26 @@ export default class CodeBlockWriter {
             if (s.length === 0)
                 return;
 
-            writeIndividual.call(this, s);
+            writeIndividual(this, s);
         });
 
-        function writeIndividual(this: CodeBlockWriter, s: string) {
-            if (!this.isInString()) {
-                const isAtStartOfLine = this.isLastNewLine() || this._text.length === 0;
+        function writeIndividual(writer: CodeBlockWriter, s: string) {
+            if (!writer.isInString()) {
+                const isAtStartOfLine = writer.isLastNewLine() || writer.getLastChar() == null;
                 if (isAtStartOfLine)
-                    this._writeIndentation();
+                    writer._writeIndentation();
             }
 
-            this._updateInternalState(s);
-            this._text += s;
-            this.dequeueQueuedIndentation();
+            writer._updateInternalState(s);
+            writer._texts.push(s);
+            writer.dequeueQueuedIndentation();
         }
     }
 
     private _baseWriteNewline() {
         if (this._currentCommentChar === CommentChar.Line)
             this._currentCommentChar = undefined;
-        this._text += this._newLine;
+        this._texts.push(this._newLine);
         this._isOnFirstLineOfBlock = false;
         this.dequeueQueuedIndentation();
     }
@@ -481,11 +498,18 @@ export default class CodeBlockWriter {
         this._queuedIndentation = undefined;
     }
 
+    private static readonly _isCharToHandle = new Set<string>(["/", "\\", "\n", "\r", "*", "\"", "'", "`", "{", "}"]);
     private _updateInternalState(str: string) {
         for (let i = 0; i < str.length; i++) {
             const currentChar = str[i];
-            const pastChar = i === 0 ? this._text[this._text.length - 1] : str[i - 1];
-            const pastPastChar = i === 0 ? this._text[this._text.length - 2] : str[i - 2];
+
+            // This is a performance optimization to short circuit all the checks below. If the current char
+            // is not in this set then it won't change any internal state so no need to continue.
+            if (!CodeBlockWriter._isCharToHandle.has(currentChar))
+                continue;
+
+            const pastChar = i === 0 ? this.getLastChar() : str[i - 1];
+            const pastPastChar = i === 0 ? this._getLastCharWithOffset(1) : i === 1 ? this.getLastChar() : str[i - 2];
 
             // handle regex
             if (this._isInRegEx) {
@@ -523,30 +547,25 @@ export default class CodeBlockWriter {
             else if (currentChar === "}" && lastStringCharOnStack === "{")
                 this._stringCharStack.pop();
         }
-
-        function isRegExStart(currentChar: string, pastChar: string, pastPastChar: string) {
-            return pastChar === "/"
-                && currentChar !== "/"
-                && currentChar !== "*"
-                && pastPastChar !== "*"
-                && pastPastChar !== "/";
-        }
     }
 
     private _writeIndentation() {
         const flooredIndentation = Math.floor(this._currentIndentation);
-        for (let i = 0; i < flooredIndentation; i++)
-            this._text += this._indentationText;
+        this._texts.push(this._indentationText.repeat(flooredIndentation));
 
         const overflow = this._currentIndentation - flooredIndentation;
         if (this._useTabs) {
             if (overflow > 0.5)
-                this._text += this._indentationText;
+                this._texts.push(this._indentationText);
         }
         else {
             const portion = Math.round(this._indentationText.length * overflow);
+
+            // build up the string first, then append it for performance reasons
+            let text = "";
             for (let i = 0; i < portion; i++)
-                this._text += this._indentationText[i];
+                text += this._indentationText[i];
+            this._texts.push(text);
         }
     }
 
@@ -574,6 +593,14 @@ export default class CodeBlockWriter {
         else
             throw new Error("Argument provided must be a string or number.");
     }
+}
+
+function isRegExStart(currentChar: string, pastChar: string | undefined, pastPastChar: string | undefined) {
+    return pastChar === "/"
+        && currentChar !== "/"
+        && currentChar !== "*"
+        && pastPastChar !== "*"
+        && pastPastChar !== "/";
 }
 
 function getIndentationText(useTabs: boolean, numberSpaces: number) {

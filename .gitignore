@@ -12,3 +12,4 @@
 /coverage
 /.vs
 /dist
+/yarn-error.log
