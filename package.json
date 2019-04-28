@@ -8,7 +8,7 @@
     "test": "nyc --reporter=lcov mocha --opts mocha.opts",
     "build": "rimraf dist && tsc",
     "lint": "tslint src/**/*.ts",
-    "dopublish": "npm run build && npm publish"
+    "dopublish": "npm run build && echo \"Run: npm publish --otp\""
   },
   "repository": {
     "type": "git",
