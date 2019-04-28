@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/dsherret/code-block-writer/compare/v7.3.1...v8.0.0) (2019-04-28)
+
+
+### Performance Improvements
+
+* [#25](https://github.com/dsherret/code-block-writer/issues/25) Improve performance. ([6061b25](https://github.com/dsherret/code-block-writer/commit/6061b25))
+
+
+### BREAKING CHANGES
+
+* Library now targets ES2015 instead of ES5.
+
+
+
 <a name="7.3.1"></a>
 ## [7.3.1](https://github.com/dsherret/code-block-writer/compare/v7.3.0...v7.3.1) (2019-04-14)
 
