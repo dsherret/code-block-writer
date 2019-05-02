@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.1"></a>
+## [8.1.1](https://github.com/dsherret/code-block-writer/compare/v8.1.0...v8.1.1) (2019-05-02)
+
+
+### Bug Fixes
+
+* Restrict `newLine` to "\n" | "\r\n". ([699a41f](https://github.com/dsherret/code-block-writer/commit/699a41f))
+
+
+### Performance Improvements
+
+* Calling `#getLength()` does not internally call `#toString()`. ([b19c7ab](https://github.com/dsherret/code-block-writer/commit/b19c7ab))
+* Calling `#isLastBlankLine()` does not internally call `#toString()`. ([d225b67](https://github.com/dsherret/code-block-writer/commit/d225b67))
+
+
+
 <a name="8.1.0"></a>
 # [8.1.0](https://github.com/dsherret/code-block-writer/compare/v8.0.0...v8.1.0) (2019-05-02)
 
