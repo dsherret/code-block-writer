@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.1.0"></a>
+# [8.1.0](https://github.com/dsherret/code-block-writer/compare/v8.0.0...v8.1.0) (2019-05-02)
+
+
+### Features
+
+* [#24](https://github.com/dsherret/code-block-writer/issues/24) - Add `indent(times)`. ([0108dab](https://github.com/dsherret/code-block-writer/commit/0108dab))
+
+
+
 <a name="8.0.0"></a>
 # [8.0.0](https://github.com/dsherret/code-block-writer/compare/v7.3.1...v8.0.0) (2019-04-28)
 
