@@ -19,7 +19,7 @@ describe("CodeBlockWriter", () => {
     });
 });
 
-function runTestsForNewLineChar(opts: { newLine: string }) {
+function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
     function getWriter(additionalOpts: { useSingleQuote?: boolean; } = {}) {
         return new CodeBlockWriter({
             newLine: opts.newLine,
