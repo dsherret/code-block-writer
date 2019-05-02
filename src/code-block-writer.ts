@@ -162,6 +162,7 @@ export default class CodeBlockWriter {
         return this;
     }
 
+    /** @internal */
     private _indentBlockInternal(block?: () => void) {
         this._currentIndentation++;
         if (this.getLastChar() != null)
@@ -471,6 +472,7 @@ export default class CodeBlockWriter {
         return this._getLastCharWithOffset(0);
     }
 
+    /** @internal */
     private _getLastCharWithOffset(offset: number) {
         for (let i = this._texts.length - 1; i >= 0; i--) {
             const currentText = this._texts[i];
@@ -496,7 +498,9 @@ export default class CodeBlockWriter {
         return this._texts[0] || "";
     }
 
+    /** @internal */
     private static readonly _newLineRegEx = /\r?\n/;
+    /** @internal */
     private _writeIndentingNewLines(text: string) {
         text = text || "";
         if (text.length === 0) {
@@ -528,6 +532,7 @@ export default class CodeBlockWriter {
         }
     }
 
+    /** @internal */
     private _baseWriteNewline() {
         if (this._currentCommentChar === CommentChar.Line)
             this._currentCommentChar = undefined;
@@ -536,6 +541,7 @@ export default class CodeBlockWriter {
         this.dequeueQueuedIndentation();
     }
 
+    /** @internal */
     private dequeueQueuedIndentation() {
         if (this._queuedIndentation == null)
             return;
@@ -544,7 +550,9 @@ export default class CodeBlockWriter {
         this._queuedIndentation = undefined;
     }
 
+    /** @internal */
     private static readonly _isCharToHandle = new Set<string>(["/", "\\", "\n", "\r", "*", "\"", "'", "`", "{", "}"]);
+    /** @internal */
     private _updateInternalState(str: string) {
         for (let i = 0; i < str.length; i++) {
             const currentChar = str[i];
@@ -595,6 +603,7 @@ export default class CodeBlockWriter {
         }
     }
 
+    /** @internal */
     private _writeIndentation() {
         const flooredIndentation = Math.floor(this._currentIndentation);
         this._internalWrite(this._indentationText.repeat(flooredIndentation));
@@ -615,6 +624,7 @@ export default class CodeBlockWriter {
         }
     }
 
+    /** @internal */
     private _newLineIfNewLineOnNextWrite() {
         if (!this._newLineOnNextWrite)
             return;
@@ -622,12 +632,15 @@ export default class CodeBlockWriter {
         this.newLine();
     }
 
+    /** @internal */
     private _internalWrite(text: string) {
         this._texts.push(text);
         this._length += text.length;
     }
 
+    /** @internal */
     private static readonly _spacesOrTabsRegEx = /^[ \t]*$/;
+    /** @internal */
     private _getIndentationLevelFromArg(countOrText: string | number) {
         if (typeof countOrText === "number") {
             if (countOrText < 0)
