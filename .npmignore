@@ -19,3 +19,4 @@
 /.travis.yml
 /dist/tests
 yarn-error.log
+mocha.opts
