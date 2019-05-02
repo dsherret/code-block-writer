@@ -1,29 +1,67 @@
 import { escapeForWithinString, getStringFromStrOrFunc } from "./utils/stringUtils";
 import { CommentChar } from "./CommentChar";
 
+/**
+ * Options for the writer.
+ */
 export interface Options {
+    /**
+     * Newline character.
+     * @remarks Defaults to \n.
+     */
     newLine: string;
+    /**
+     * Number of spaces to indent when `useTabs` is false.
+     * @remarks Defaults to 4.
+     */
     indentNumberOfSpaces: number;
+    /**
+     * Whether to use tabs (true) or spaces (false).
+     * @remarks Defaults to false.
+     */
     useTabs: boolean;
+    /**
+     * Whether to use a single quote (true) or double quote (false).
+     * @remarks Defaults to false.
+     */
     useSingleQuote: boolean;
 }
 
+/**
+ * Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
+ */
 export default class CodeBlockWriter {
+    /** @internal */
     private readonly _indentationText: string;
+    /** @internal */
     private readonly _newLine: string;
+    /** @internal */
     private readonly _useTabs: boolean;
+    /** @internal */
     private readonly _quoteChar: string;
+    /** @internal */
     private readonly _indentNumberOfSpaces: number;
+    /** @internal */
     private _currentIndentation = 0;
+    /** @internal */
     private _queuedIndentation: number | undefined;
+    /** @internal */
     private _texts: string[] = [];
+    /** @internal */
     private _newLineOnNextWrite = false;
     /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
+    /** @internal */
     private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
+    /** @internal */
     private _isInRegEx = false;
+    /** @internal */
     private _isOnFirstLineOfBlock = true;
 
+    /**
+     * Constructor.
+     * @param opts - Options for the writer.
+     */
     constructor(opts: Partial<Options> = {}) {
         this._newLine = opts.newLine || "\n";
         this._useTabs = opts.useTabs || false;
