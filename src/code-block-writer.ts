@@ -9,7 +9,7 @@ export interface Options {
      * Newline character.
      * @remarks Defaults to \n.
      */
-    newLine: string;
+    newLine: "\n" | "\r\n";
     /**
      * Number of spaces to indent when `useTabs` is false.
      * @remarks Defaults to 4.
@@ -34,7 +34,7 @@ export default class CodeBlockWriter {
     /** @internal */
     private readonly _indentationText: string;
     /** @internal */
-    private readonly _newLine: string;
+    private readonly _newLine: "\n" | "\r\n";
     /** @internal */
     private readonly _useTabs: boolean;
     /** @internal */
