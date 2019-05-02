@@ -437,6 +437,14 @@ test`;
                 writer.writeLine("test").indent().write("test");
             });
         });
+
+        it("should indent multiple times when specifying an argument", () => {
+            const expected = `test\n        test`;
+
+            doTest(expected, writer => {
+                writer.writeLine("test").indent(2).write("test");
+            });
+        });
     });
 
     describe("#newLineIfLastNot()", () => {

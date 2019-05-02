@@ -1,4 +1,4 @@
-import { stringRepeat, escapeForWithinString, getStringFromStrOrFunc } from "./utils/stringUtils";
+import { escapeForWithinString, getStringFromStrOrFunc } from "./utils/stringUtils";
 import { CommentChar } from "./CommentChar";
 
 export interface Options {
@@ -207,9 +207,9 @@ export default class CodeBlockWriter {
     /**
      * Indents the code one level for the current line.
      */
-    indent() {
+    indent(times = 1) {
         this._newLineIfNewLineOnNextWrite();
-        return this.write(this._indentationText);
+        return this.write(this._indentationText.repeat(times));
     }
 
     /**
@@ -264,7 +264,7 @@ export default class CodeBlockWriter {
      */
     space(times = 1) {
         this._newLineIfNewLineOnNextWrite();
-        this._writeIndentingNewLines(stringRepeat(" ", times));
+        this._writeIndentingNewLines(" ".repeat(times));
         return this;
     }
 
@@ -286,7 +286,7 @@ export default class CodeBlockWriter {
      */
     tab(times = 1) {
         this._newLineIfNewLineOnNextWrite();
-        this._writeIndentingNewLines(stringRepeat("\t", times));
+        this._writeIndentingNewLines("\t".repeat(times));
         return this;
     }
 
