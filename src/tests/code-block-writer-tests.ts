@@ -684,6 +684,12 @@ test`;
             writer.write("1234");
             assert.equal(writer.getLength(), 4);
         });
+
+        it("should get the correct length after various kinds of writes", () => {
+            const writer = getWriter();
+            writer.write("1").writeLine("2").write("3").block(() => writer.write("4")).tab(5).quote("testing").blankLine();
+            assert.equal(writer.getLength(), writer.toString().length);
+        });
     });
 
     describe("#conditionalNewLine()", () => {

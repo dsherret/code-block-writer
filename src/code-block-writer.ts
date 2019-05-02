@@ -48,6 +48,8 @@ export default class CodeBlockWriter {
     /** @internal */
     private _texts: string[] = [];
     /** @internal */
+    private _length = 0;
+    /** @internal */
     private _newLineOnNextWrite = false;
     /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
@@ -384,7 +386,7 @@ export default class CodeBlockWriter {
      * Gets the length of the string in the writer.
      */
     getLength() {
-        return this.toString().length;
+        return this._length;
     }
 
     /**
@@ -515,7 +517,7 @@ export default class CodeBlockWriter {
             }
 
             writer._updateInternalState(s);
-            writer._texts.push(s);
+            writer._internalWrite(s);
             writer.dequeueQueuedIndentation();
         }
     }
@@ -523,7 +525,7 @@ export default class CodeBlockWriter {
     private _baseWriteNewline() {
         if (this._currentCommentChar === CommentChar.Line)
             this._currentCommentChar = undefined;
-        this._texts.push(this._newLine);
+        this._internalWrite(this._newLine);
         this._isOnFirstLineOfBlock = false;
         this.dequeueQueuedIndentation();
     }
@@ -589,12 +591,12 @@ export default class CodeBlockWriter {
 
     private _writeIndentation() {
         const flooredIndentation = Math.floor(this._currentIndentation);
-        this._texts.push(this._indentationText.repeat(flooredIndentation));
+        this._internalWrite(this._indentationText.repeat(flooredIndentation));
 
         const overflow = this._currentIndentation - flooredIndentation;
         if (this._useTabs) {
             if (overflow > 0.5)
-                this._texts.push(this._indentationText);
+                this._internalWrite(this._indentationText);
         }
         else {
             const portion = Math.round(this._indentationText.length * overflow);
@@ -603,7 +605,7 @@ export default class CodeBlockWriter {
             let text = "";
             for (let i = 0; i < portion; i++)
                 text += this._indentationText[i];
-            this._texts.push(text);
+            this._internalWrite(text);
         }
     }
 
@@ -612,6 +614,11 @@ export default class CodeBlockWriter {
             return;
         this._newLineOnNextWrite = false;
         this.newLine();
+    }
+
+    private _internalWrite(text: string) {
+        this._texts.push(text);
+        this._length += text.length;
     }
 
     private static readonly _spacesOrTabsRegEx = /^[ \t]*$/;
