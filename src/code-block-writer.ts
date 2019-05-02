@@ -430,17 +430,23 @@ export default class CodeBlockWriter {
      */
     isLastBlankLine() {
         let foundCount = 0;
-        const text = this.toString();
-        for (let i = text.length - 1; i >= 0; i--) {
-            const currentChar = text[i];
-            if (currentChar === "\n") {
-                foundCount++;
-                if (foundCount === 2)
-                    return true;
+
+        // todo: consider extracting out iterating over past characters, but don't use
+        // an iterator because it will be slow.
+        for (let i = this._texts.length - 1; i >= 0; i--) {
+            const currentText = this._texts[i];
+            for (let j = currentText.length - 1; j >= 0; j--) {
+                const currentChar = currentText[j];
+                if (currentChar === "\n") {
+                    foundCount++;
+                    if (foundCount === 2)
+                        return true;
+                }
+                else if (currentChar !== "\r")
+                    return false;
             }
-            else if (currentChar !== "\r")
-                return false;
         }
+
         return false;
     }
 
