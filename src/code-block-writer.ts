@@ -46,8 +46,6 @@ export default class CodeBlockWriter {
     /** @internal */
     private _queuedIndentation: number | undefined;
     /** @internal */
-    private _texts: string[] = [];
-    /** @internal */
     private _length = 0;
     /** @internal */
     private _newLineOnNextWrite = false;
@@ -59,6 +57,10 @@ export default class CodeBlockWriter {
     private _isInRegEx = false;
     /** @internal */
     private _isOnFirstLineOfBlock = true;
+    // An array of strings is used rather than a single string because it was
+    // found to be ~11x faster when printing a 10K line file (~11s to ~1s).
+    /** @internal */
+    private _texts: string[] = [];
 
     /**
      * Constructor.
@@ -558,7 +560,8 @@ export default class CodeBlockWriter {
             const currentChar = str[i];
 
             // This is a performance optimization to short circuit all the checks below. If the current char
-            // is not in this set then it won't change any internal state so no need to continue.
+            // is not in this set then it won't change any internal state so no need to continue and do
+            // so many other checks (this made it 3x faster in one scenario I tested).
             if (!CodeBlockWriter._isCharToHandle.has(currentChar))
                 continue;
 
