@@ -59,11 +59,11 @@ class MyClass extends OtherClass {
 * `blankLineIfLastNot()` - Writes a blank line if what was written last wasn't a blank line.
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
-* `indent()` - Indents the current line.
+* `indent(times?: number)` - Indents the current line. Optionally indents multiple times when providing a number.
 * `indentBlock(block?: () => void)` - Indents a block of code.
-* `space(times?: number)` - Writes a space. Optionally writes multiple spaces if providing a number.
+* `space(times?: number)` - Writes a space. Optionally writes multiple spaces when providing a number.
 * `spaceIfLastNot()` - Writes a space if the last was not a space.
-* `tab(times?: number)` - Writes a tab. Optionally writes multiple tabs if providing a number.
+* `tab(times?: number)` - Writes a tab. Optionally writes multiple tabs when providing a number.
 * `tabIfLastNot()` - Writes a tab if the last was not a tab.
 * `write(text: string)` - Writes some text.
 * `conditionalNewLine(condition: boolean)` - Writes a newline if the condition is matched.
