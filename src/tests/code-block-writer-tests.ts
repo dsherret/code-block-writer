@@ -243,9 +243,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
 
     describe("#indentBlock()", () => {
         it("should indent text inside a block", () => {
-            const expected =
-                `test
-    inside`;
+            const expected = `test\n    inside`;
             doTest(expected, writer => {
                 writer.write("test").indentBlock(() => {
                     writer.write("inside");
@@ -254,8 +252,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should not do a newline on the first line", () => {
-            const expected =
-                `    inside`;
+            const expected = `    inside`;
             doTest(expected, writer => {
                 writer.indentBlock(() => {
                     writer.write("inside");
@@ -264,9 +261,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should not do a newline at the start if the last was a new line", () => {
-            const expected =
-                `test
-    inside`;
+            const expected = `test\n    inside`;
             doTest(expected, writer => {
                 writer.writeLine("test").indentBlock(() => {
                     writer.write("inside");
@@ -284,8 +279,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should indent text inside a block inside a block", () => {
-            const expected =
-                `test
+            const expected = `test
     inside
         inside again
 test`;
