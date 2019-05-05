@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.2.0"></a>
+# [8.2.0](https://github.com/dsherret/code-block-writer/compare/v8.1.2...v8.2.0) (2019-05-05)
+
+
+### Features
+
+* Add `#withQueuedIndentationLevel` and `#withIndentationLevel`. ([1bcf7c8](https://github.com/dsherret/code-block-writer/commit/1bcf7c8))
+
+
+
 <a name="8.1.2"></a>
 ## [8.1.2](https://github.com/dsherret/code-block-writer/compare/v8.1.1...v8.1.2) (2019-05-02)
 
