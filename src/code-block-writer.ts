@@ -129,6 +129,14 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Writes the text within the provided action with hanging indentation.
+     * @param action - Action to perform with hanging indentation.
+     */
+    withHangingIdentation(action: () => void) {
+        return this.withQueuedIndentationLevel(this.getIndentationLevel() + 1, action);
+    }
+
+    /**
      * Sets the current indentation level.
      * @param indentationLevel - Indentation level to be at.
      */
