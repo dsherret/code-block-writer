@@ -1058,6 +1058,19 @@ describe("#withQueuedIndentationLevel", () => {
     });
 });
 
+describe("#withQueuedIndent", () => {
+    it("should queue an indent +1", () => {
+        const writer = new CodeBlockWriter();
+        writer.setIndentationLevel(2);
+        writer.withHangingIdentation(() => {
+            assert.equal(writer.getIndentationLevel(), 2);
+            writer.newLine();
+            assert.equal(writer.getIndentationLevel(), 3);
+        });
+        assert.equal(writer.getIndentationLevel(), 2);
+    });
+});
+
 describe("#getIndentationLevel", () => {
     it("should get the indentation level", () => {
         const writer = new CodeBlockWriter();
