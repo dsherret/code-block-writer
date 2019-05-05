@@ -96,8 +96,35 @@ export default class CodeBlockWriter {
      * @param whitespaceText - Gets the indentation level from the indentation text.
      */
     queueIndentationLevel(whitespaceText: string): this;
+    /** @internal */
+    queueIndentationLevel(countOrText: string | number): this;
     queueIndentationLevel(countOrText: string | number) {
         this._queuedIndentation = this._getIndentationLevelFromArg(countOrText);
+        return this;
+    }
+
+    /**
+     * Queues the indentation level for the next lines written within the provided action
+     * and restores the writer's indentation state after afterwards.
+     * @param indentationLevel - Indentation level to queue.
+     * @param action - Action to perform with the queued indentation.
+     */
+    withQueuedIndentationLevel(indentationLevel: number, action: () => void): this;
+    /**
+     * Queues the indentation level for the next lines written using the provided indentation
+     * text within the provided action and restores the writer's indentation state afterwards.
+     * @param whitespaceText - Gets the indentation level from the indentation text.
+     * @param action - Action to perform with the queued indentation.
+     */
+    withQueuedIndentationLevel(whitespaceText: string, action: () => void): this;
+    withQueuedIndentationLevel(countOrText: string | number, action: () => void) {
+        const previousState = this._getIndentationState();
+        this.queueIndentationLevel(countOrText);
+        try {
+            action();
+        } finally {
+            this._setIdentationState(previousState);
+        }
         return this;
     }
 
@@ -111,12 +138,36 @@ export default class CodeBlockWriter {
      * @param whitespaceText - Gets the indentation level from the indentation text.
      */
     setIndentationLevel(whitespaceText: string): this;
-    /**
-     * @internal
-     */
+    /** @internal */
     setIndentationLevel(countOrText: string | number): this;
     setIndentationLevel(countOrText: string | number) {
         this._currentIndentation = this._getIndentationLevelFromArg(countOrText);
+        return this;
+    }
+
+    /**
+     * Sets the indentation level within the provided action and restores the writer's indentation
+     * state afterwards.
+     * @remarks Restores the writer's state after the action.
+     * @param indentationLevel - Indentation level to queue.
+     * @param action - Action to perform with the indentation.
+     */
+    withIdentationLevel(indentationLevel: number, action: () => void): this;
+    /**
+     * Sets the identation level with the provided indentation text within the provided action
+     * and restores the writer's indentation state afterwards.
+     * @param whitespaceText - Gets the indentation level from the indentation text.
+     * @param action - Action to perform with the indentation.
+     */
+    withIdentationLevel(whitespaceText: string, action: () => void): this;
+    withIdentationLevel(countOrText: string | number, action: () => void) {
+        const previousState = this._getIndentationState();
+        this.setIndentationLevel(countOrText);
+        try {
+            action();
+        } finally {
+            this._setIdentationState(previousState);
+        }
         return this;
     }
 
@@ -660,6 +711,25 @@ export default class CodeBlockWriter {
         else
             throw new Error("Argument provided must be a string or number.");
     }
+
+    /** @internal */
+    private _setIdentationState(state: IndentationLevelState) {
+        this._currentIndentation = state.current;
+        this._queuedIndentation = state.queued;
+    }
+
+    /** @internal */
+    private _getIndentationState(): IndentationLevelState {
+        return {
+            current: this._currentIndentation,
+            queued: this._queuedIndentation
+        };
+    }
+}
+
+interface IndentationLevelState {
+    current: number;
+    queued: number | undefined;
 }
 
 function isRegExStart(currentChar: string, pastChar: string | undefined, pastPastChar: string | undefined) {
@@ -681,10 +751,10 @@ function getSpacesAndTabsCount(str: string) {
     let tabsCount = 0;
 
     for (const char of str) {
-        if (char === "\t")
-            tabsCount++;
-        else if (char === " ")
+        if (char === " ")
             spacesCount++;
+        else if (char === "\t")
+            tabsCount++;
     }
 
     return { spacesCount, tabsCount };
