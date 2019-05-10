@@ -817,7 +817,7 @@ test`;
     });
 }
 
-describe("#setIdentationLevel", () => {
+describe("#setIndentationLevel", () => {
     it("should throw when providing a negative number", () => {
         const writer = new CodeBlockWriter();
         assert.throws(() => writer.setIndentationLevel(-1));
@@ -947,10 +947,10 @@ describe("#setIdentationLevel", () => {
     });
 });
 
-describe("#withIdentationLevel", () => {
+describe("#withIndentationLevel", () => {
     it("should use the provided indentation level within the block", () => {
         const writer = new CodeBlockWriter();
-        writer.withIdentationLevel(2, () => {
+        writer.withIndentationLevel(2, () => {
             assert.equal(writer.getIndentationLevel(), 2);
         });
         assert.equal(writer.getIndentationLevel(), 0);
@@ -958,14 +958,14 @@ describe("#withIdentationLevel", () => {
 
     it("should use the provided indentation level within the block when providing a string", () => {
         const writer = new CodeBlockWriter();
-        writer.withIdentationLevel("    ", () => {
+        writer.withIndentationLevel("    ", () => {
             assert.equal(writer.getIndentationLevel(), 1);
         });
         assert.equal(writer.getIndentationLevel(), 0);
     });
 });
 
-describe("#queueIdentationLevel", () => {
+describe("#queueIndentationLevel", () => {
     it("should throw when providing a negative number", () => {
         const writer = new CodeBlockWriter();
         assert.throws(() => writer.queueIndentationLevel(-1));
@@ -1062,7 +1062,7 @@ describe("#withQueuedIndent", () => {
     it("should queue an indent +1", () => {
         const writer = new CodeBlockWriter();
         writer.setIndentationLevel(2);
-        writer.withHangingIdentation(() => {
+        writer.withHangingIndentation(() => {
             assert.equal(writer.getIndentationLevel(), 2);
             writer.newLine();
             assert.equal(writer.getIndentationLevel(), 3);
