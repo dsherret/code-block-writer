@@ -1058,7 +1058,7 @@ describe("#withQueuedIndentationLevel", () => {
     });
 });
 
-describe("#withQueuedIndent", () => {
+describe("#withHangingIndentation", () => {
     it("should queue an indent +1", () => {
         const writer = new CodeBlockWriter();
         writer.setIndentationLevel(2);
@@ -1068,6 +1068,19 @@ describe("#withQueuedIndent", () => {
             assert.equal(writer.getIndentationLevel(), 3);
         });
         assert.equal(writer.getIndentationLevel(), 2);
+    });
+
+    it("should handle nested indentations", () => {
+        const writer = new CodeBlockWriter();
+        writer.write("(");
+        writer.withHangingIndentation(() => {
+            writer.write("p");
+            writer.withHangingIndentation(() => {
+                writer.write(": string").newLine().write("| number")
+            });
+        });
+        writer.write(")");
+        assert.equal(writer.toString(), "(p: string\n    | number)");
     });
 });
 
