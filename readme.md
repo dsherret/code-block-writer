@@ -45,7 +45,7 @@ class MyClass extends OtherClass {
     return this.post('myArgument');
   }
 }
-```
+de```
 
 ## Methods
 
@@ -74,14 +74,14 @@ class MyClass extends OtherClass {
 * `conditionalWriteLine(condition: boolean, textFunc: () => string)` - Writes some text and adds a newline if the condition is matched.
 * `setIndentationLevel(indentationLevel: number)` - Sets the current indentation level.
 * `setIndentationLevel(whitespaceText: string)` - Sets the current indentation level based on the provided whitespace text.
-* `withIdentationLevel(indentationLevel: number, action: () => void)` - Sets the indentation level within the provided action.
-* `withIdentationLevel(whitespaceText: string, action: () => void)` - Sets the indentation level based on the provided whitespace text within the action.
+* `withIndentationLevel(indentationLevel: number, action: () => void)` - Sets the indentation level within the provided action.
+* `withIndentationLevel(whitespaceText: string, action: () => void)` - Sets the indentation level based on the provided whitespace text within the action.
 * `getIndentationLevel()` - Gets the current indentation level.
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
 * `queueIndentationLevel(whitespaceText: string)` - Queues an indentation level to be used once a new line is written based on the provided whitespace text.
-* `withQueuedIdentationLevel(indentationLevel: number, action: () => void)` - Sets the queued indentation level within the provided action.
-* `withQueuedIdentationLevel(whitespaceText: string, action: () => void)` - Sets the queued indentation level based on the provided whitespace text within the action.
-* `withHangingIdentation(action: () => void)` - Writes the code within the action with hanging indentation.
+* `withQueuedIndentationLevel(indentationLevel: number, action: () => void)` - Sets the queued indentation level within the provided action.
+* `withQueuedIndentationLevel(whitespaceText: string, action: () => void)` - Sets the queued indentation level based on the provided whitespace text within the action.
+* `withHangingIndentation(action: () => void)` - Writes the code within the action with hanging indentation.
 * `closeComment()` - Writes text to exit a comment if in a comment.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isAtStartOfFirstLineOfBlock()` - Gets if the writer is currently at the start of the first line of the text, block, or indentation block.

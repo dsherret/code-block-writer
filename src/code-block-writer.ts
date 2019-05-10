@@ -123,7 +123,7 @@ export default class CodeBlockWriter {
         try {
             action();
         } finally {
-            this._setIdentationState(previousState);
+            this._setIndentationState(previousState);
         }
         return this;
     }
@@ -132,7 +132,7 @@ export default class CodeBlockWriter {
      * Writes the text within the provided action with hanging indentation.
      * @param action - Action to perform with hanging indentation.
      */
-    withHangingIdentation(action: () => void) {
+    withHangingIndentation(action: () => void) {
         return this.withQueuedIndentationLevel(this.getIndentationLevel() + 1, action);
     }
 
@@ -160,21 +160,21 @@ export default class CodeBlockWriter {
      * @param indentationLevel - Indentation level to queue.
      * @param action - Action to perform with the indentation.
      */
-    withIdentationLevel(indentationLevel: number, action: () => void): this;
+    withIndentationLevel(indentationLevel: number, action: () => void): this;
     /**
      * Sets the identation level with the provided indentation text within the provided action
      * and restores the writer's indentation state afterwards.
      * @param whitespaceText - Gets the indentation level from the indentation text.
      * @param action - Action to perform with the indentation.
      */
-    withIdentationLevel(whitespaceText: string, action: () => void): this;
-    withIdentationLevel(countOrText: string | number, action: () => void) {
+    withIndentationLevel(whitespaceText: string, action: () => void): this;
+    withIndentationLevel(countOrText: string | number, action: () => void) {
         const previousState = this._getIndentationState();
         this.setIndentationLevel(countOrText);
         try {
             action();
         } finally {
-            this._setIdentationState(previousState);
+            this._setIndentationState(previousState);
         }
         return this;
     }
@@ -721,7 +721,7 @@ export default class CodeBlockWriter {
     }
 
     /** @internal */
-    private _setIdentationState(state: IndentationLevelState) {
+    private _setIndentationState(state: IndentationLevelState) {
         this._currentIndentation = state.current;
         this._queuedIndentation = state.queued;
     }
