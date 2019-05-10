@@ -39,9 +39,6 @@
     ],
     "all": true
   },
-  "typescript": {
-    "definition": "code-block-writer.d.ts"
-  },
   "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^5.2.6",
