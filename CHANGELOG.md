@@ -1,6 +1,42 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [9.0.0](https://github.com/dsherret/code-block-writer/compare/v7.3.0...v9.0.0) (2019-05-10)
+
+
+### Bug Fixes
+
+* `isInString()` was not handling escaped string characters. ([a357278](https://github.com/dsherret/code-block-writer/commit/a357278))
+* Hide remaining private methods/properties from declaration file. ([5e7aaef](https://github.com/dsherret/code-block-writer/commit/5e7aaef))
+* Restrict `newLine` to "\n" | "\r\n". ([699a41f](https://github.com/dsherret/code-block-writer/commit/699a41f))
+
+
+### Features
+
+* [#24](https://github.com/dsherret/code-block-writer/issues/24) - Add `indent(times)`. ([0108dab](https://github.com/dsherret/code-block-writer/commit/0108dab))
+* Add `#withHangingIndentation` ([2c77357](https://github.com/dsherret/code-block-writer/commit/2c77357))
+* Add `#withQueuedIndentationLevel` and `#withIndentationLevel`. ([1bcf7c8](https://github.com/dsherret/code-block-writer/commit/1bcf7c8))
+
+
+### perf
+
+* [#25](https://github.com/dsherret/code-block-writer/issues/25) Improve performance. ([6061b25](https://github.com/dsherret/code-block-writer/commit/6061b25))
+
+
+### refactor
+
+* Fix spelling mistake in withHangingIdentation and withIdentationLevel method names. ([38d2bf1](https://github.com/dsherret/code-block-writer/commit/38d2bf1))
+* Remove `queueIndentationLevel` and `withQueuedIndentationLevel`. Use `withHangingIndentation`. ([ffa2e0f](https://github.com/dsherret/code-block-writer/commit/ffa2e0f))
+
+
+### BREAKING CHANGES
+
+* Removed `queueIndentationLevel` and `withQueuedIndentationLevel`. Use `withHangingIndentation`.
+* Fixed spelling mistake in withHangingIdentation and withIdentationLevel method names.
+* Library now targets ES2015 instead of ES5.
+
+
 
 <a name="8.3.0"></a>
 # [8.3.0](https://github.com/dsherret/code-block-writer/compare/v8.2.0...v8.3.0) (2019-05-05)
