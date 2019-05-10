@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.1.0](https://github.com/dsherret/code-block-writer/compare/v9.0.0...v9.1.0) (2019-05-10)
+
+
+### Features
+
+* Add back `#queueIndentationLevel`. ([13044cf](https://github.com/dsherret/code-block-writer/commit/13044cf))
+
+
+
 ## [9.0.0](https://github.com/dsherret/code-block-writer/compare/v7.3.0...v9.0.0) (2019-05-10)
 
 
