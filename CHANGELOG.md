@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [9.1.1](https://github.com/dsherret/code-block-writer/compare/v9.1.0...v9.1.1) (2019-05-10)
+
+
+### Bug Fixes
+
+* Fix queued indentation so it is only dequeued after a newline. ([9f3298d](https://github.com/dsherret/code-block-writer/commit/9f3298d))
+
+
+
 ## [9.1.0](https://github.com/dsherret/code-block-writer/compare/v9.0.0...v9.1.0) (2019-05-10)
 
 
