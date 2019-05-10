@@ -86,37 +86,13 @@ export default class CodeBlockWriter {
         };
     }
 
-    /**
-     * Queues the indentation level for the next lines written.
-     * @param indentationLevel - Indentation level to queue.
-     */
-    queueIndentationLevel(indentationLevel: number): this;
-    /**
-     * Queues the indentation level for the next lines written using the provided indentation text.
-     * @param whitespaceText - Gets the indentation level from the indentation text.
-     */
-    queueIndentationLevel(whitespaceText: string): this;
     /** @internal */
-    queueIndentationLevel(countOrText: string | number): this;
     queueIndentationLevel(countOrText: string | number) {
         this._queuedIndentation = this._getIndentationLevelFromArg(countOrText);
         return this;
     }
 
-    /**
-     * Queues the indentation level for the next lines written within the provided action
-     * and restores the writer's indentation state after afterwards.
-     * @param indentationLevel - Indentation level to queue.
-     * @param action - Action to perform with the queued indentation.
-     */
-    withQueuedIndentationLevel(indentationLevel: number, action: () => void): this;
-    /**
-     * Queues the indentation level for the next lines written using the provided indentation
-     * text within the provided action and restores the writer's indentation state afterwards.
-     * @param whitespaceText - Gets the indentation level from the indentation text.
-     * @param action - Action to perform with the queued indentation.
-     */
-    withQueuedIndentationLevel(whitespaceText: string, action: () => void): this;
+    /** @internal */
     withQueuedIndentationLevel(countOrText: string | number, action: () => void) {
         const previousState = this._getIndentationState();
         this.queueIndentationLevel(countOrText);
