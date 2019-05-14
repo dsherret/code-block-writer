@@ -1076,7 +1076,7 @@ describe("#withHangingIndentation", () => {
         writer.withHangingIndentation(() => {
             writer.write("p");
             writer.withHangingIndentation(() => {
-                writer.write(": string").newLine().write("| number")
+                writer.write(": string").newLine().write("| number");
             });
         });
         writer.write(")");
