@@ -1,6 +1,12 @@
-# Changelog
+# Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [9.1.2](https://github.com/dsherret/code-block-writer/compare/v9.1.1...v9.1.2) (2019-05-15)
+
+### Bug Fixes
+
+* Fix indentation when using a block within a hanging indent. ([b931952](https://github.com/dsherret/code-block-writer/commit/b931952))
 
 ### [9.1.1](https://github.com/dsherret/code-block-writer/compare/v9.1.0...v9.1.1) (2019-05-10)
 
