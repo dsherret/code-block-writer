@@ -1082,6 +1082,14 @@ describe("#withHangingIndentation", () => {
         writer.write(")");
         assert.equal(writer.toString(), "(p: string\n    | number)");
     });
+
+    it("should handle if a block occurs within a hanging indent", () => {
+        const writer = new CodeBlockWriter();
+        writer.withHangingIndentation(() => {
+            writer.block();
+        });
+        assert.equal(writer.toString(), "{\n    }");
+    })
 });
 
 describe("#getIndentationLevel", () => {

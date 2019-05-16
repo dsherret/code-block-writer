@@ -212,9 +212,9 @@ export default class CodeBlockWriter {
 
     /** @internal */
     private _indentBlockInternal(block?: () => void) {
-        this._currentIndentation++;
         if (this.getLastChar() != null)
             this.newLineIfLastNot();
+        this._currentIndentation++;
         this._isOnFirstLineOfBlock = true;
         if (block != null)
             block();
