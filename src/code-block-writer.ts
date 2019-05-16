@@ -558,10 +558,8 @@ export default class CodeBlockWriter {
 
         const items = text.split(CodeBlockWriter._newLineRegEx);
         items.forEach((s, i) => {
-            if (i > 0) {
+            if (i > 0)
                 this._baseWriteNewline();
-                this.dequeueQueuedIndentation();
-            }
 
             if (s.length === 0)
                 return;
