@@ -144,7 +144,7 @@ export default class CodeBlockWriter {
      * Sets the indentation level within the provided action and restores the writer's indentation
      * state afterwards.
      * @remarks Restores the writer's state after the action.
-     * @param indentationLevel - Indentation level to queue.
+     * @param indentationLevel - Indentation level to set.
      * @param action - Action to perform with the indentation.
      */
     withIndentationLevel(indentationLevel: number, action: () => void): this;
