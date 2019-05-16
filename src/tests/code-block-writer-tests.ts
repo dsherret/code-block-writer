@@ -1059,15 +1059,20 @@ describe("#withQueuedIndentationLevel", () => {
 });
 
 describe("#withHangingIndentation", () => {
-    it("should queue an indent +1", () => {
-        const writer = new CodeBlockWriter();
-        writer.setIndentationLevel(2);
-        writer.withHangingIndentation(() => {
+    it("should queue an indent +1 when using newLine() and writing text", () => {
+        function doTest(action: (writer: CodeBlockWriter) => void) {
+            const writer = new CodeBlockWriter();
+            writer.setIndentationLevel(2);
+            writer.withHangingIndentation(() => {
+                assert.equal(writer.getIndentationLevel(), 2);
+                action(writer);
+                assert.equal(writer.getIndentationLevel(), 3);
+            });
             assert.equal(writer.getIndentationLevel(), 2);
-            writer.newLine();
-            assert.equal(writer.getIndentationLevel(), 3);
-        });
-        assert.equal(writer.getIndentationLevel(), 2);
+        }
+
+        doTest(writer => writer.newLine());
+        doTest(writer => writer.write("testing\nthis"));
     });
 
     it("should handle nested indentations", () => {
@@ -1076,7 +1081,7 @@ describe("#withHangingIndentation", () => {
         writer.withHangingIndentation(() => {
             writer.write("p");
             writer.withHangingIndentation(() => {
-                writer.write(": string").newLine().write("| number");
+                writer.write(": string\n| number");
             });
         });
         writer.write(")");
