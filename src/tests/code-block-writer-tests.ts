@@ -1089,7 +1089,7 @@ describe("#withHangingIndentation", () => {
             writer.block();
         });
         assert.equal(writer.toString(), "{\n    }");
-    })
+    });
 });
 
 describe("#getIndentationLevel", () => {
