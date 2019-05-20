@@ -682,6 +682,9 @@ export default class CodeBlockWriter {
 
     /** @internal */
     private _internalWrite(text: string) {
+        if (text.length === 0)
+            return;
+
         this._texts.push(text);
         this._length += text.length;
     }
