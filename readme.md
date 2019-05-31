@@ -45,7 +45,7 @@ class MyClass extends OtherClass {
     return this.post('myArgument');
   }
 }
-de```
+```
 
 ## Methods
 
