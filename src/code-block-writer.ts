@@ -526,6 +526,27 @@ export default class CodeBlockWriter {
         return this._getLastCharWithOffset(0);
     }
 
+    /**
+     * Iterates over the writer characters in reverse order. The iteration stops when a non-null or
+     * undefined value is returned from the action. The returned value is then returned by the method.
+     *
+     * @remarks It is much more efficient to use this method rather than `#toString()` since `#toString()`
+     * will combine the internal array into a string.
+     */
+    iterateLastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined {
+        let index = this._length;
+        for (let i = this._texts.length - 1; i >= 0; i--) {
+            const currentText = this._texts[i];
+            for (let j = currentText.length - 1; j >= 0; j--) {
+                index--;
+                const result = action(currentText[j], index);
+                if (result != null)
+                    return result;
+            }
+        }
+        return undefined;
+    }
+
     /** @internal */
     private _getLastCharWithOffset(offset: number) {
         for (let i = this._texts.length - 1; i >= 0; i--) {
@@ -610,7 +631,7 @@ export default class CodeBlockWriter {
 
         function wasLastBlock(writer: CodeBlockWriter) {
             let foundNewLine = false;
-            return writer._iteratePastChars(char => {
+            return writer.iterateLastChars(char => {
                 switch (char) {
                     case "\n":
                         if (foundNewLine)
@@ -627,20 +648,6 @@ export default class CodeBlockWriter {
                 }
             });
         }
-    }
-
-    private _iteratePastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined {
-        let index = this._length;
-        for (let i = this._texts.length - 1; i >= 0; i--) {
-            const currentText = this._texts[i];
-            for (let j = currentText.length - 1; j >= 0; j--) {
-                index--;
-                const result = action(currentText[j], index);
-                if (result != null)
-                    return result;
-            }
-        }
-        return undefined;
     }
 
     /** @internal */

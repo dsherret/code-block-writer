@@ -1139,6 +1139,37 @@ describe("#withHangingIndentationUnlessBlock", () => {
     });
 });
 
+describe("#iterateLastChars", () => {
+    it("should iterate over the past characters until the end", () => {
+        const writer = new CodeBlockWriter();
+        writer.write("test\n");
+        const expected: [string, number][] = [
+            ["\n", 4],
+            ["t", 3],
+            ["s", 2],
+            ["e", 1],
+            ["t", 0]
+        ];
+        const result: typeof expected = [];
+        const returnValue = writer.iterateLastChars((char, index) => {
+            result.push([char, index]);
+        });
+        assert.deepEqual(result, expected);
+        assert.equal(returnValue, undefined);
+    });
+
+    it("should stop and return the value when returning a non-null value", () => {
+        const writer = new CodeBlockWriter();
+        writer.write("test");
+        const returnValue = writer.iterateLastChars(char => {
+            if (char !== "t")
+                throw new Error("It didn't stop for some reason.");
+            return false;
+        });
+        assert.equal(returnValue, false);
+    });
+});
+
 describe("#getIndentationLevel", () => {
     it("should get the indentation level", () => {
         const writer = new CodeBlockWriter();
