@@ -161,6 +161,7 @@ export default class CodeBlockWriter {
         return this._withResetIndentation(() => this.setIndentationLevel(countOrText), action);
     }
 
+    /** @internal */
     private _withResetIndentation(setStateAction: () => void, writeAction: () => void) {
         const previousState = this._getIndentationState();
         setStateAction();
