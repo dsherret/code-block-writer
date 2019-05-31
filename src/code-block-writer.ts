@@ -46,6 +46,8 @@ export default class CodeBlockWriter {
     /** @internal */
     private _queuedIndentation: number | undefined;
     /** @internal */
+    private _queuedOnlyIfNotBlock: true | undefined;
+    /** @internal */
     private _length = 0;
     /** @internal */
     private _newLineOnNextWrite = false;
@@ -100,18 +102,7 @@ export default class CodeBlockWriter {
     queueIndentationLevel(countOrText: string | number): this;
     queueIndentationLevel(countOrText: string | number) {
         this._queuedIndentation = this._getIndentationLevelFromArg(countOrText);
-        return this;
-    }
-
-    /** @internal */
-    withQueuedIndentationLevel(countOrText: string | number, action: () => void) {
-        const previousState = this._getIndentationState();
-        this.queueIndentationLevel(countOrText);
-        try {
-            action();
-        } finally {
-            this._setIndentationState(previousState);
-        }
+        this._queuedOnlyIfNotBlock = undefined;
         return this;
     }
 
@@ -120,7 +111,18 @@ export default class CodeBlockWriter {
      * @param action - Action to perform with hanging indentation.
      */
     withHangingIndentation(action: () => void) {
-        return this.withQueuedIndentationLevel(this.getIndentationLevel() + 1, action);
+        return this._withResetIndentation(() => this.queueIndentationLevel(this.getIndentationLevel() + 1), action);
+    }
+
+    /**
+     * Writes the text within the provided action with hanging indentation unless writing a block.
+     * @param action - Action to perform with hanging indentation unless a block is written.
+     */
+    withHangingIndentationUnlessBlock(action: () => void) {
+        return this._withResetIndentation(() => {
+            this.queueIndentationLevel(this.getIndentationLevel() + 1);
+            this._queuedOnlyIfNotBlock = true;
+        }, action);
     }
 
     /**
@@ -149,17 +151,21 @@ export default class CodeBlockWriter {
      */
     withIndentationLevel(indentationLevel: number, action: () => void): this;
     /**
-     * Sets the identation level with the provided indentation text within the provided action
+     * Sets the indentation level with the provided indentation text within the provided action
      * and restores the writer's indentation state afterwards.
      * @param whitespaceText - Gets the indentation level from the indentation text.
      * @param action - Action to perform with the indentation.
      */
     withIndentationLevel(whitespaceText: string, action: () => void): this;
     withIndentationLevel(countOrText: string | number, action: () => void) {
+        return this._withResetIndentation(() => this.setIndentationLevel(countOrText), action);
+    }
+
+    private _withResetIndentation(setStateAction: () => void, writeAction: () => void) {
         const previousState = this._getIndentationState();
-        this.setIndentationLevel(countOrText);
+        setStateAction();
         try {
-            action();
+            writeAction();
         } finally {
             this._setIndentationState(previousState);
         }
@@ -585,16 +591,56 @@ export default class CodeBlockWriter {
             this._currentCommentChar = undefined;
         this._internalWrite(this._newLine);
         this._isOnFirstLineOfBlock = false;
-        this.dequeueQueuedIndentation();
+        this._dequeueQueuedIndentation();
     }
 
     /** @internal */
-    private dequeueQueuedIndentation() {
+    private _dequeueQueuedIndentation() {
         if (this._queuedIndentation == null)
             return;
 
-        this._currentIndentation = this._queuedIndentation;
-        this._queuedIndentation = undefined;
+        if (this._queuedOnlyIfNotBlock && wasLastBlock(this)) {
+            this._queuedIndentation = undefined;
+            this._queuedOnlyIfNotBlock = undefined;
+        }
+        else {
+            this._currentIndentation = this._queuedIndentation;
+            this._queuedIndentation = undefined;
+        }
+
+        function wasLastBlock(writer: CodeBlockWriter) {
+            let foundNewLine = false;
+            return writer._iteratePastChars(char => {
+                switch (char) {
+                    case "\n":
+                        if (foundNewLine)
+                            return false;
+                        else
+                            foundNewLine = true;
+                        break;
+                    case "\r":
+                        return undefined;
+                    case "{":
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+        }
+    }
+
+    private _iteratePastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined {
+        let index = this._length;
+        for (let i = this._texts.length - 1; i >= 0; i--) {
+            const currentText = this._texts[i];
+            for (let j = currentText.length - 1; j >= 0; j--) {
+                index--;
+                const result = action(currentText[j], index);
+                if (result != null)
+                    return result;
+            }
+        }
+        return undefined;
     }
 
     /** @internal */
@@ -713,13 +759,15 @@ export default class CodeBlockWriter {
     private _setIndentationState(state: IndentationLevelState) {
         this._currentIndentation = state.current;
         this._queuedIndentation = state.queued;
+        this._queuedOnlyIfNotBlock = state.queuedOnlyIfNotBlock;
     }
 
     /** @internal */
     private _getIndentationState(): IndentationLevelState {
         return {
             current: this._currentIndentation,
-            queued: this._queuedIndentation
+            queued: this._queuedIndentation,
+            queuedOnlyIfNotBlock: this._queuedOnlyIfNotBlock
         };
     }
 }
@@ -727,6 +775,7 @@ export default class CodeBlockWriter {
 interface IndentationLevelState {
     current: number;
     queued: number | undefined;
+    queuedOnlyIfNotBlock: true | undefined;
 }
 
 function isRegExStart(currentChar: string, pastChar: string | undefined, pastPastChar: string | undefined) {

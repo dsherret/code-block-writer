@@ -1036,28 +1036,6 @@ describe("#queueIndentationLevel", () => {
     });
 });
 
-describe("#withQueuedIndentationLevel", () => {
-    it("should use the provided queued indentation level within the block", () => {
-        const writer = new CodeBlockWriter();
-        writer.withQueuedIndentationLevel(2, () => {
-            assert.equal(writer.getIndentationLevel(), 0);
-            writer.newLine();
-            assert.equal(writer.getIndentationLevel(), 2);
-        });
-        assert.equal(writer.getIndentationLevel(), 0);
-    });
-
-    it("should use the provided queued indentation level within the block when providing a string", () => {
-        const writer = new CodeBlockWriter();
-        writer.withQueuedIndentationLevel("    ", () => {
-            assert.equal(writer.getIndentationLevel(), 0);
-            writer.newLine();
-            assert.equal(writer.getIndentationLevel(), 1);
-        });
-        assert.equal(writer.getIndentationLevel(), 0);
-    });
-});
-
 describe("#withHangingIndentation", () => {
     it("should queue an indent +1 when using newLine() and writing text", () => {
         function doTest(action: (writer: CodeBlockWriter) => void) {
@@ -1094,6 +1072,70 @@ describe("#withHangingIndentation", () => {
             writer.block();
         });
         assert.equal(writer.toString(), "{\n    }");
+    });
+
+    it("should not indent if within a string", () => {
+        const writer = new CodeBlockWriter();
+        writer.withHangingIndentation(() => {
+            writer.quote("t\nu").newLine().write("t");
+        });
+        assert.equal(writer.toString(), `"t\\\nu"\n    t`);
+    });
+});
+
+describe("#withHangingIndentationUnlessBlock", () => {
+    it("should write with hanging indentation when not a brace", () => {
+        const writer = new CodeBlockWriter();
+        writer.setIndentationLevel(2);
+        writer.withHangingIndentationUnlessBlock(() => {
+            assert.equal(writer.getIndentationLevel(), 2);
+            writer.write("t").newLine();
+            assert.equal(writer.getIndentationLevel(), 3);
+        });
+        assert.equal(writer.getIndentationLevel(), 2);
+    });
+
+    it("should not write with hanging indentation when it's a block and using \n newlines", () => {
+        const writer = new CodeBlockWriter();
+        writer.withHangingIndentationUnlessBlock(() => {
+            writer.write("t").block(() => {
+                writer.write("f");
+            });
+        });
+        assert.equal(writer.toString(), `t {\n    f\n}`);
+    });
+
+    it("should not write with hanging indentation when it's a block and using \r\n newlines", () => {
+        const writer = new CodeBlockWriter({ newLine: "\r\n" });
+        writer.withHangingIndentationUnlessBlock(() => {
+            writer.write("t").block(() => {
+                writer.write("f");
+            });
+        });
+        assert.equal(writer.toString(), `t {\r\n    f\r\n}`);
+    });
+
+    it("should write blocks at the same hanging indentation once past the first line with hanging indenation", () => {
+        const writer = new CodeBlockWriter();
+        writer.withHangingIndentationUnlessBlock(() => {
+            writer.writeLine("t");
+            writer.write("u").block(() => {
+                writer.write("f");
+            });
+            writer.write("v");
+        });
+        assert.equal(writer.toString(), `t\n    u {\n        f\n    }\n    v`);
+    });
+
+    it("should ignore blocks written in a string", () => {
+        // this would be strange to happen... but this behaviour seems ok
+        const writer = new CodeBlockWriter();
+        writer.withHangingIndentationUnlessBlock(() => {
+            writer.writeLine("`t{");
+            writer.write("v`");
+            writer.block(() => writer.write("u"));
+        });
+        assert.equal(writer.toString(), "`t{\nv` {\n    u\n}");
     });
 });
 

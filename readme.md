@@ -80,6 +80,7 @@ class MyClass extends OtherClass {
 * `queueIndentationLevel(indentationLevel: number)` - Queues an indentation level to be used once a new line is written.
 * `queueIndentationLevel(whitespaceText: string)` - Queues an indentation level to be used once a new line is written based on the provided whitespace text.
 * `withHangingIndentation(action: () => void)` - Writes the code within the action with hanging indentation.
+* `withHangingIndentationUnlessBlock(action: () => void)` - Writes the code within the action with hanging indentation unless a block is written going from the first line to the second.
 * `closeComment()` - Writes text to exit a comment if in a comment.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isAtStartOfFirstLineOfBlock()` - Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
