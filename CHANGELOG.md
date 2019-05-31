@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.2.0"></a>
+# [9.2.0](https://github.com/dsherret/code-block-writer/compare/v9.1.3...v9.2.0) (2019-05-31)
+
+
+### Features
+
+* [#27](https://github.com/dsherret/code-block-writer/issues/27) - Add `iterateLastChars`. ([5ce22c2](https://github.com/dsherret/code-block-writer/commit/5ce22c2))
+* Add `withHangingIndentationUnlessBlock(action)` ([c04bef2](https://github.com/dsherret/code-block-writer/commit/c04bef2))
+
+
+
 <a name="9.1.3"></a>
 ## [9.1.3](https://github.com/dsherret/code-block-writer/compare/v9.1.1...v9.1.3) (2019-05-20)
 
