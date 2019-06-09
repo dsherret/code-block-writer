@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.3.0"></a>
+# [9.3.0](https://github.com/dsherret/code-block-writer/compare/v9.2.1...v9.3.0) (2019-06-09)
+
+
+### Features
+
+* Add `#endsWith(text: string)` ([460e007](https://github.com/dsherret/code-block-writer/commit/460e007))
+
+
+
 <a name="9.2.1"></a>
 ## [9.2.1](https://github.com/dsherret/code-block-writer/compare/v9.2.0...v9.2.1) (2019-05-31)
 
