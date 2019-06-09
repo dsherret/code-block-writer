@@ -1139,6 +1139,30 @@ describe("#withHangingIndentationUnlessBlock", () => {
     });
 });
 
+describe("#endsWith", () => {
+    function doTest(str: string, text: string, expectedValue: boolean) {
+        const writer = new CodeBlockWriter();
+        writer.write(str);
+        assert.equal(writer.endsWith(text), expectedValue);
+    }
+
+    it("should be true when equal", () => {
+        doTest("test", "test", true);
+    });
+
+    it("should be true when it ends with", () => {
+        doTest("test", "st", true);
+    });
+
+    it("should be false when the provided text is greater than the length", () => {
+        doTest("test", "test1", false);
+    });
+
+    it("should be false when the provided text does not end with", () => {
+        doTest("test", "rt", false);
+    });
+});
+
 describe("#iterateLastChars", () => {
     it("should iterate over the past characters until the end", () => {
         const writer = new CodeBlockWriter();

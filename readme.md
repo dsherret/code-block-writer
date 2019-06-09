@@ -91,6 +91,7 @@ class MyClass extends OtherClass {
 * `isLastSpace()` - Gets if the writer last wrote a space.
 * `isLastTab()` - Gets if the writer last wrote a tab.
 * `getLastChar()` - Gets the last character written.
+* `endsWith(text: string)` - Gets if the writer ends with the provided text.
 * `iterateLastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined` - Iterates over the writer's characters in reverse order, stopping once a non-null or undefined value is returned and returns that value.
 * `getOptions()` - Gets the writer options.
 * `toString()` - Gets the string.

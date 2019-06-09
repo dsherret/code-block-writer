@@ -528,6 +528,21 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Gets if the writer ends with the provided text.
+     * @param text - Text to check if the writer ends with the provided text.
+     */
+    endsWith(text: string) {
+        const length = this._length;
+        return this.iterateLastChars((char, index) => {
+            const offset = length - index;
+            const textIndex = text.length - offset;
+            if (text[textIndex] !== char)
+                return false;
+            return textIndex === 0 ? true : undefined;
+        }) || false;
+    }
+
+    /**
      * Iterates over the writer characters in reverse order. The iteration stops when a non-null or
      * undefined value is returned from the action. The returned value is then returned by the method.
      *
