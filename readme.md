@@ -82,6 +82,7 @@ class MyClass extends OtherClass {
 * `withHangingIndentation(action: () => void)` - Writes the code within the action with hanging indentation.
 * `withHangingIndentationUnlessBlock(action: () => void)` - Writes the code within the action with hanging indentation unless a block is written going from the first line to the second.
 * `closeComment()` - Writes text to exit a comment if in a comment.
+* `unsafeInsert(pos: number, text: string)` - Inserts text into the writer. This will not update the writer's state. Read more in its jsdoc.
 * `isInComment()` - Gets if the writer is currently in a comment.
 * `isAtStartOfFirstLineOfBlock()` - Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
 * `isOnFirstLineOfBlock()` - Gets if the writer is currently on the first line of the text, block, or indentation block.

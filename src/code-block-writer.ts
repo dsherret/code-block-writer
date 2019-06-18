@@ -439,6 +439,80 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Inserts text at the provided position.
+     *
+     * This method is "unsafe" because it won't update the state of the writer unless
+     * inserting at the end position. It is biased towards being fast at inserting closer
+     * to the start or end, but slower to insert in the middle. Only use this if
+     * absolutely necessary.
+     * @param pos - Position to insert at.
+     * @param text - Text to insert.
+     */
+    unsafeInsert(pos: number, text: string) {
+        const textLength = this._length;
+        const texts = this._texts;
+        verifyInput();
+
+        if (pos === textLength)
+            return this.write(text);
+
+        updateInternalArray();
+        this._length += text.length;
+
+        return this;
+
+        function verifyInput() {
+            if (pos < 0)
+                throw new Error(`Provided position of '${pos}' was less than zero.`);
+            if (pos > textLength)
+                throw new Error(`Provided position of '${pos}' was greater than the text length of '${textLength}'.`);
+        }
+
+        function updateInternalArray() {
+            const { index, localIndex } = getArrayIndexAndLocalIndex();
+
+            if (localIndex === 0) {
+                texts.splice(index, 0, text);
+            }
+            else if (localIndex === texts[index].length) {
+                texts.splice(index + 1, 0, text);
+            }
+            else {
+                const textItem = texts[index];
+                const startText = textItem.substring(0, localIndex);
+                const endText = textItem.substring(localIndex);
+                texts.splice(index, 1, startText, text, endText);
+            }
+        }
+
+        function getArrayIndexAndLocalIndex() {
+            if (pos < textLength / 2) {
+                // start searching from the front
+                let endPos = 0;
+                for (let i = 0; i < texts.length; i++) {
+                    const textItem = texts[i];
+                    const startPos = endPos;
+                    endPos += textItem.length;
+                    if (endPos >= pos)
+                        return { index: i, localIndex: pos - startPos };
+                }
+            }
+            else {
+                // start searching from the back
+                let startPos = textLength;
+                for (let i = texts.length - 1; i >= 0; i--) {
+                    const textItem = texts[i];
+                    startPos -= textItem.length;
+                    if (startPos <= pos)
+                        return { index: i, localIndex: pos - startPos };
+                }
+            }
+
+            throw new Error("Unhandled situation inserting. This should never happen.");
+        }
+    }
+
+    /**
      * Gets the length of the string in the writer.
      */
     getLength() {

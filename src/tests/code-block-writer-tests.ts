@@ -1,4 +1,4 @@
-﻿import * as assert from "assert";
+﻿import { expect } from "chai";
 import CodeBlockWriter from "./../code-block-writer";
 
 describe("CodeBlockWriter", () => {
@@ -6,7 +6,7 @@ describe("CodeBlockWriter", () => {
         it("should use a \n newline if none is specified", () => {
             const writer = new CodeBlockWriter();
             writer.writeLine("test");
-            assert.equal(writer.toString(), "test\n");
+            expect(writer.toString()).to.equal("test\n");
         });
     });
 
@@ -30,7 +30,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
     function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void, additionalOpts: { useSingleQuote?: boolean; } = {}) {
         const writer = getWriter(additionalOpts);
         writerCallback(writer);
-        assert.equal(writer.toString(), expected.replace(/\r?\n/g, opts.newLine));
+        expect(writer.toString()).to.equal(expected.replace(/\r?\n/g, opts.newLine));
     }
 
     describe("#write()", () => {
@@ -613,7 +613,7 @@ test`;
 
         it("should throw if providing a negative number", () => {
             const writer = new CodeBlockWriter();
-            assert.throws(() => writer.space(-1));
+            expect(() => writer.space(-1)).to.throw();
         });
     });
 
@@ -668,7 +668,7 @@ test`;
 
         it("should throw if providing a negative number", () => {
             const writer = new CodeBlockWriter();
-            assert.throws(() => writer.tab(-1));
+            expect(() => writer.tab(-1)).to.throw();
         });
     });
 
@@ -676,13 +676,13 @@ test`;
         it("should return the length", () => {
             const writer = getWriter();
             writer.write("1234");
-            assert.equal(writer.getLength(), 4);
+            expect(writer.getLength()).to.equal(4);
         });
 
         it("should get the correct length after various kinds of writes", () => {
             const writer = getWriter();
             writer.write("1").writeLine("2").write("3").block(() => writer.write("4")).tab(5).quote("testing").blankLine();
-            assert.equal(writer.getLength(), writer.toString().length);
+            expect(writer.getLength()).to.equal(writer.toString().length);
         });
     });
 
@@ -815,27 +815,103 @@ test`;
             });
         });
     });
+
+    describe("#unsafeInsert()", () => {
+        it("should throw if providing a negative number", () => {
+            const writer = new CodeBlockWriter();
+            expect(() => writer.unsafeInsert(-1, "t"))
+                .to.throw("Provided position of '-1' was less than zero.");
+        });
+
+        it("should throw if providing a number greater than the length", () => {
+            const writer = new CodeBlockWriter();
+            expect(() => writer.unsafeInsert(1, "t"))
+                .to.throw("Provided position of '1' was greater than the text length of '0'.");
+        });
+
+        it("should support inserting at the beginning", () => {
+            doTest("01234", writer => {
+                writer.write("1234").unsafeInsert(0, "0");
+                expect(writer.getLength()).to.equal(5);
+            });
+        });
+
+        it("should support inserting at the end", () => {
+            doTest("01234", writer => {
+                writer.write("0123").unsafeInsert(4, "4");
+                expect(writer.getLength()).to.equal(5);
+            });
+        });
+
+        it("should support inserting in the first half at the beginning of an existing string", () => {
+            doTest("0x123456", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(1, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+
+        it("should support inserting in the first half in the middle of an existing string", () => {
+            doTest("01x23456", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(2, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+
+        it("should support inserting in the first half at the end of an existing string", () => {
+            doTest("012x3456", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(3, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+
+        it("should support inserting in the second half at the beginning of an existing string", () => {
+            doTest("0123x456", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(4, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+
+        it("should support inserting in the second half in the middle of an existing string", () => {
+            doTest("01234x56", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(5, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+
+        it("should support inserting in the second half at the end of an existing string", () => {
+            doTest("012345x6", writer => {
+                writer.write("0").write("12").write("3").write("45").write("6");
+                writer.unsafeInsert(6, "x");
+                expect(writer.getLength()).to.equal(8);
+            });
+        });
+    });
 }
 
 describe("#setIndentationLevel", () => {
     it("should throw when providing a negative number", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.setIndentationLevel(-1));
+        expect(() => writer.setIndentationLevel(-1)).to.throw();
     });
 
     it("should throw when not providing a number or string", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.setIndentationLevel({} as any));
+        expect(() => writer.setIndentationLevel({} as any)).to.throw();
     });
 
     it("should not throw when providing an empty string", () => {
         const writer = new CodeBlockWriter();
-        assert.doesNotThrow(() => writer.setIndentationLevel(""));
+        expect(() => writer.setIndentationLevel("")).to.not.throw();
     });
 
     it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.setIndentationLevel("  \ta"));
+        expect(() => writer.setIndentationLevel("  \ta")).to.throw();
     });
 
     it("should be able to set the indentation level and it maintains it over newlines", () => {
@@ -844,8 +920,8 @@ describe("#setIndentationLevel", () => {
         writer.writeLine("t");
         writer.writeLine("t");
 
-        assert.equal(writer.toString(), "        t\n        t\n");
-        assert.equal(writer.getIndentationLevel(), 2);
+        expect(writer.toString()).to.equal("        t\n        t\n");
+        expect(writer.getIndentationLevel()).to.equal(2);
     });
 
     it("should be able to set the indentation level to 0 within a block", () => {
@@ -858,7 +934,7 @@ describe("#setIndentationLevel", () => {
             writer.write("t");
         });
 
-        assert.equal(writer.toString(), "t {\nt\nt\n}\nt {\n    t\n}");
+        expect(writer.toString()).to.equal("t {\nt\nt\n}\nt {\n    t\n}");
     });
 
     function doSpacesTest(numberSpaces: number) {
@@ -867,8 +943,8 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel(indent + indent);
         writer.write("t").block(() => writer.write("t"));
 
-        assert.equal(writer.toString(), `${indent + indent}t {\n${indent + indent + indent}t\n${indent + indent}}`);
-        assert.equal(writer.getIndentationLevel(), 2);
+        expect(writer.toString()).to.equal(`${indent + indent}t {\n${indent + indent + indent}t\n${indent + indent}}`);
+        expect(writer.getIndentationLevel()).to.equal(2);
     }
 
     it("should be able to set the indentation level using a string with two spaces", () => {
@@ -888,7 +964,7 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel("\t\t");
         writer.write("s");
 
-        assert.equal(writer.toString(), `\t\ts`);
+        expect(writer.toString()).to.equal(`\t\ts`);
     });
 
     it("should indent to the nearest indent when mixing tabs and spaces (round down)", () => {
@@ -896,7 +972,7 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel("\t \t ");
         writer.write("s");
 
-        assert.equal(writer.toString(), `\t\ts`);
+        expect(writer.toString()).to.equal(`\t\ts`);
     });
 
     it("should indent to the nearest indent when mixing tabs and spaces (round down, 2 spaces)", () => {
@@ -904,7 +980,7 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel("\t \t");
         writer.write("s");
 
-        assert.equal(writer.toString(), `\t\ts`);
+        expect(writer.toString()).to.equal(`\t\ts`);
     });
 
     it("should indent to the nearest indent when mixing tabs and spaces (round up)", () => {
@@ -912,7 +988,7 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel("\t \t  ");
         writer.write("s");
 
-        assert.equal(writer.toString(), `\t\t\ts`);
+        expect(writer.toString()).to.equal(`\t\t\ts`);
     });
 
     it("should indent to the nearest indent when mixing tabs and spaces (2 spaces)", () => {
@@ -920,14 +996,14 @@ describe("#setIndentationLevel", () => {
         writer.setIndentationLevel("\t \t     ");
         writer.write("s");
 
-        assert.equal(writer.toString(), `\t\t\t\t\ts`);
+        expect(writer.toString()).to.equal(`\t\t\t\t\ts`);
     });
 
     function doPortionTest(level: number, expected: string) {
         const writer = new CodeBlockWriter({ useTabs: false, indentNumberOfSpaces: 4 });
         writer.setIndentationLevel(level);
         writer.write("s");
-        assert.equal(writer.toString(), expected + `s`);
+        expect(writer.toString()).to.equal(expected + `s`);
     }
 
     it("should indent a quarter of an indent when using spaces and specifying a quarter", () => {
@@ -951,39 +1027,39 @@ describe("#withIndentationLevel", () => {
     it("should use the provided indentation level within the block", () => {
         const writer = new CodeBlockWriter();
         writer.withIndentationLevel(2, () => {
-            assert.equal(writer.getIndentationLevel(), 2);
+            expect(writer.getIndentationLevel()).to.equal(2);
         });
-        assert.equal(writer.getIndentationLevel(), 0);
+        expect(writer.getIndentationLevel()).to.equal(0);
     });
 
     it("should use the provided indentation level within the block when providing a string", () => {
         const writer = new CodeBlockWriter();
         writer.withIndentationLevel("    ", () => {
-            assert.equal(writer.getIndentationLevel(), 1);
+            expect(writer.getIndentationLevel()).to.equal(1);
         });
-        assert.equal(writer.getIndentationLevel(), 0);
+        expect(writer.getIndentationLevel()).to.equal(0);
     });
 });
 
 describe("#queueIndentationLevel", () => {
     it("should throw when providing a negative number", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.queueIndentationLevel(-1));
+        expect(() => writer.queueIndentationLevel(-1)).to.throw();
     });
 
     it("should throw when not providing a number or string", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.queueIndentationLevel({} as any));
+        expect(() => writer.queueIndentationLevel({} as any)).to.throw();
     });
 
     it("should not throw when providing an empty string", () => {
         const writer = new CodeBlockWriter();
-        assert.doesNotThrow(() => writer.queueIndentationLevel(""));
+        expect(() => writer.queueIndentationLevel("")).to.not.throw();
     });
 
     it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
         const writer = new CodeBlockWriter();
-        assert.throws(() => writer.queueIndentationLevel("  \ta"));
+        expect(() => writer.queueIndentationLevel("  \ta")).to.throw();
     });
 
     it("should write with indentation when queuing and immediately doing a newline", () => {
@@ -991,7 +1067,7 @@ describe("#queueIndentationLevel", () => {
         writer.queueIndentationLevel(1);
         writer.newLine().write("t");
 
-        assert.equal(writer.toString(), "\n    t");
+        expect(writer.toString()).to.equal("\n    t");
     });
 
     it("should be able to queue the indentation level", () => {
@@ -1000,7 +1076,7 @@ describe("#queueIndentationLevel", () => {
         writer.writeLine("t");
         writer.writeLine("t");
 
-        assert.equal(writer.toString(), "t\n    t\n");
+        expect(writer.toString()).to.equal("t\n    t\n");
     });
 
     it("should be able to queue the indentation mid line and it will write the next line with indentation", () => {
@@ -1010,7 +1086,7 @@ describe("#queueIndentationLevel", () => {
         writer.write("t");
         writer.writeLine("t");
 
-        assert.equal(writer.toString(), "tt\n    t\n");
+        expect(writer.toString()).to.equal("tt\n    t\n");
     });
 
     it("should be able to set and queue an indentation", () => {
@@ -1020,7 +1096,7 @@ describe("#queueIndentationLevel", () => {
         writer.writeLine("t");
         writer.writeLine("t");
 
-        assert.equal(writer.toString(), "    t\n        t\n");
+        expect(writer.toString()).to.equal("    t\n        t\n");
     });
 
     it("should be able to set after queueng an indentation", () => {
@@ -1032,7 +1108,7 @@ describe("#queueIndentationLevel", () => {
         writer.writeLine("t");
         writer.writeLine("t");
 
-        assert.equal(writer.toString(), "t\n    t\n        t\n        t\n");
+        expect(writer.toString()).to.equal("t\n    t\n        t\n        t\n");
     });
 });
 
@@ -1042,11 +1118,11 @@ describe("#withHangingIndentation", () => {
             const writer = new CodeBlockWriter();
             writer.setIndentationLevel(2);
             writer.withHangingIndentation(() => {
-                assert.equal(writer.getIndentationLevel(), 2);
+                expect(writer.getIndentationLevel()).to.equal(2);
                 action(writer);
-                assert.equal(writer.getIndentationLevel(), 3);
+                expect(writer.getIndentationLevel()).to.equal(3);
             });
-            assert.equal(writer.getIndentationLevel(), 2);
+            expect(writer.getIndentationLevel()).to.equal(2);
         }
 
         doTest(writer => writer.newLine());
@@ -1063,7 +1139,7 @@ describe("#withHangingIndentation", () => {
             });
         });
         writer.write(")");
-        assert.equal(writer.toString(), "(p: string\n    | number)");
+        expect(writer.toString()).to.equal("(p: string\n    | number)");
     });
 
     it("should handle if a block occurs within a hanging indent", () => {
@@ -1071,7 +1147,7 @@ describe("#withHangingIndentation", () => {
         writer.withHangingIndentation(() => {
             writer.block();
         });
-        assert.equal(writer.toString(), "{\n    }");
+        expect(writer.toString()).to.equal("{\n    }");
     });
 
     it("should not indent if within a string", () => {
@@ -1079,7 +1155,7 @@ describe("#withHangingIndentation", () => {
         writer.withHangingIndentation(() => {
             writer.quote("t\nu").newLine().write("t");
         });
-        assert.equal(writer.toString(), `"t\\\nu"\n    t`);
+        expect(writer.toString()).to.equal(`"t\\\nu"\n    t`);
     });
 });
 
@@ -1088,11 +1164,11 @@ describe("#withHangingIndentationUnlessBlock", () => {
         const writer = new CodeBlockWriter();
         writer.setIndentationLevel(2);
         writer.withHangingIndentationUnlessBlock(() => {
-            assert.equal(writer.getIndentationLevel(), 2);
+            expect(writer.getIndentationLevel()).to.equal(2);
             writer.write("t").newLine();
-            assert.equal(writer.getIndentationLevel(), 3);
+            expect(writer.getIndentationLevel()).to.equal(3);
         });
-        assert.equal(writer.getIndentationLevel(), 2);
+        expect(writer.getIndentationLevel()).to.equal(2);
     });
 
     it("should not write with hanging indentation when it's a block and using \n newlines", () => {
@@ -1102,7 +1178,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
                 writer.write("f");
             });
         });
-        assert.equal(writer.toString(), `t {\n    f\n}`);
+        expect(writer.toString()).to.equal(`t {\n    f\n}`);
     });
 
     it("should not write with hanging indentation when it's a block and using \r\n newlines", () => {
@@ -1112,7 +1188,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
                 writer.write("f");
             });
         });
-        assert.equal(writer.toString(), `t {\r\n    f\r\n}`);
+        expect(writer.toString()).to.equal(`t {\r\n    f\r\n}`);
     });
 
     it("should write blocks at the same hanging indentation once past the first line with hanging indenation", () => {
@@ -1124,7 +1200,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
             });
             writer.write("v");
         });
-        assert.equal(writer.toString(), `t\n    u {\n        f\n    }\n    v`);
+        expect(writer.toString()).to.equal(`t\n    u {\n        f\n    }\n    v`);
     });
 
     it("should ignore blocks written in a string", () => {
@@ -1135,7 +1211,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
             writer.write("v`");
             writer.block(() => writer.write("u"));
         });
-        assert.equal(writer.toString(), "`t{\nv` {\n    u\n}");
+        expect(writer.toString()).to.equal("`t{\nv` {\n    u\n}");
     });
 });
 
@@ -1143,7 +1219,7 @@ describe("#endsWith", () => {
     function doTest(str: string, text: string, expectedValue: boolean) {
         const writer = new CodeBlockWriter();
         writer.write(str);
-        assert.equal(writer.endsWith(text), expectedValue);
+        expect(writer.endsWith(text)).to.equal(expectedValue);
     }
 
     it("should be true when equal", () => {
@@ -1178,8 +1254,8 @@ describe("#iterateLastChars", () => {
         const returnValue = writer.iterateLastChars((char, index) => {
             result.push([char, index]);
         });
-        assert.deepEqual(result, expected);
-        assert.equal(returnValue, undefined);
+        expect(result).to.deep.equal(expected);
+        expect(returnValue).to.equal(undefined);
     });
 
     it("should stop and return the value when returning a non-null value", () => {
@@ -1190,7 +1266,7 @@ describe("#iterateLastChars", () => {
                 throw new Error("It didn't stop for some reason.");
             return false;
         });
-        assert.equal(returnValue, false);
+        expect(returnValue).to.equal(false);
     });
 });
 
@@ -1198,18 +1274,18 @@ describe("#getIndentationLevel", () => {
     it("should get the indentation level", () => {
         const writer = new CodeBlockWriter();
         writer.setIndentationLevel(5);
-        assert.equal(writer.getIndentationLevel(), 5);
+        expect(writer.getIndentationLevel()).to.equal(5);
     });
 });
 
 describe("#isInString", () => {
     function doTest(str: string, expectedValues: boolean[]) {
-        assert.equal(str.length + 1, expectedValues.length);
+        expect(str.length + 1).to.equal(expectedValues.length);
         const writer = new CodeBlockWriter();
-        assert.equal(writer.isInString(), expectedValues[0]);
+        expect(writer.isInString()).to.equal(expectedValues[0]);
         for (let i = 0; i < str.length; i++) {
             writer.write(str[i]);
-            assert.equal(writer.isInString(), expectedValues[i + 1], `at expected position ${i + 1}`);
+            expect(writer.isInString()).to.equal(expectedValues[i + 1], `at expected position ${i + 1}`);
         }
     }
 
@@ -1303,11 +1379,11 @@ describe("#isInString", () => {
 });
 
 function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T, writer = new CodeBlockWriter()) {
-    assert.equal(str.length + 1, expectedValues.length);
-    assert.equal(func(writer), expectedValues[0]);
+    expect(str.length + 1).to.equal(expectedValues.length);
+    expect(func(writer)).to.equal(expectedValues[0]);
     for (let i = 0; i < str.length; i++) {
         writer.write(str[i]);
-        assert.equal(func(writer), expectedValues[i + 1], `For char: ${JSON.stringify(str[i])} (${i})`);
+        expect(func(writer)).to.equal(expectedValues[i + 1], `For char: ${JSON.stringify(str[i])} (${i})`);
     }
 }
 
@@ -1379,7 +1455,7 @@ describe("#isOnFirstLineOfBlock", () => {
         assertState(false);
 
         function assertState(state: boolean) {
-            assert.equal(writer.isOnFirstLineOfBlock(), state);
+            expect(writer.isOnFirstLineOfBlock()).to.equal(state);
         }
     });
 });
@@ -1420,7 +1496,7 @@ describe("#isAtStartOfFirstLineOfBlock", () => {
         assertState(false);
 
         function assertState(state: boolean) {
-            assert.equal(writer.isAtStartOfFirstLineOfBlock(), state);
+            expect(writer.isAtStartOfFirstLineOfBlock()).to.equal(state);
         }
     });
 });
@@ -1469,7 +1545,7 @@ describe("#_getLastCharWithOffset", () => {
         const writer = new CodeBlockWriter();
         for (const str of strs)
             writer.write(str);
-        assert.equal(writer._getLastCharWithOffset(offset), expectedValue);
+        expect(writer._getLastCharWithOffset(offset)).to.equal(expectedValue);
     }
 
     it("should return undefined for a negative number", () => {
@@ -1509,7 +1585,7 @@ describe("indentNumberOfSpaces", () => {
 }`;
 
     it("should indent 2 spaces", () => {
-        assert.equal(writer.toString(), expected);
+        expect(writer.toString()).to.equal(expected);
     });
 });
 
@@ -1529,14 +1605,14 @@ describe("useTabs", () => {
 }`;
 
     it("should use tabs", () => {
-        assert.equal(writer.toString(), expected);
+        expect(writer.toString()).to.equal(expected);
     });
 });
 
 describe("#getOptions", () => {
     it("should have the options that were passed in", () => {
         const writer = new CodeBlockWriter({ useTabs: true, indentNumberOfSpaces: 8, newLine: "\r\n", useSingleQuote: false });
-        assert.deepEqual(writer.getOptions(), {
+        expect(writer.getOptions()).to.deep.equal({
             useTabs: true,
             indentNumberOfSpaces: 8,
             newLine: "\r\n",

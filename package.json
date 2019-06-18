@@ -39,8 +39,11 @@
     ],
     "all": true
   },
-  "dependencies": {},
+  "dependencies": {
+    "chai": "^4.2.0"
+  },
   "devDependencies": {
+    "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.6",
     "@types/node": "^8.0.53",
     "coveralls": "^2.13.1",
