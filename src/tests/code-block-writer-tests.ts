@@ -1464,6 +1464,39 @@ describe("#getLastChar", () => {
     });
 });
 
+describe("#_getLastCharWithOffset", () => {
+    function doTest(strs: string[], offset: number, expectedValue: string | undefined) {
+        const writer = new CodeBlockWriter();
+        for (const str of strs)
+            writer.write(str);
+        assert.equal(writer._getLastCharWithOffset(offset), expectedValue);
+    }
+
+    it("should return undefined for a negative number", () => {
+        doTest(["values"], -1, undefined);
+    });
+
+    it("should return undefined for the text length", () => {
+        doTest(["1", "2", "3"], 3, undefined);
+    });
+
+    it("should get when getting the first index", () => {
+        doTest(["2", "1", "0"], 0, "0");
+    });
+
+    it("should get when getting the last index", () => {
+        doTest(["3", "21", "0"], 3, "3");
+    });
+
+    it("should get when getting the last index of a write", () => {
+        doTest(["3", "21", "0"], 2, "2");
+    });
+
+    it("should get when getting the first index of a write", () => {
+        doTest(["3", "21", "0"], 1, "1");
+    });
+});
+
 describe("indentNumberOfSpaces", () => {
     const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });
     writer.write("do").block(() => {

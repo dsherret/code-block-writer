@@ -563,19 +563,6 @@ export default class CodeBlockWriter {
         return undefined;
     }
 
-    /** @internal */
-    private _getLastCharWithOffset(offset: number) {
-        for (let i = this._texts.length - 1; i >= 0; i--) {
-            const currentText = this._texts[i];
-            for (let j = currentText.length - 1; j >= 0; j--) {
-                if (offset === 0)
-                    return currentText[j];
-                offset--;
-            }
-        }
-        return undefined;
-    }
-
     /**
      * Gets the writer's text.
      */
@@ -718,6 +705,21 @@ export default class CodeBlockWriter {
             else if (currentChar === "}" && lastStringCharOnStack === "{")
                 this._stringCharStack.pop();
         }
+    }
+
+    /** @internal - This is private, but exposed for testing. */
+    _getLastCharWithOffset(offset: number) {
+        if (offset >= this._length || offset < 0)
+            return undefined;
+
+        for (let i = this._texts.length - 1; i >= 0; i--) {
+            const currentText = this._texts[i];
+            if (offset >= currentText.length)
+                offset -= currentText.length;
+            else
+                return currentText[currentText.length - 1 - offset];
+        }
+        return undefined;
     }
 
     /** @internal */
