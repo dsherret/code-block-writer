@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="9.4.0"></a>
+# [9.4.0](https://github.com/dsherret/code-block-writer/compare/v9.3.0...v9.4.0) (2019-06-18)
+
+
+### Features
+
+* Add `unsafeInsert`. ([88cce9a](https://github.com/dsherret/code-block-writer/commit/88cce9a))
+
+
+
 <a name="9.3.0"></a>
 # [9.3.0](https://github.com/dsherret/code-block-writer/compare/v9.2.1...v9.3.0) (2019-06-09)
 
