@@ -1,4 +1,4 @@
-﻿import { expect } from "chai";
+import { expect } from "chai";
 import CodeBlockWriter from "./../code-block-writer";
 
 describe("CodeBlockWriter", () => {
@@ -19,7 +19,7 @@ describe("CodeBlockWriter", () => {
     });
 });
 
-function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
+function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n"; }) {
     function getWriter(additionalOpts: { useSingleQuote?: boolean; } = {}) {
         return new CodeBlockWriter({
             newLine: opts.newLine,
@@ -59,8 +59,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should indent if it's passed a newline character inside a block", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside
     inside
 }`;
@@ -101,8 +100,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
 
     describe("#block()", () => {
         it("should allow an empty block", () => {
-            const expected =
-`test {
+            const expected = `test {
 }`;
             doTest(expected, writer => {
                 writer.write("test").block();
@@ -110,8 +108,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should write text inside a block", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside
 }`;
             doTest(expected, writer => {
@@ -122,8 +119,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should write text inside a block inside a block", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside {
         inside again
     }
@@ -139,8 +135,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should not do an extra space if there was a space added before the block", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside
 }`;
             doTest(expected, writer => {
@@ -151,8 +146,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should put the brace on the next line if there is a newline before it", () => {
-            const expected =
-`test
+            const expected = `test
 {
     inside
 }`;
@@ -164,8 +158,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should not add an extra newline if the last character written in the block was a newline", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside
 }`;
             doTest(expected, writer => {
@@ -176,8 +169,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should add a newline after the block when writing afterwards", () => {
-            const expected =
-`{
+            const expected = `{
     t;
 }
  `;
@@ -187,8 +179,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
         });
 
         it("should not add a newline after the block when doing a condition call and the conditions are false", () => {
-            const expected =
-`{
+            const expected = `{
     t;
 }`;
             doTest(expected, writer => {
@@ -519,8 +510,7 @@ test`;
         });
 
         it("should indent if it's passed a newline character inside a block", () => {
-            const expected =
-`test {
+            const expected = `test {
     inside
     inside
 }`;
@@ -1579,8 +1569,7 @@ describe("indentNumberOfSpaces", () => {
         writer.write("something");
     });
 
-    const expected =
-`do {
+    const expected = `do {
   something
 }`;
 
@@ -1597,8 +1586,7 @@ describe("useTabs", () => {
         });
     });
 
-    const expected =
-`do {
+    const expected = `do {
 \tdo {
 \t\tsomething
 \t}

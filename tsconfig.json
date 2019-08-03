@@ -1,16 +1,16 @@
 {
-    "compilerOptions": {
-        "target": "es2015",
-        "module": "commonjs",
-        "declaration": true,
-        "sourceMap": true,
-        "removeComments": false,
-        "experimentalDecorators": true,
-        "outDir": "dist",
-        "rootDir": "src",
-        "typeRoots": [ "node_modules/@types/" ],
-        "types": [ "node", "mocha" ],
-        "strict": true,
-        "stripInternal": true
-    }
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "declaration": true,
+    "sourceMap": true,
+    "removeComments": false,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "typeRoots": ["node_modules/@types/"],
+    "types": ["node", "mocha"],
+    "strict": true,
+    "stripInternal": true
+  }
 }

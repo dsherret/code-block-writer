@@ -471,12 +471,10 @@ export default class CodeBlockWriter {
         function updateInternalArray() {
             const { index, localIndex } = getArrayIndexAndLocalIndex();
 
-            if (localIndex === 0) {
+            if (localIndex === 0)
                 texts.splice(index, 0, text);
-            }
-            else if (localIndex === texts[index].length) {
+            else if (localIndex === texts[index].length)
                 texts.splice(index + 1, 0, text);
-            }
             else {
                 const textItem = texts[index];
                 const startText = textItem.substring(0, localIndex);
@@ -572,8 +570,9 @@ export default class CodeBlockWriter {
                     if (foundCount === 2)
                         return true;
                 }
-                else if (currentChar !== "\r")
+                else if (currentChar !== "\r") {
                     return false;
+                }
             }
         }
 
@@ -850,8 +849,9 @@ export default class CodeBlockWriter {
             const { spacesCount, tabsCount } = getSpacesAndTabsCount(countOrText);
             return tabsCount + spacesCount / this._indentNumberOfSpaces;
         }
-        else
+        else {
             throw new Error("Argument provided must be a string or number.");
+        }
     }
 
     /** @internal */

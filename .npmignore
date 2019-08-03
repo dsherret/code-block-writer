@@ -12,7 +12,7 @@
 /coverage
 /.vs
 /src
-/tslint.json
+/dprint.json
 /tsconfig.json
 /gulpfile.js
 /CHANGELOG.md
