@@ -1102,12 +1102,12 @@ describe("#queueIndentationLevel", () => {
     });
 });
 
-describe("#withHangingIndentation", () => {
+describe("#hangingIndent", () => {
     it("should queue an indent +1 when using newLine() and writing text", () => {
         function doTest(action: (writer: CodeBlockWriter) => void) {
             const writer = new CodeBlockWriter();
             writer.setIndentationLevel(2);
-            writer.withHangingIndentation(() => {
+            writer.hangingIndent(() => {
                 expect(writer.getIndentationLevel()).to.equal(2);
                 action(writer);
                 expect(writer.getIndentationLevel()).to.equal(3);
@@ -1122,9 +1122,9 @@ describe("#withHangingIndentation", () => {
     it("should handle nested indentations", () => {
         const writer = new CodeBlockWriter();
         writer.write("(");
-        writer.withHangingIndentation(() => {
+        writer.hangingIndent(() => {
             writer.write("p");
-            writer.withHangingIndentation(() => {
+            writer.hangingIndent(() => {
                 writer.write(": string\n| number");
             });
         });
@@ -1134,7 +1134,7 @@ describe("#withHangingIndentation", () => {
 
     it("should handle if a block occurs within a hanging indent", () => {
         const writer = new CodeBlockWriter();
-        writer.withHangingIndentation(() => {
+        writer.hangingIndent(() => {
             writer.block();
         });
         expect(writer.toString()).to.equal("{\n    }");
@@ -1142,18 +1142,18 @@ describe("#withHangingIndentation", () => {
 
     it("should not indent if within a string", () => {
         const writer = new CodeBlockWriter();
-        writer.withHangingIndentation(() => {
+        writer.hangingIndent(() => {
             writer.quote("t\nu").newLine().write("t");
         });
         expect(writer.toString()).to.equal(`"t\\\nu"\n    t`);
     });
 });
 
-describe("#withHangingIndentationUnlessBlock", () => {
+describe("#hangingIndentUnlessBlock", () => {
     it("should write with hanging indentation when not a brace", () => {
         const writer = new CodeBlockWriter();
         writer.setIndentationLevel(2);
-        writer.withHangingIndentationUnlessBlock(() => {
+        writer.hangingIndentUnlessBlock(() => {
             expect(writer.getIndentationLevel()).to.equal(2);
             writer.write("t").newLine();
             expect(writer.getIndentationLevel()).to.equal(3);
@@ -1163,7 +1163,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
 
     it("should not write with hanging indentation when it's a block and using \n newlines", () => {
         const writer = new CodeBlockWriter();
-        writer.withHangingIndentationUnlessBlock(() => {
+        writer.hangingIndentUnlessBlock(() => {
             writer.write("t").block(() => {
                 writer.write("f");
             });
@@ -1173,7 +1173,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
 
     it("should not write with hanging indentation when it's a block and using \r\n newlines", () => {
         const writer = new CodeBlockWriter({ newLine: "\r\n" });
-        writer.withHangingIndentationUnlessBlock(() => {
+        writer.hangingIndentUnlessBlock(() => {
             writer.write("t").block(() => {
                 writer.write("f");
             });
@@ -1183,7 +1183,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
 
     it("should write blocks at the same hanging indentation once past the first line with hanging indenation", () => {
         const writer = new CodeBlockWriter();
-        writer.withHangingIndentationUnlessBlock(() => {
+        writer.hangingIndentUnlessBlock(() => {
             writer.writeLine("t");
             writer.write("u").block(() => {
                 writer.write("f");
@@ -1196,7 +1196,7 @@ describe("#withHangingIndentationUnlessBlock", () => {
     it("should ignore blocks written in a string", () => {
         // this would be strange to happen... but this behaviour seems ok
         const writer = new CodeBlockWriter();
-        writer.withHangingIndentationUnlessBlock(() => {
+        writer.hangingIndentUnlessBlock(() => {
             writer.writeLine("`t{");
             writer.write("v`");
             writer.block(() => writer.write("u"));

@@ -110,7 +110,7 @@ export default class CodeBlockWriter {
      * Writes the text within the provided action with hanging indentation.
      * @param action - Action to perform with hanging indentation.
      */
-    withHangingIndentation(action: () => void) {
+    hangingIndent(action: () => void) {
         return this._withResetIndentation(() => this.queueIndentationLevel(this.getIndentationLevel() + 1), action);
     }
 
@@ -118,7 +118,7 @@ export default class CodeBlockWriter {
      * Writes the text within the provided action with hanging indentation unless writing a block.
      * @param action - Action to perform with hanging indentation unless a block is written.
      */
-    withHangingIndentationUnlessBlock(action: () => void) {
+    hangingIndentUnlessBlock(action: () => void) {
         return this._withResetIndentation(() => {
             this.queueIndentationLevel(this.getIndentationLevel() + 1);
             this._queuedOnlyIfNotBlock = true;
