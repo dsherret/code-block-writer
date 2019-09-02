@@ -1293,6 +1293,26 @@ describe("#isInString", () => {
         doTest("s`y`", [false, false, true, true, false]);
     });
 
+    it("should not be in a string after a new line and not closing the double quote", () => {
+        doTest(`s"y\nt`, [false, false, true, true, false, false]);
+    });
+
+    it("should be in a string after a new line and not closing the double quote, but escaping the new line", () => {
+        doTest(`s"y\\\nt`, [false, false, true, true, true, true, true]);
+    });
+
+    it("should not be in a string after a new line and not closing the single quote", () => {
+        doTest(`s'y\nt`, [false, false, true, true, false, false]);
+    });
+
+    it("should be in a string after a new line and not closing the single quote, but escaping the new line", () => {
+        doTest(`s'y\\\nt`, [false, false, true, true, true, true, true]);
+    });
+
+    it("should be in a string after a new line and not closing the back tick", () => {
+        doTest("s\`y\nt", [false, false, true, true, true, true]);
+    });
+
     it("should not be affected by other string quotes while in double quotes", () => {
         doTest(`"'\`\${}"`, [false, true, true, true, true, true, true, false]);
     });
@@ -1566,35 +1586,35 @@ describe("#_getLastCharWithOffset", () => {
 });
 
 describe("indentNumberOfSpaces", () => {
-    const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });
-    writer.write("do").block(() => {
-        writer.write("something");
-    });
+    it("should indent 2 spaces", () => {
+        const writer = new CodeBlockWriter({ indentNumberOfSpaces: 2 });
+        writer.write("do").block(() => {
+            writer.write("something");
+        });
 
-    const expected = `do {
+        const expected = `do {
   something
 }`;
 
-    it("should indent 2 spaces", () => {
         expect(writer.toString()).to.equal(expected);
     });
 });
 
 describe("useTabs", () => {
-    const writer = new CodeBlockWriter({ useTabs: true });
-    writer.write("do").block(() => {
+    it("should use tabs", () => {
+        const writer = new CodeBlockWriter({ useTabs: true });
         writer.write("do").block(() => {
-            writer.write("something");
+            writer.write("do").block(() => {
+                writer.write("something");
+            });
         });
-    });
 
-    const expected = `do {
+        const expected = `do {
 \tdo {
 \t\tsomething
 \t}
 }`;
 
-    it("should use tabs", () => {
         expect(writer.toString()).to.equal(expected);
     });
 });

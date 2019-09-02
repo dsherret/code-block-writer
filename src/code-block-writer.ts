@@ -689,6 +689,11 @@ export default class CodeBlockWriter {
     private _baseWriteNewline() {
         if (this._currentCommentChar === CommentChar.Line)
             this._currentCommentChar = undefined;
+
+        const lastStringCharOnStack = this._stringCharStack[this._stringCharStack.length - 1];
+        if ((lastStringCharOnStack === "\"" || lastStringCharOnStack === "'") && this.getLastChar() !== "\\")
+            this._stringCharStack.pop();
+
         this._internalWrite(this._newLine);
         this._isOnFirstLineOfBlock = false;
         this._dequeueQueuedIndentation();
