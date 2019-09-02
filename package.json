@@ -6,6 +6,7 @@
   "typings": "dist/code-block-writer.d.ts",
   "scripts": {
     "test": "nyc --reporter=lcov mocha --opts mocha.opts",
+    "test:debug": "cross-env TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts --inspect-brk",
     "build": "rimraf dist && tsc",
     "format": "dprint \"**/*{.ts|.json}\"",
     "dopublish": "npm run build && echo \"Run: npm publish --otp\""
@@ -46,6 +47,7 @@
     "@types/node": "^12.6.8",
     "chai": "^4.2.0",
     "coveralls": "^3.0.5",
+    "cross-env": "^5.2.1",
     "dprint": "^0.2.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",

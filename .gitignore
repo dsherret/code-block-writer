@@ -1,5 +1,4 @@
 /node_modules
-/.vscode
 /.nyc_output
 *.js.map
 /obj
