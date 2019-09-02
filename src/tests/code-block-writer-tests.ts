@@ -232,75 +232,95 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n"; }) {
         });
     });
 
-    describe("#indentBlock()", () => {
-        it("should indent text inside a block", () => {
-            const expected = `test\n    inside`;
-            doTest(expected, writer => {
-                writer.write("test").indentBlock(() => {
-                    writer.write("inside");
+    describe("#indent()", () => {
+        describe("number argument", () => {
+            it("should indent as necessary", () => {
+                const expected = `test\n    test`;
+
+                doTest(expected, writer => {
+                    writer.writeLine("test").indent().write("test");
+                });
+            });
+
+            it("should indent multiple times when specifying an argument", () => {
+                const expected = `test\n        test`;
+
+                doTest(expected, writer => {
+                    writer.writeLine("test").indent(2).write("test");
                 });
             });
         });
 
-        it("should not do a newline on the first line", () => {
-            const expected = `    inside`;
-            doTest(expected, writer => {
-                writer.indentBlock(() => {
-                    writer.write("inside");
+        describe("block argument", () => {
+            it("should indent text inside a block", () => {
+                const expected = `test\n    inside`;
+                doTest(expected, writer => {
+                    writer.write("test").indent(() => {
+                        writer.write("inside");
+                    });
                 });
             });
-        });
 
-        it("should not do a newline at the start if the last was a new line", () => {
-            const expected = `test\n    inside`;
-            doTest(expected, writer => {
-                writer.writeLine("test").indentBlock(() => {
-                    writer.write("inside");
+            it("should not do a newline on the first line", () => {
+                const expected = `    inside`;
+                doTest(expected, writer => {
+                    writer.indent(() => {
+                        writer.write("inside");
+                    });
                 });
             });
-        });
 
-        it("should not do a newline at the end if the last was a new line", () => {
-            const expected = `    inside\ntest`;
-            doTest(expected, writer => {
-                writer.indentBlock(() => {
-                    writer.writeLine("inside");
-                }).write("test");
+            it("should not do a newline at the start if the last was a new line", () => {
+                const expected = `test\n    inside`;
+                doTest(expected, writer => {
+                    writer.writeLine("test").indent(() => {
+                        writer.write("inside");
+                    });
+                });
             });
-        });
 
-        it("should indent text inside a block inside a block", () => {
-            const expected = `test
+            it("should not do a newline at the end if the last was a new line", () => {
+                const expected = `    inside\ntest`;
+                doTest(expected, writer => {
+                    writer.indent(() => {
+                        writer.writeLine("inside");
+                    }).write("test");
+                });
+            });
+
+            it("should indent text inside a block inside a block", () => {
+                const expected = `test
     inside
         inside again
 test`;
 
-            doTest(expected, writer => {
-                writer.write("test").indentBlock(() => {
-                    writer.write("inside").indentBlock(() => {
-                        writer.write("inside again");
+                doTest(expected, writer => {
+                    writer.write("test").indent(() => {
+                        writer.write("inside").indent(() => {
+                            writer.write("inside again");
+                        });
+                    });
+                    writer.write("test");
+                });
+            });
+
+            it("should not indent when in a string", () => {
+                const expected = "block\n    const t = `\nt`;\n    const u = 1;";
+
+                doTest(expected, writer => {
+                    writer.write("block").indent(() => {
+                        writer.write("const t = `\nt`;\nconst u = 1;");
                     });
                 });
-                writer.write("test");
             });
-        });
 
-        it("should not indent when in a string", () => {
-            const expected = "block\n    const t = `\nt`;\n    const u = 1;";
+            it("should indent when in a comment", () => {
+                const expected = "block\n    const t = /*\n    const u = 1;*/";
 
-            doTest(expected, writer => {
-                writer.write("block").indentBlock(() => {
-                    writer.write("const t = `\nt`;\nconst u = 1;");
-                });
-            });
-        });
-
-        it("should indent when in a comment", () => {
-            const expected = "block\n    const t = /*\n    const u = 1;*/";
-
-            doTest(expected, writer => {
-                writer.write("block").indentBlock(() => {
-                    writer.write("const t = /*\nconst u = 1;*/");
+                doTest(expected, writer => {
+                    writer.write("block").indent(() => {
+                        writer.write("const t = /*\nconst u = 1;*/");
+                    });
                 });
             });
         });
@@ -410,24 +430,6 @@ test`;
         it("should not write when the condition is undefined", () => {
             doTest("t", writer => {
                 writer.write("t").conditionalBlankLine(undefined);
-            });
-        });
-    });
-
-    describe("#indent()", () => {
-        it("should indent as necessary", () => {
-            const expected = `test\n    test`;
-
-            doTest(expected, writer => {
-                writer.writeLine("test").indent().write("test");
-            });
-        });
-
-        it("should indent multiple times when specifying an argument", () => {
-            const expected = `test\n        test`;
-
-            doTest(expected, writer => {
-                writer.writeLine("test").indent(2).write("test");
             });
         });
     });
@@ -1429,7 +1431,7 @@ describe("#isOnFirstLineOfBlock", () => {
             assertState(true);
             writer.newLine();
             assertState(false);
-            writer.indentBlock(() => {
+            writer.indent(() => {
                 assertState(true);
                 writer.write("testing\n");
                 assertState(false);
@@ -1470,7 +1472,7 @@ describe("#isAtStartOfFirstLineOfBlock", () => {
             assertState(false);
             writer.newLine();
             assertState(false);
-            writer.indentBlock(() => {
+            writer.indent(() => {
                 assertState(true);
                 writer.write("testing\n");
                 assertState(false);

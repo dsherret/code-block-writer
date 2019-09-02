@@ -60,7 +60,7 @@ class MyClass extends OtherClass {
 * `quote()` - Writes a quote character.
 * `quote(text: string)` - Writes text surrounded in quotes.
 * `indent(times?: number)` - Indents the current line. Optionally indents multiple times when providing a number.
-* `indentBlock(block?: () => void)` - Indents a block of code.
+* `indent(block?: () => void)` - Indents a block of code.
 * `space(times?: number)` - Writes a space. Optionally writes multiple spaces when providing a number.
 * `spaceIfLastNot()` - Writes a space if the last was not a space.
 * `tab(times?: number)` - Writes a tab. Optionally writes multiple tabs when providing a number.

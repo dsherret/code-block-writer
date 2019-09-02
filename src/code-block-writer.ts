@@ -207,14 +207,25 @@ export default class CodeBlockWriter {
     }
 
     /**
+     * Indents the code one level for the current line.
+     */
+    indent(times?: number): this;
+    /**
      * Indents a block of code.
      * @param block - Block to indent.
      */
-    indentBlock(block: () => void): this {
-        this._indentBlockInternal(block);
-        if (!this.isLastNewLine())
-            this._newLineOnNextWrite = true;
-        return this;
+    indent(block: () => void): this;
+    indent(timesOrBlock: number | (() => void) = 1) {
+        if (typeof timesOrBlock === "number") {
+            this._newLineIfNewLineOnNextWrite();
+            return this.write(this._indentationText.repeat(timesOrBlock));
+        }
+        else {
+            this._indentBlockInternal(timesOrBlock);
+            if (!this.isLastNewLine())
+                this._newLineOnNextWrite = true;
+            return this;
+        }
     }
 
     /** @internal */
@@ -298,14 +309,6 @@ export default class CodeBlockWriter {
      */
     blankLine() {
         return this.newLineIfLastNot().newLine();
-    }
-
-    /**
-     * Indents the code one level for the current line.
-     */
-    indent(times = 1) {
-        this._newLineIfNewLineOnNextWrite();
-        return this.write(this._indentationText.repeat(times));
     }
 
     /**
