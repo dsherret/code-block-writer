@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.0.0"></a>
+# [10.0.0](https://github.com/dsherret/code-block-writer/compare/v9.4.1...v10.0.0) (2019-09-02)
+
+
+### Bug Fixes
+
+* [#32](https://github.com/dsherret/code-block-writer/issues/32) - Doing a non-escaped newline within a string literal would not properly update the writer state. ([a155e47](https://github.com/dsherret/code-block-writer/commit/a155e47))
+
+
+### Code Refactoring
+
+* Rename `indentBlock` to `indent`. ([34fd843](https://github.com/dsherret/code-block-writer/commit/34fd843))
+* Rename `withHangingIndentation` to `hangingIndent`. ([f87cb91](https://github.com/dsherret/code-block-writer/commit/f87cb91))
+
+
+### BREAKING CHANGES
+
+* `indentBlock` is now merged with `indent`.
+* `withHangingIndentation` is now `hangingIndent`.
+
+
+
 <a name="9.4.1"></a>
 ## [9.4.1](https://github.com/dsherret/code-block-writer/compare/v9.4.0...v9.4.1) (2019-07-16)
 
