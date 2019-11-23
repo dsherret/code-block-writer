@@ -20,3 +20,5 @@
 /dist/tests
 yarn-error.log
 mocha.opts
+/dist/utils/stringUtils.d.ts
+dprint.config.js
