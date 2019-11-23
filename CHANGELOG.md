@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="10.1.0"></a>
+# [10.1.0](https://github.com/dsherret/code-block-writer/compare/v10.0.0...v10.1.0) (2019-11-23)
+
+
+### Features
+
+* Add `iterateLastCharCodes` which is slightly more efficient than `iterateLastChars`. ([5e27b85](https://github.com/dsherret/code-block-writer/commit/5e27b85))
+
+
+### Performance Improvements
+
+* Use `charCodeAt` instead of indexing into the string (to avoid an allocation). ([48b4e3e](https://github.com/dsherret/code-block-writer/commit/48b4e3e))
+
+
+
 <a name="10.0.0"></a>
 # [10.0.0](https://github.com/dsherret/code-block-writer/compare/v9.4.1...v10.0.0) (2019-09-02)
 
