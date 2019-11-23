@@ -1557,7 +1557,7 @@ describe("#_getLastCharWithOffset", () => {
         const writer = new CodeBlockWriter();
         for (const str of strs)
             writer.write(str);
-        expect(writer._getLastCharWithOffset(offset)).to.equal(expectedValue);
+        expect(writer._getLastCharCodeWithOffset(offset)).to.equal(expectedValue?.charCodeAt(0));
     }
 
     it("should return undefined for a negative number", () => {

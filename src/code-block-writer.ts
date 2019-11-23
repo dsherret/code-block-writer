@@ -27,6 +27,21 @@ export interface Options {
     useSingleQuote: boolean;
 }
 
+const isCharToHandle = new Set<number>(["/", "\\", "\n", "\r", "*", "\"", "'", "`", "{", "}"].map(c => c.charCodeAt(0)));
+const CHARS = {
+    BACK_SLASH: "\\".charCodeAt(0),
+    FORWARD_SLASH: "/".charCodeAt(0),
+    NEW_LINE: "\n".charCodeAt(0),
+    CARRIAGE_RETURN: "\r".charCodeAt(0),
+    ASTERISK: "*".charCodeAt(0),
+    DOUBLE_QUOTE: "\"".charCodeAt(0),
+    SINGLE_QUOTE: "'".charCodeAt(0),
+    BACK_TICK: "`".charCodeAt(0),
+    OPEN_BRACE: "{".charCodeAt(0),
+    CLOSE_BRACE: "}".charCodeAt(0),
+    DOLLAR_SIGN: "$".charCodeAt(0)
+};
+
 /**
  * Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
  */
@@ -54,7 +69,7 @@ export default class CodeBlockWriter {
     /** @internal */
     private _currentCommentChar: CommentChar | undefined = undefined;
     /** @internal */
-    private _stringCharStack: ("\"" | "'" | "`" | "{")[] = [];
+    private _stringCharStack: number[] = [];
     /** @internal */
     private _isInRegEx = false;
     /** @internal */
@@ -545,7 +560,7 @@ export default class CodeBlockWriter {
      * Gets if the writer is currently in a string.
      */
     isInString() {
-        return this._stringCharStack.length > 0 && this._stringCharStack[this._stringCharStack.length - 1] !== "{";
+        return this._stringCharStack.length > 0 && this._stringCharStack[this._stringCharStack.length - 1] !== CHARS.OPEN_BRACE;
     }
 
     /**
@@ -567,13 +582,13 @@ export default class CodeBlockWriter {
         for (let i = this._texts.length - 1; i >= 0; i--) {
             const currentText = this._texts[i];
             for (let j = currentText.length - 1; j >= 0; j--) {
-                const currentChar = currentText[j];
-                if (currentChar === "\n") {
+                const currentChar = currentText.charCodeAt(j);
+                if (currentChar === CHARS.NEW_LINE) {
                     foundCount++;
                     if (foundCount === 2)
                         return true;
                 }
-                else if (currentChar !== "\r") {
+                else if (currentChar !== CHARS.CARRIAGE_RETURN) {
                     return false;
                 }
             }
@@ -600,7 +615,8 @@ export default class CodeBlockWriter {
      * Gets the last char written.
      */
     getLastChar() {
-        return this._getLastCharWithOffset(0);
+        const charCode = this._getLastCharCodeWithOffset(0);
+        return charCode == null ? undefined : String.fromCharCode(charCode);
     }
 
     /**
@@ -691,7 +707,7 @@ export default class CodeBlockWriter {
             this._currentCommentChar = undefined;
 
         const lastStringCharOnStack = this._stringCharStack[this._stringCharStack.length - 1];
-        if ((lastStringCharOnStack === "\"" || lastStringCharOnStack === "'") && this.getLastChar() !== "\\")
+        if ((lastStringCharOnStack === CHARS.DOUBLE_QUOTE || lastStringCharOnStack === CHARS.SINGLE_QUOTE) && this._getLastCharCodeWithOffset(0) !== CHARS.BACK_SLASH)
             this._stringCharStack.pop();
 
         this._internalWrite(this._newLine);
@@ -735,24 +751,22 @@ export default class CodeBlockWriter {
     }
 
     /** @internal */
-    private static readonly _isCharToHandle = new Set<string>(["/", "\\", "\n", "\r", "*", "\"", "'", "`", "{", "}"]);
-    /** @internal */
     private _updateInternalState(str: string) {
         for (let i = 0; i < str.length; i++) {
-            const currentChar = str[i];
+            const currentChar = str.charCodeAt(i);
 
             // This is a performance optimization to short circuit all the checks below. If the current char
             // is not in this set then it won't change any internal state so no need to continue and do
             // so many other checks (this made it 3x faster in one scenario I tested).
-            if (!CodeBlockWriter._isCharToHandle.has(currentChar))
+            if (!isCharToHandle.has(currentChar))
                 continue;
 
-            const pastChar = i === 0 ? this.getLastChar() : str[i - 1];
-            const pastPastChar = i === 0 ? this._getLastCharWithOffset(1) : i === 1 ? this.getLastChar() : str[i - 2];
+            const pastChar = i === 0 ? this._getLastCharCodeWithOffset(0) : str.charCodeAt(i - 1);
+            const pastPastChar = i === 0 ? this._getLastCharCodeWithOffset(1) : i === 1 ? this._getLastCharCodeWithOffset(0) : str.charCodeAt(i - 2);
 
             // handle regex
             if (this._isInRegEx) {
-                if (pastChar === "/" && pastPastChar !== "\\" || pastChar === "\n")
+                if (pastChar === CHARS.FORWARD_SLASH && pastPastChar !== CHARS.BACK_SLASH || pastChar === CHARS.NEW_LINE)
                     this._isInRegEx = false;
                 else
                     continue;
@@ -763,11 +777,11 @@ export default class CodeBlockWriter {
             }
 
             // handle comments
-            if (this._currentCommentChar == null && pastChar === "/" && currentChar === "/")
+            if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.FORWARD_SLASH)
                 this._currentCommentChar = CommentChar.Line;
-            else if (this._currentCommentChar == null && pastChar === "/" && currentChar === "*")
+            else if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.ASTERISK)
                 this._currentCommentChar = CommentChar.Star;
-            else if (this._currentCommentChar === CommentChar.Star && pastChar === "*" && currentChar === "/")
+            else if (this._currentCommentChar === CommentChar.Star && pastChar === CHARS.ASTERISK && currentChar === CHARS.FORWARD_SLASH)
                 this._currentCommentChar = undefined;
 
             if (this.isInComment())
@@ -775,21 +789,21 @@ export default class CodeBlockWriter {
 
             // handle strings
             const lastStringCharOnStack = this._stringCharStack.length === 0 ? undefined : this._stringCharStack[this._stringCharStack.length - 1];
-            if (pastChar !== "\\" && (currentChar === "\"" || currentChar === "'" || currentChar === "`")) {
+            if (pastChar !== CHARS.BACK_SLASH && (currentChar === CHARS.DOUBLE_QUOTE || currentChar === CHARS.SINGLE_QUOTE || currentChar === CHARS.BACK_TICK)) {
                 if (lastStringCharOnStack === currentChar)
                     this._stringCharStack.pop();
-                else if (lastStringCharOnStack === "{" || lastStringCharOnStack === undefined)
+                else if (lastStringCharOnStack === CHARS.OPEN_BRACE || lastStringCharOnStack === undefined)
                     this._stringCharStack.push(currentChar);
             }
-            else if (pastPastChar !== "\\" && pastChar === "$" && currentChar === "{" && lastStringCharOnStack === "`")
+            else if (pastPastChar !== CHARS.BACK_SLASH && pastChar === CHARS.DOLLAR_SIGN && currentChar === CHARS.OPEN_BRACE && lastStringCharOnStack === CHARS.BACK_TICK)
                 this._stringCharStack.push(currentChar);
-            else if (currentChar === "}" && lastStringCharOnStack === "{")
+            else if (currentChar === CHARS.CLOSE_BRACE && lastStringCharOnStack === CHARS.OPEN_BRACE)
                 this._stringCharStack.pop();
         }
     }
 
     /** @internal - This is private, but exposed for testing. */
-    _getLastCharWithOffset(offset: number) {
+    _getLastCharCodeWithOffset(offset: number) {
         if (offset >= this._length || offset < 0)
             return undefined;
 
@@ -798,7 +812,7 @@ export default class CodeBlockWriter {
             if (offset >= currentText.length)
                 offset -= currentText.length;
             else
-                return currentText[currentText.length - 1 - offset];
+                return currentText.charCodeAt(currentText.length - 1 - offset);
         }
         return undefined;
     }
@@ -885,12 +899,12 @@ interface IndentationLevelState {
     queuedOnlyIfNotBlock: true | undefined;
 }
 
-function isRegExStart(currentChar: string, pastChar: string | undefined, pastPastChar: string | undefined) {
-    return pastChar === "/"
-        && currentChar !== "/"
-        && currentChar !== "*"
-        && pastPastChar !== "*"
-        && pastPastChar !== "/";
+function isRegExStart(currentChar: number, pastChar: number | undefined, pastPastChar: number | undefined) {
+    return pastChar === CHARS.FORWARD_SLASH
+        && currentChar !== CHARS.FORWARD_SLASH
+        && currentChar !== CHARS.ASTERISK
+        && pastPastChar !== CHARS.ASTERISK
+        && pastPastChar !== CHARS.FORWARD_SLASH;
 }
 
 function getIndentationText(useTabs: boolean, numberSpaces: number) {
