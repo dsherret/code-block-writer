@@ -27,7 +27,11 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n"; }) {
         });
     }
 
-    function doTest(expected: string, writerCallback: (writer: CodeBlockWriter) => void, additionalOpts: { useSingleQuote?: boolean; } = {}) {
+    function doTest(
+        expected: string,
+        writerCallback: (writer: CodeBlockWriter) => void,
+        additionalOpts: { useSingleQuote?: boolean; } = {}
+    ) {
         const writer = getWriter(additionalOpts);
         writerCallback(writer);
         expect(writer.toString()).to.equal(expected.replace(/\r?\n/g, opts.newLine));
@@ -1390,7 +1394,12 @@ describe("#isInString", () => {
     });
 });
 
-function runSequentialCheck<T>(str: string, expectedValues: T[], func: (writer: CodeBlockWriter) => T, writer = new CodeBlockWriter()) {
+function runSequentialCheck<T>(
+    str: string,
+    expectedValues: T[],
+    func: (writer: CodeBlockWriter) => T,
+    writer = new CodeBlockWriter()
+) {
     expect(str.length + 1).to.equal(expectedValues.length);
     expect(func(writer)).to.equal(expectedValues[0]);
     for (let i = 0; i < str.length; i++) {
@@ -1621,7 +1630,12 @@ describe("useTabs", () => {
 
 describe("#getOptions", () => {
     it("should have the options that were passed in", () => {
-        const writer = new CodeBlockWriter({ useTabs: true, indentNumberOfSpaces: 8, newLine: "\r\n", useSingleQuote: false });
+        const writer = new CodeBlockWriter({
+            useTabs: true,
+            indentNumberOfSpaces: 8,
+            newLine: "\r\n",
+            useSingleQuote: false
+        });
         expect(writer.getOptions()).to.deep.equal({
             useTabs: true,
             indentNumberOfSpaces: 8,

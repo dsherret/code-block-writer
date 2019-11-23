@@ -8,7 +8,7 @@
     "test": "nyc --reporter=lcov mocha --opts mocha.opts",
     "test:debug": "cross-env TS_NODE_TRANSPILE_ONLY=\"true\" mocha --opts mocha.opts --inspect-brk",
     "build": "rimraf dist && tsc",
-    "format": "dprint \"**/*{.ts|.json}\"",
+    "format": "dprint",
     "dopublish": "npm run build && echo \"Run: npm publish --otp\""
   },
   "repository": {
@@ -42,17 +42,19 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/chai": "^4.1.7",
+    "@types/chai": "^4.2.5",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.6.8",
+    "@types/node": "^12.12.12",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.5",
-    "cross-env": "^5.2.1",
-    "dprint": "^0.2.0",
-    "mocha": "^6.2.0",
+    "coveralls": "^3.0.8",
+    "cross-env": "^6.0.3",
+    "dprint": "^0.7.3",
+    "dprint-plugin-jsonc": "^0.2.4",
+    "dprint-plugin-typescript": "^0.10.0",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
-    "source-map-support": "^0.5.12",
-    "ts-node": "^8.3.0",
+    "source-map-support": "^0.5.16",
+    "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
   }
 }
