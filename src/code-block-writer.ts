@@ -625,10 +625,10 @@ export default class CodeBlockWriter {
      */
     endsWith(text: string) {
         const length = this._length;
-        return this.iterateLastChars((char, index) => {
+        return this.iterateLastCharCodes((charCode, index) => {
             const offset = length - index;
             const textIndex = text.length - offset;
-            if (text[textIndex] !== char)
+            if (text.charCodeAt(textIndex) !== charCode)
                 return false;
             return textIndex === 0 ? true : undefined;
         }) || false;
@@ -642,12 +642,24 @@ export default class CodeBlockWriter {
      * will combine the internal array into a string.
      */
     iterateLastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined {
+        return this.iterateLastCharCodes((charCode, index) => action(String.fromCharCode(charCode), index));
+    }
+
+    /**
+     * Iterates over the writer character char codes in reverse order. The iteration stops when a non-null or
+     * undefined value is returned from the action. The returned value is then returned by the method.
+     *
+     * @remarks It is much more efficient to use this method rather than `#toString()` since `#toString()`
+     * will combine the internal array into a string. Additionally, this is slightly more efficient that
+     * `iterateLastChars` as this won't allocate a string per character.
+     */
+    iterateLastCharCodes<T>(action: (charCode: number, index: number) => T | undefined): T | undefined {
         let index = this._length;
         for (let i = this._texts.length - 1; i >= 0; i--) {
             const currentText = this._texts[i];
             for (let j = currentText.length - 1; j >= 0; j--) {
                 index--;
-                const result = action(currentText[j], index);
+                const result = action(currentText.charCodeAt(j), index);
                 if (result != null)
                     return result;
             }
@@ -731,17 +743,17 @@ export default class CodeBlockWriter {
 
         function wasLastBlock(writer: CodeBlockWriter) {
             let foundNewLine = false;
-            return writer.iterateLastChars(char => {
-                switch (char) {
-                    case "\n":
+            return writer.iterateLastCharCodes(charCode => {
+                switch (charCode) {
+                    case CHARS.NEW_LINE:
                         if (foundNewLine)
                             return false;
                         else
                             foundNewLine = true;
                         break;
-                    case "\r":
+                    case CHARS.CARRIAGE_RETURN:
                         return undefined;
-                    case "{":
+                    case CHARS.OPEN_BRACE:
                         return true;
                     default:
                         return false;

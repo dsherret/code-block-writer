@@ -94,6 +94,7 @@ class MyClass extends OtherClass {
 * `getLastChar()` - Gets the last character written.
 * `endsWith(text: string)` - Gets if the writer ends with the provided text.
 * `iterateLastChars<T>(action: (char: string, index: number) => T | undefined): T | undefined` - Iterates over the writer's characters in reverse order, stopping once a non-null or undefined value is returned and returns that value.
+* `iterateLastCharCodes<T>(action: (charCode: number, index: number) => T | undefined): T | undefined` - A slightly faster version of `iterateLastChars` that doesn't allocate a string per character.
 * `getOptions()` - Gets the writer options.
 * `toString()` - Gets the string.
 
