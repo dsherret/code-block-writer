@@ -10,7 +10,11 @@ module.exports.config = {
         new TypeScriptPlugin({
             useBraces: "preferNone",
             singleBodyPosition: "nextLine",
-            "tryStatement.nextControlFlowPosition": "sameLine"
+            preferHanging: true,
+            nextControlFlowPosition: "nextLine",
+            "arrowFunctionExpression.useParentheses": "preferNone",
+            "tryStatement.nextControlFlowPosition": "sameLine",
+            "quoteStyle": "alwaysDouble"
         }),
         new JsoncPlugin({
             indentWidth: 2

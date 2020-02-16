@@ -1524,7 +1524,7 @@ describe("#isAtStartOfFirstLineOfBlock", () => {
 
 describe("#isLastNewLine", () => {
     function doTest(str: string, expectedValues: boolean[], customWriter?: CodeBlockWriter) {
-        runSequentialCheck(str, expectedValues, (writer) => writer.isLastNewLine(), customWriter);
+        runSequentialCheck(str, expectedValues, writer => writer.isLastNewLine(), customWriter);
     }
 
     it("should be true when a new line", () => {
@@ -1539,7 +1539,7 @@ describe("#isLastNewLine", () => {
 
 describe("#isLastBlankLine", () => {
     function doTest(str: string, expectedValues: boolean[], customWriter?: CodeBlockWriter) {
-        runSequentialCheck(str, expectedValues, (writer) => writer.isLastBlankLine(), customWriter);
+        runSequentialCheck(str, expectedValues, writer => writer.isLastBlankLine(), customWriter);
     }
 
     it("should be true when a blank line", () => {

@@ -41,8 +41,18 @@ const CHARS = {
     CLOSE_BRACE: "}".charCodeAt(0),
     DOLLAR_SIGN: "$".charCodeAt(0)
 };
-const isCharToHandle = new Set<number>([CHARS.BACK_SLASH, CHARS.FORWARD_SLASH, CHARS.NEW_LINE, CHARS.CARRIAGE_RETURN, CHARS.ASTERISK, CHARS.DOUBLE_QUOTE, CHARS.SINGLE_QUOTE,
-    CHARS.BACK_TICK, CHARS.OPEN_BRACE, CHARS.CLOSE_BRACE]);
+const isCharToHandle = new Set<number>([
+    CHARS.BACK_SLASH,
+    CHARS.FORWARD_SLASH,
+    CHARS.NEW_LINE,
+    CHARS.CARRIAGE_RETURN,
+    CHARS.ASTERISK,
+    CHARS.DOUBLE_QUOTE,
+    CHARS.SINGLE_QUOTE,
+    CHARS.BACK_TICK,
+    CHARS.OPEN_BRACE,
+    CHARS.CLOSE_BRACE
+]);
 
 /**
  * Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.

@@ -1,0 +1,4 @@
+require: 'ts-node/register'
+recursive: true
+reporter: progress
+spec: src/tests/**/*.ts
