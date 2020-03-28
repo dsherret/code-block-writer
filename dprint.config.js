@@ -12,15 +12,15 @@ module.exports.config = {
             singleBodyPosition: "nextLine",
             preferHanging: true,
             nextControlFlowPosition: "nextLine",
-            "arrowFunctionExpression.useParentheses": "preferNone",
+            "arrowFunction.useParentheses": "preferNone",
             "tryStatement.nextControlFlowPosition": "sameLine",
-            "quoteStyle": "alwaysDouble"
+            "quoteStyle": "alwaysDouble",
         }),
         new JsoncPlugin({
-            indentWidth: 2
-        })
+            indentWidth: 2,
+        }),
     ],
     includes: [
-        "**/*{.ts,.tsx,.json,.js}"
-    ]
+        "**/*{.ts,.tsx,.json,.js}",
+    ],
 };

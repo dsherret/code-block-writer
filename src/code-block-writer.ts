@@ -39,7 +39,7 @@ const CHARS = {
     BACK_TICK: "`".charCodeAt(0),
     OPEN_BRACE: "{".charCodeAt(0),
     CLOSE_BRACE: "}".charCodeAt(0),
-    DOLLAR_SIGN: "$".charCodeAt(0)
+    DOLLAR_SIGN: "$".charCodeAt(0),
 };
 const isCharToHandle = new Set<number>([
     CHARS.BACK_SLASH,
@@ -51,7 +51,7 @@ const isCharToHandle = new Set<number>([
     CHARS.SINGLE_QUOTE,
     CHARS.BACK_TICK,
     CHARS.OPEN_BRACE,
-    CHARS.CLOSE_BRACE
+    CHARS.CLOSE_BRACE,
 ]);
 
 /**
@@ -111,7 +111,7 @@ export default class CodeBlockWriter {
             indentNumberOfSpaces: this._indentNumberOfSpaces,
             newLine: this._newLine,
             useTabs: this._useTabs,
-            useSingleQuote: this._quoteChar === "'"
+            useSingleQuote: this._quoteChar === "'",
         };
     }
 
@@ -912,7 +912,7 @@ export default class CodeBlockWriter {
         return {
             current: this._currentIndentation,
             queued: this._queuedIndentation,
-            queuedOnlyIfNotBlock: this._queuedOnlyIfNotBlock
+            queuedOnlyIfNotBlock: this._queuedOnlyIfNotBlock,
         };
     }
 }

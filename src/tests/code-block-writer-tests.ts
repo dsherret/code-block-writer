@@ -19,18 +19,18 @@ describe("CodeBlockWriter", () => {
     });
 });
 
-function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n"; }) {
-    function getWriter(additionalOpts: { useSingleQuote?: boolean; } = {}) {
+function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
+    function getWriter(additionalOpts: { useSingleQuote?: boolean } = {}) {
         return new CodeBlockWriter({
             newLine: opts.newLine,
-            useSingleQuote: additionalOpts.useSingleQuote
+            useSingleQuote: additionalOpts.useSingleQuote,
         });
     }
 
     function doTest(
         expected: string,
         writerCallback: (writer: CodeBlockWriter) => void,
-        additionalOpts: { useSingleQuote?: boolean; } = {}
+        additionalOpts: { useSingleQuote?: boolean } = {},
     ) {
         const writer = getWriter(additionalOpts);
         writerCallback(writer);
@@ -1244,7 +1244,7 @@ describe("#iterateLastChars", () => {
             ["t", 3],
             ["s", 2],
             ["e", 1],
-            ["t", 0]
+            ["t", 0],
         ];
         const result: typeof expected = [];
         const returnValue = writer.iterateLastChars((char, index) => {
@@ -1398,7 +1398,7 @@ function runSequentialCheck<T>(
     str: string,
     expectedValues: T[],
     func: (writer: CodeBlockWriter) => T,
-    writer = new CodeBlockWriter()
+    writer = new CodeBlockWriter(),
 ) {
     expect(str.length + 1).to.equal(expectedValues.length);
     expect(func(writer)).to.equal(expectedValues[0]);
@@ -1634,13 +1634,13 @@ describe("#getOptions", () => {
             useTabs: true,
             indentNumberOfSpaces: 8,
             newLine: "\r\n",
-            useSingleQuote: false
+            useSingleQuote: false,
         });
         expect(writer.getOptions()).to.deep.equal({
             useTabs: true,
             indentNumberOfSpaces: 8,
             newLine: "\r\n",
-            useSingleQuote: false
+            useSingleQuote: false,
         });
     });
 });
