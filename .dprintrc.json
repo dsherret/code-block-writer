@@ -11,9 +11,6 @@
     "tryStatement.nextControlFlowPosition": "sameLine",
     "quoteStyle": "alwaysDouble"
   },
-  "json": {
-    "indentWidth": 2
-  },
   "includes": ["**/*.{ts,tsx,js,jsx,json,md}"],
   "excludes": [
     "dist",
@@ -24,7 +21,7 @@
     "**/*-lock.json"
   ],
   "plugins": [
-    "https://plugins.dprint.dev/typescript-0.27.0.wasm",
+    "https://plugins.dprint.dev/typescript-0.29.0.wasm",
     "https://plugins.dprint.dev/json-0.7.0.wasm",
     "https://plugins.dprint.dev/markdown-0.4.0.wasm"
   ]
