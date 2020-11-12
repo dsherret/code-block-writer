@@ -6,6 +6,7 @@
     "sourceMap": false,
     "removeComments": false,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "outDir": "dist",
     "rootDir": "src",
     "typeRoots": ["node_modules/@types/"],
