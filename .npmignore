@@ -19,6 +19,6 @@
 /.travis.yml
 /dist/tests
 yarn-error.log
-mocha.opts
+.mocharc.yml
+.dprintrc.json
 /dist/utils/stringUtils.d.ts
-dprint.config.js
