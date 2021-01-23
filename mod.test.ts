@@ -1,5 +1,7 @@
-import { expect } from "chai";
-import CodeBlockWriter from "./../code-block-writer";
+import CodeBlockWriter from "./mod.ts";
+import { describe, expect, it } from "./test_helpers/mocha.ts";
+
+Deno.test("dummy test", () => {});
 
 describe("CodeBlockWriter", () => {
     describe("default opts", () => {
@@ -902,7 +904,7 @@ describe("#setIndentationLevel", () => {
 
     it("should not throw when providing an empty string", () => {
         const writer = new CodeBlockWriter();
-        expect(() => writer.setIndentationLevel("")).to.not.throw();
+        expect(() => writer.setIndentationLevel("")).to.notThrow();
     });
 
     it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
@@ -1050,7 +1052,7 @@ describe("#queueIndentationLevel", () => {
 
     it("should not throw when providing an empty string", () => {
         const writer = new CodeBlockWriter();
-        expect(() => writer.queueIndentationLevel("")).to.not.throw();
+        expect(() => writer.queueIndentationLevel("")).to.notThrow();
     });
 
     it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
@@ -1250,7 +1252,7 @@ describe("#iterateLastChars", () => {
         const returnValue = writer.iterateLastChars((char, index) => {
             result.push([char, index]);
         });
-        expect(result).to.deep.equal(expected);
+        expect(result).to.deepEqual(expected);
         expect(returnValue).to.equal(undefined);
     });
 
@@ -1631,15 +1633,15 @@ describe("useTabs", () => {
 describe("#getOptions", () => {
     it("should have the options that were passed in", () => {
         const writer = new CodeBlockWriter({
-            useTabs: true,
             indentNumberOfSpaces: 8,
             newLine: "\r\n",
+            useTabs: true,
             useSingleQuote: false,
         });
-        expect(writer.getOptions()).to.deep.equal({
-            useTabs: true,
+        expect(writer.getOptions()).to.deepEqual({
             indentNumberOfSpaces: 8,
             newLine: "\r\n",
+            useTabs: true,
             useSingleQuote: false,
         });
     });

@@ -1,9 +1,9 @@
-import * as assert from "assert";
-import { escapeChar, escapeForWithinString, getStringFromStrOrFunc } from "../../utils/stringUtils";
+import { describe, expect, it } from "../test_helpers/mocha.ts";
+import { escapeChar, escapeForWithinString, getStringFromStrOrFunc } from "./string_utils.ts";
 
 describe("escapeForWithinString", () => {
     function doTest(input: string, expected: string) {
-        assert.equal(escapeForWithinString(input, "\""), expected);
+        expect(escapeForWithinString(input, "\"")).to.equal(expected);
     }
 
     it("should escape the quotes and newline", () => {
@@ -13,15 +13,15 @@ describe("escapeForWithinString", () => {
 
 describe("escapeChar", () => {
     function doTest(input: string, char: string, expected: string) {
-        assert.equal(escapeChar(input, char), expected);
+        expect(escapeChar(input, char)).to.equal(expected);
     }
 
     it("should throw when specifying a char length > 1", () => {
-        assert.throws(() => escapeChar("", "ab"));
+        expect(() => escapeChar("", "ab")).to.throw();
     });
 
     it("should throw when specifying a char length < 1", () => {
-        assert.throws(() => escapeChar("", ""));
+        expect(() => escapeChar("", "")).to.throw();
     });
 
     it("should escape the single quotes when specified", () => {
@@ -35,10 +35,10 @@ describe("escapeChar", () => {
 
 describe("getStringFromStrOrFunc", () => {
     it("should return a string when given a string", () => {
-        assert.equal(getStringFromStrOrFunc("test"), "test");
+        expect(getStringFromStrOrFunc("test")).to.equal("test");
     });
 
     it("should return a string when given a function", () => {
-        assert.equal(getStringFromStrOrFunc(() => "test"), "test");
+        expect(getStringFromStrOrFunc(() => "test")).to.equal("test");
     });
 });

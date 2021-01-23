@@ -1,5 +1,5 @@
-import { escapeForWithinString, getStringFromStrOrFunc } from "./utils/stringUtils";
-import { CommentChar } from "./CommentChar";
+import { CommentChar } from "./comment_char.ts";
+import { escapeForWithinString, getStringFromStrOrFunc } from "./utils/string_utils.ts";
 
 /**
  * Options for the writer.
@@ -40,6 +40,8 @@ const CHARS = {
     OPEN_BRACE: "{".charCodeAt(0),
     CLOSE_BRACE: "}".charCodeAt(0),
     DOLLAR_SIGN: "$".charCodeAt(0),
+    SPACE: " ".charCodeAt(0),
+    TAB: "\t".charCodeAt(0),
 };
 const isCharToHandle = new Set<number>([
     CHARS.BACK_SLASH,
@@ -941,10 +943,11 @@ function getSpacesAndTabsCount(str: string) {
     let spacesCount = 0;
     let tabsCount = 0;
 
-    for (const char of str) {
-        if (char === " ")
+    for (let i = 0; i < str.length; i++) {
+        const charCode = str.charCodeAt(i);
+        if (charCode === CHARS.SPACE)
             spacesCount++;
-        else if (char === "\t")
+        else if (charCode === CHARS.TAB)
             tabsCount++;
     }
 

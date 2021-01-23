@@ -1,14 +1,4 @@
 /node_modules
-/.nyc_output
 *.js.map
-/obj
-/temp
-/bin
-*.suo
-*.csproj
-*.csproj.user
-*.sln
-/coverage
-/.vs
-/dist
-/yarn-error.log
+npm/dist
+npm/LICENSE

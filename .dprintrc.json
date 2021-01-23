@@ -15,14 +15,13 @@
   "excludes": [
     "dist",
     "coverage",
-    "temp",
     ".nyc_output",
     "**/node_modules",
     "**/*-lock.json"
   ],
   "plugins": [
-    "https://plugins.dprint.dev/typescript-0.33.0.wasm",
-    "https://plugins.dprint.dev/json-0.7.2.wasm",
-    "https://plugins.dprint.dev/markdown-0.4.2.wasm"
+    "https://plugins.dprint.dev/typescript-0.38.4.wasm",
+    "https://plugins.dprint.dev/json-0.7.3.wasm",
+    "https://plugins.dprint.dev/markdown-0.5.1.wasm"
   ]
 }

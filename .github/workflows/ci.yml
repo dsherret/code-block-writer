@@ -1,0 +1,14 @@
+name: CI
+on: push
+jobs:
+  test-library:
+      name: Deno test
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+        - uses: denolib/setup-deno@v2
+          with:
+            deno-version: v1.7
+        - name: Run tests
+          run: deno test

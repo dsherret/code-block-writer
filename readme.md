@@ -1,8 +1,7 @@
 # code-block-writer
 
 [![npm version](https://badge.fury.io/js/code-block-writer.svg)](https://badge.fury.io/js/code-block-writer)
-[![Build Status](https://travis-ci.org/dsherret/code-block-writer.svg)](https://travis-ci.org/dsherret/code-block-writer)
-[![Coverage Status](https://coveralls.io/repos/dsherret/code-block-writer/badge.svg?branch=master&service=github)](https://coveralls.io/github/dsherret/code-block-writer?branch=master)
+[![CI](https://github.com/dsherret/code-block-writer/workflows/CI/badge.svg)](https://github.com/dsherret/code-block-writer/actions?query=workflow%3ACI)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
@@ -11,12 +10,18 @@ Code writer that assists with formatting and visualizing blocks of JavaScript or
 npm install --save code-block-writer
 ```
 
+Or with Deno:
+
+```ts
+import CodeBlockWriter from "https://deno.land/x/code_block_writer@x.x.x/mod.ts";
+```
+
 ## Example
 
 <!-- dprint-ignore -->
 
 ```typescript
-import CodeBlockWriter from "code-block-writer";
+import CodeBlockWriter from "https://deno.land/x/code_block_writer@x.x.x/mod.ts";
 
 const writer = new CodeBlockWriter({
     // optional options
