@@ -105,3 +105,4 @@ if (result.diagnostics.length > 0) {
 
 Deno.renameSync("./npm/dist/mod.js", "./npm/dist/code-block-writer.js");
 Deno.renameSync("./npm/dist/mod.d.ts", "./npm/dist/code-block-writer.d.ts");
+Deno.copyFileSync("./LICENSE", "./npm/LICENSE");

@@ -2,6 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/code-block-writer.svg)](https://badge.fury.io/js/code-block-writer)
 [![CI](https://github.com/dsherret/code-block-writer/workflows/CI/badge.svg)](https://github.com/dsherret/code-block-writer/actions?query=workflow%3ACI)
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/code_block_writer/mod.ts)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.

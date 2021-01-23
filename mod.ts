@@ -139,7 +139,7 @@ export default class CodeBlockWriter {
      * Writes the text within the provided action with hanging indentation.
      * @param action - Action to perform with hanging indentation.
      */
-    hangingIndent(action: () => void) {
+    hangingIndent(action: () => void): this {
         return this._withResetIndentation(() => this.queueIndentationLevel(this.getIndentationLevel() + 1), action);
     }
 
@@ -147,7 +147,7 @@ export default class CodeBlockWriter {
      * Writes the text within the provided action with hanging indentation unless writing a block.
      * @param action - Action to perform with hanging indentation unless a block is written.
      */
-    hangingIndentUnlessBlock(action: () => void) {
+    hangingIndentUnlessBlock(action: () => void): this {
         return this._withResetIndentation(() => {
             this.queueIndentationLevel(this.getIndentationLevel() + 1);
             this._queuedOnlyIfNotBlock = true;
@@ -205,7 +205,7 @@ export default class CodeBlockWriter {
     /**
      * Gets the current indentation level.
      */
-    getIndentationLevel() {
+    getIndentationLevel(): number {
         return this._currentIndentation;
     }
 
@@ -213,7 +213,7 @@ export default class CodeBlockWriter {
      * Writes a block using braces.
      * @param block - Write using the writer within this block.
      */
-    block(block?: () => void) {
+    block(block?: () => void): this {
         this._newLineIfNewLineOnNextWrite();
         if (this.getLength() > 0 && !this.isLastNewLine())
             this.spaceIfLastNot();
@@ -226,7 +226,7 @@ export default class CodeBlockWriter {
      * Writes an inline block with braces.
      * @param block - Write using the writer within this block.
      */
-    inlineBlock(block?: () => void) {
+    inlineBlock(block?: () => void): this {
         this._newLineIfNewLineOnNextWrite();
         this.write("{");
         this._indentBlockInternal(block);
@@ -292,7 +292,7 @@ export default class CodeBlockWriter {
      * Writes a line of text.
      * @param text - String to write.
      */
-    writeLine(text: string) {
+    writeLine(text: string): this {
         this._newLineIfNewLineOnNextWrite();
         if (this.getLastChar() != null)
             this.newLineIfLastNot();
@@ -305,7 +305,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a newline if the last line was not a newline.
      */
-    newLineIfLastNot() {
+    newLineIfLastNot(): this {
         this._newLineIfNewLineOnNextWrite();
 
         if (!this.isLastNewLine())
@@ -317,7 +317,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a blank line if the last written text was not a blank line.
      */
-    blankLineIfLastNot() {
+    blankLineIfLastNot(): this {
         if (!this.isLastBlankLine())
             this.blankLine();
         return this;
@@ -327,7 +327,7 @@ export default class CodeBlockWriter {
      * Writes a blank line if the condition is true.
      * @param condition - Condition to evaluate.
      */
-    conditionalBlankLine(condition: boolean | undefined) {
+    conditionalBlankLine(condition: boolean | undefined): this {
         if (condition)
             this.blankLine();
         return this;
@@ -336,7 +336,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a blank line.
      */
-    blankLine() {
+    blankLine(): this {
         return this.newLineIfLastNot().newLine();
     }
 
@@ -344,7 +344,7 @@ export default class CodeBlockWriter {
      * Writes a newline if the condition is true.
      * @param condition - Condition to evaluate.
      */
-    conditionalNewLine(condition: boolean | undefined) {
+    conditionalNewLine(condition: boolean | undefined): this {
         if (condition)
             this.newLine();
         return this;
@@ -353,7 +353,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a newline.
      */
-    newLine() {
+    newLine(): this {
         this._newLineOnNextWrite = false;
         this._baseWriteNewline();
         return this;
@@ -377,7 +377,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a space if the last character was not a space.
      */
-    spaceIfLastNot() {
+    spaceIfLastNot(): this {
         this._newLineIfNewLineOnNextWrite();
 
         if (!this.isLastSpace())
@@ -390,7 +390,7 @@ export default class CodeBlockWriter {
      * Writes a space.
      * @param times - Number of times to write a space.
      */
-    space(times = 1) {
+    space(times = 1): this {
         this._newLineIfNewLineOnNextWrite();
         this._writeIndentingNewLines(" ".repeat(times));
         return this;
@@ -399,7 +399,7 @@ export default class CodeBlockWriter {
     /**
      * Writes a tab if the last character was not a tab.
      */
-    tabIfLastNot() {
+    tabIfLastNot(): this {
         this._newLineIfNewLineOnNextWrite();
 
         if (!this.isLastTab())
@@ -412,7 +412,7 @@ export default class CodeBlockWriter {
      * Writes a tab.
      * @param times - Number of times to write a tab.
      */
-    tab(times = 1) {
+    tab(times = 1): this {
         this._newLineIfNewLineOnNextWrite();
         this._writeIndentingNewLines("\t".repeat(times));
         return this;
@@ -441,7 +441,7 @@ export default class CodeBlockWriter {
      * Writes the provided text.
      * @param text - Text to write.
      */
-    write(text: string) {
+    write(text: string): this {
         this._newLineIfNewLineOnNextWrite();
         this._writeIndentingNewLines(text);
         return this;
@@ -450,7 +450,7 @@ export default class CodeBlockWriter {
     /**
      * Writes text to exit a comment if in a comment.
      */
-    closeComment() {
+    closeComment(): this {
         const commentChar = this._currentCommentChar;
 
         switch (commentChar) {
@@ -463,7 +463,7 @@ export default class CodeBlockWriter {
                 this.write("*/");
                 break;
             default:
-                const assertUndefined: undefined = commentChar;
+                const _assertUndefined: undefined = commentChar;
                 break;
         }
 
@@ -480,7 +480,7 @@ export default class CodeBlockWriter {
      * @param pos - Position to insert at.
      * @param text - Text to insert.
      */
-    unsafeInsert(pos: number, text: string) {
+    unsafeInsert(pos: number, text: string): this {
         const textLength = this._length;
         const texts = this._texts;
         verifyInput();
@@ -545,42 +545,42 @@ export default class CodeBlockWriter {
     /**
      * Gets the length of the string in the writer.
      */
-    getLength() {
+    getLength(): number {
         return this._length;
     }
 
     /**
      * Gets if the writer is currently in a comment.
      */
-    isInComment() {
+    isInComment(): boolean {
         return this._currentCommentChar !== undefined;
     }
 
     /**
      * Gets if the writer is currently at the start of the first line of the text, block, or indentation block.
      */
-    isAtStartOfFirstLineOfBlock() {
+    isAtStartOfFirstLineOfBlock(): boolean {
         return this.isOnFirstLineOfBlock() && (this.isLastNewLine() || this.getLastChar() == null);
     }
 
     /**
      * Gets if the writer is currently on the first line of the text, block, or indentation block.
      */
-    isOnFirstLineOfBlock() {
+    isOnFirstLineOfBlock(): boolean {
         return this._isOnFirstLineOfBlock;
     }
 
     /**
      * Gets if the writer is currently in a string.
      */
-    isInString() {
+    isInString(): boolean {
         return this._stringCharStack.length > 0 && this._stringCharStack[this._stringCharStack.length - 1] !== CHARS.OPEN_BRACE;
     }
 
     /**
      * Gets if the last chars written were for a newline.
      */
-    isLastNewLine() {
+    isLastNewLine(): boolean {
         const lastChar = this.getLastChar();
         return lastChar === "\n" || lastChar === "\r";
     }
@@ -588,7 +588,7 @@ export default class CodeBlockWriter {
     /**
      * Gets if the last chars written were for a blank line.
      */
-    isLastBlankLine() {
+    isLastBlankLine(): boolean {
         let foundCount = 0;
 
         // todo: consider extracting out iterating over past characters, but don't use
@@ -614,21 +614,21 @@ export default class CodeBlockWriter {
     /**
      * Gets if the last char written was a space.
      */
-    isLastSpace() {
+    isLastSpace(): boolean {
         return this.getLastChar() === " ";
     }
 
     /**
      * Gets if the last char written was a tab.
      */
-    isLastTab() {
+    isLastTab(): boolean {
         return this.getLastChar() === "\t";
     }
 
     /**
      * Gets the last char written.
      */
-    getLastChar() {
+    getLastChar(): string | undefined {
         const charCode = this._getLastCharCodeWithOffset(0);
         return charCode == null ? undefined : String.fromCharCode(charCode);
     }
@@ -637,7 +637,7 @@ export default class CodeBlockWriter {
      * Gets if the writer ends with the provided text.
      * @param text - Text to check if the writer ends with the provided text.
      */
-    endsWith(text: string) {
+    endsWith(text: string): boolean {
         const length = this._length;
         return this.iterateLastCharCodes((charCode, index) => {
             const offset = length - index;
@@ -684,7 +684,7 @@ export default class CodeBlockWriter {
     /**
      * Gets the writer's text.
      */
-    toString() {
+    toString(): string {
         if (this._texts.length > 1) {
             const text = this._texts.join("");
             this._texts.length = 0;
