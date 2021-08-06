@@ -475,9 +475,10 @@ export default class CodeBlockWriter {
         }
         this.write("*/");
         break;
-      default:
+      default: {
         const _assertUndefined: undefined = commentChar;
         break;
+      }
     }
 
     return this;

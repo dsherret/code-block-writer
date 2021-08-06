@@ -17,7 +17,7 @@ export function it(desc: string, action: () => void) {
 }
 
 function logDesc(desc: string) {
-  console.log(desc.split("\n").map(l => "  ".repeat(indent) + desc).join("\n"));
+  console.log(desc.split("\n").map(l => "  ".repeat(indent) + l).join("\n"));
 }
 
 export function expect<T>(value: T) {
@@ -33,9 +33,9 @@ export function expect<T>(value: T) {
           throw new Error(`FAIL. ${JSON.stringify(value)} did not equal ${JSON.stringify(otherValue)}`);
         }
       },
-      throw(message?: string) {
-        const func = value as any as () => void;
-        let caughtErr: any;
+      throw(_message?: string) {
+        const func = value as unknown as () => void;
+        let caughtErr: unknown;
         try {
           func();
         } catch (err) {
@@ -46,8 +46,8 @@ export function expect<T>(value: T) {
         }
       },
       notThrow() {
-        const func = value as any as () => void;
-        let caughtErr: any;
+        const func = value as unknown as () => void;
+        let caughtErr: unknown;
         try {
           func();
         } catch (err) {

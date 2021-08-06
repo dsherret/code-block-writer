@@ -7,14 +7,16 @@
 
 Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
 
-```
-npm install --save code-block-writer
-```
-
-Or with Deno:
+With Deno/Browser:
 
 ```ts
-import CodeBlockWriter from "https://deno.land/x/code_block_writer@x.x.x/mod.ts";
+import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
+```
+
+Or with Node:
+
+```
+npm install --save code-block-writer
 ```
 
 ## Example
@@ -22,7 +24,7 @@ import CodeBlockWriter from "https://deno.land/x/code_block_writer@x.x.x/mod.ts"
 <!-- dprint-ignore -->
 
 ```typescript
-import CodeBlockWriter from "https://deno.land/x/code_block_writer@x.x.x/mod.ts";
+import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
 
 const writer = new CodeBlockWriter({
     // optional options

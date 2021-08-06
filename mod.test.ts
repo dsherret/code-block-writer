@@ -60,7 +60,7 @@ function runTestsForNewLineChar(opts: { newLine: "\r\n" | "\n" }) {
       const expected = "";
 
       doTest(expected, writer => {
-        writer.write(null as any as string);
+        writer.write(null as unknown as string);
       });
     });
 
@@ -736,6 +736,7 @@ test`;
     });
 
     it("should not evaluate the given function when the condition is false", () => {
+      // deno-lint-ignore no-explicit-any
       const test: any = null;
       doTest("", writer => {
         writer.conditionalWrite(false, () => test.test);
@@ -775,6 +776,7 @@ test`;
     });
 
     it("should not evaluate the given function when the condition is false", () => {
+      // deno-lint-ignore no-explicit-any
       const test: any = null;
       doTest("", writer => {
         writer.conditionalWriteLine(false, () => test.test);
@@ -899,6 +901,7 @@ describe("#setIndentationLevel", () => {
 
   it("should throw when not providing a number or string", () => {
     const writer = new CodeBlockWriter();
+    // deno-lint-ignore no-explicit-any
     expect(() => writer.setIndentationLevel({} as any)).to.throw();
   });
 
@@ -1047,6 +1050,7 @@ describe("#queueIndentationLevel", () => {
 
   it("should throw when not providing a number or string", () => {
     const writer = new CodeBlockWriter();
+    // deno-lint-ignore no-explicit-any
     expect(() => writer.queueIndentationLevel({} as any)).to.throw();
   });
 

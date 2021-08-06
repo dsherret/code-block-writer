@@ -1,1 +1,1 @@
-deno run -A --unstable scripts/build_npm.ts
+deno run --allow-read=./ --allow-write=./npm --unstable scripts/build_npm.ts
