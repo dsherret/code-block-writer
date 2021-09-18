@@ -1,5 +1,5 @@
-import { describe, expect, it } from "./test_helpers/mocha.ts";
 import CodeBlockWriter from "./mod.ts";
+import { describe, expect, it } from "./test_helpers/mocha.ts";
 
 Deno.test("dummy test", () => {});
 
