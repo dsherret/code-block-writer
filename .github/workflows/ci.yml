@@ -27,6 +27,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          ./scripts/build_npm.ps1 ${{steps.get_tag_version.outputs.TAG_VERSION}}
+          deno run --allow-read --allow-write=./npm --allow-net --allow-run --no-check ./scripts/build_npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
           cd npm
+          npm install
           npm publish
