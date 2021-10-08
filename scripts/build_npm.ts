@@ -1,4 +1,4 @@
-import { run } from "https://deno.land/x/dnt@0.0.6/mod.ts";
+import { run } from "https://deno.land/x/dnt@0.0.7/mod.ts";
 
 await run({
   entryPoint: "mod.ts",
