@@ -6,7 +6,7 @@ await build({
   outDir: "./npm",
   package: {
     name: "code-block-writer",
-    version: Deno.args[0],
+    version: Deno.args[0] ?? "0.0.0",
     description: "A simple code writer that assists with formatting and visualizing blocks of code.",
     repository: {
       type: "git",
