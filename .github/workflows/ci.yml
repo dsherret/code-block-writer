@@ -22,7 +22,7 @@ jobs:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
       - name: npm build
-        run: deno run --allow-read --allow-write=./npm --allow-net --allow-run --no-check ./scripts/build_npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
+        run: deno run --allow-read --allow-write --allow-net --allow-run --no-check --allow-env ./scripts/build_npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
       - name: npm publish
         if: startsWith(github.ref, 'refs/tags/')
         env:
