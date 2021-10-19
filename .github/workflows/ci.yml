@@ -19,7 +19,7 @@ jobs:
         run: echo ::set-output name=TAG_VERSION::${GITHUB_REF/refs\/tags\//}
       - uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - name: npm build
         run: deno run --allow-read --allow-write --allow-net --allow-run --no-check --allow-env ./scripts/build_npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
