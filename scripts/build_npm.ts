@@ -1,8 +1,8 @@
-import { build } from "https://deno.land/x/dnt@0.0.13/mod.ts";
+import { build } from "https://deno.land/x/dnt@0.0.14/mod.ts";
 
 await build({
   entryPoints: ["mod.ts"],
-  typeCheck: false,
+  typeCheck: true,
   test: true,
   outDir: "./npm",
   package: {
