@@ -1,12 +1,13 @@
-import { build } from "https://deno.land/x/dnt@0.0.10/mod.ts";
+import { build } from "https://deno.land/x/dnt@0.0.20/mod.ts";
 
 await build({
   entryPoints: ["mod.ts"],
   typeCheck: true,
+  test: true,
   outDir: "./npm",
   package: {
     name: "code-block-writer",
-    version: Deno.args[0] ?? "0.0.0",
+    version: Deno.args[0],
     description: "A simple code writer that assists with formatting and visualizing blocks of code.",
     repository: {
       type: "git",

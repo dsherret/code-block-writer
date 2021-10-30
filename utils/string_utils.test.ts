@@ -1,4 +1,4 @@
-import { describe, expect, it } from "../test_helpers/mocha.ts";
+import { expect } from "../_test.deps.ts";
 import { escapeChar, escapeForWithinString, getStringFromStrOrFunc } from "./string_utils.ts";
 
 describe("escapeForWithinString", () => {

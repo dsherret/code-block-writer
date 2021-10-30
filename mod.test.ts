@@ -1,7 +1,5 @@
+import { expect } from "./_test.deps.ts";
 import CodeBlockWriter from "./mod.ts";
-import { describe, expect, it } from "./test_helpers/mocha.ts";
-
-Deno.test("dummy test", () => {});
 
 describe("CodeBlockWriter", () => {
   describe("default opts", () => {
@@ -12,11 +10,11 @@ describe("CodeBlockWriter", () => {
     });
   });
 
-  describe("tests for \n", () => {
+  describe("tests for \\n", () => {
     runTestsForNewLineChar({ newLine: "\n" });
   });
 
-  describe("tests for \r\n", () => {
+  describe("tests for \\r\\n", () => {
     runTestsForNewLineChar({ newLine: "\r\n" });
   });
 });
@@ -907,7 +905,7 @@ describe("#setIndentationLevel", () => {
 
   it("should not throw when providing an empty string", () => {
     const writer = new CodeBlockWriter();
-    expect(() => writer.setIndentationLevel("")).to.notThrow();
+    expect(() => writer.setIndentationLevel("")).to.not.throw();
   });
 
   it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
@@ -1056,7 +1054,7 @@ describe("#queueIndentationLevel", () => {
 
   it("should not throw when providing an empty string", () => {
     const writer = new CodeBlockWriter();
-    expect(() => writer.queueIndentationLevel("")).to.notThrow();
+    expect(() => writer.queueIndentationLevel("")).to.not.throw();
   });
 
   it("should throw when providing a string that doesn't contain only spaces and tabs", () => {
@@ -1256,7 +1254,7 @@ describe("#iterateLastChars", () => {
     const returnValue = writer.iterateLastChars((char, index) => {
       result.push([char, index]);
     });
-    expect(result).to.deepEqual(expected);
+    expect(result).to.deep.equal(expected);
     expect(returnValue).to.equal(undefined);
   });
 
@@ -1644,7 +1642,7 @@ describe("#getOptions", () => {
       useTabs: true,
       useSingleQuote: false,
     });
-    expect(writer.getOptions()).to.deepEqual({
+    expect(writer.getOptions()).to.deep.equal({
       indentNumberOfSpaces: 8,
       newLine: "\r\n",
       useTabs: true,
