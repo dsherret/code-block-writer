@@ -1,4 +1,4 @@
-import { build } from "https://deno.land/x/dnt@0.2.0/mod.ts";
+import { build } from "https://deno.land/x/dnt@0.6.0/mod.ts";
 
 await build({
   entryPoints: ["mod.ts"],
@@ -25,6 +25,9 @@ await build({
       url: "https://github.com/dsherret/code-block-writer/issues",
     },
     homepage: "https://github.com/dsherret/code-block-writer#readme",
+    devDependencies: {
+      "@types/chai": "^4.2.22",
+    },
   },
 });
 
