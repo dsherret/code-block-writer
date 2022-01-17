@@ -5,9 +5,9 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/code_block_writer/mod.ts)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-Code writer that assists with formatting and visualizing blocks of JavaScript or TypeScript code.
+Code writer for JavaScript or TypeScript code.
 
-With Deno/Browser:
+With Deno:
 
 ```ts
 import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
@@ -27,19 +27,18 @@ npm install --save code-block-writer
 import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
 
 const writer = new CodeBlockWriter({
-    // optional options
-    newLine: "\r\n",         // default: "\n"
-    indentNumberOfSpaces: 2, // default: 4
-    useTabs: false,          // default: false
-    useSingleQuote: true     // default: false
+  // optional options
+  newLine: "\r\n",         // default: "\n"
+  indentNumberOfSpaces: 2, // default: 4
+  useTabs: false,          // default: false
+  useSingleQuote: true     // default: false
 });
-const className = "MyClass";
 
-writer.write(`class ${className} extends OtherClass`).block(() => {
-    writer.writeLine(`@MyDecorator(1, 2)`);
-    writer.write(`myMethod(myParam: any)`).block(() => {
-        writer.write("return this.post(").quote("myArgument").write(");");
-    });
+writer.write("class MyClass extends OtherClass").block(() => {
+  writer.writeLine(`@MyDecorator(1, 2)`);
+  writer.write(`myMethod(myParam: any)`).block(() => {
+    writer.write("return this.post(").quote("myArgument").write(");");
+  });
 });
 
 console.log(writer.toString());
@@ -47,7 +46,9 @@ console.log(writer.toString());
 
 Outputs (using "\r\n" for newlines):
 
-```text
+<!-- dprint-ignore -->
+
+```js
 class MyClass extends OtherClass {
   @MyDecorator(1, 2)
   myMethod(myParam: any) {

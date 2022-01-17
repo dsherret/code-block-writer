@@ -1,5 +1,10 @@
-import { CommentChar } from "./comment_char.ts";
 import { escapeForWithinString, getStringFromStrOrFunc } from "./utils/string_utils.ts";
+
+/** @internal */
+enum CommentChar {
+  Line,
+  Star,
+}
 
 /**
  * Options for the writer.
