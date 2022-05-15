@@ -1,4 +1,4 @@
-import { expect } from "../_test.deps.ts";
+import { describe, expect, it } from "../_test.deps.ts";
 import { escapeChar, escapeForWithinString, getStringFromStrOrFunc } from "./string_utils.ts";
 
 describe("escapeForWithinString", () => {

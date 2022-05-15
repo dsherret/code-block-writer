@@ -1,6 +1,5 @@
 {
   "tasks": {
-    "build:npm": "deno run -A ./scripts/build_npm.ts",
-    "test": "deno test --unstable --no-check --location http://localhost"
+    "build:npm": "deno run -A ./scripts/build_npm.ts"
   }
 }

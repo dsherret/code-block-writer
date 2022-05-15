@@ -1,4 +1,4 @@
-import { expect } from "./_test.deps.ts";
+import { describe, expect, it } from "./_test.deps.ts";
 import CodeBlockWriter from "./mod.ts";
 
 describe("CodeBlockWriter", () => {
