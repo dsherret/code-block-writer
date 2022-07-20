@@ -5,7 +5,7 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/code_block_writer/mod.ts)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
-Code writer for JavaScript or TypeScript code.
+Code writer for JavaScript and TypeScript code.
 
 With Deno:
 
