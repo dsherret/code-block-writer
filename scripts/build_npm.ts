@@ -55,6 +55,7 @@ const declFile = npmDir.join("types/mod.d.ts");
 let declText = declFile.readTextSync();
 declText = declText.replace("export default class ", "declare class ");
 declText = declText + "\nexport = CodeBlockWriter";
+declFile.writeTextSync(declText);
 
 $.logStep("Rerunning tests...");
 await $`npm run test`.cwd(npmDir);
