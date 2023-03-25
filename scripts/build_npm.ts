@@ -1,4 +1,4 @@
-import { build, emptyDir } from "https://deno.land/x/dnt@0.33.1/mod.ts";
+import { build, emptyDir } from "https://raw.githubusercontent.com/denoland/dnt/eec75130560bcf2fe7cf562c06e91dcd423fa519/mod.ts";
 
 await emptyDir("./npm");
 
@@ -6,11 +6,12 @@ await build({
   entryPoints: ["mod.ts"],
   typeCheck: true,
   test: true,
-  esModule: false,
+  esModule: true,
   outDir: "./npm",
   shims: {
     deno: "dev",
   },
+  declaration: "inline",
   package: {
     name: "code-block-writer",
     version: Deno.args[0],
@@ -31,9 +32,6 @@ await build({
       url: "https://github.com/dsherret/code-block-writer/issues",
     },
     homepage: "https://github.com/dsherret/code-block-writer#readme",
-    devDependencies: {
-      "@types/chai": "^4.2.22",
-    },
   },
 });
 
