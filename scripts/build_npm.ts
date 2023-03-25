@@ -6,7 +6,7 @@ await build({
   entryPoints: ["mod.ts"],
   typeCheck: true,
   test: true,
-  esModule: false,
+  esModule: true,
   outDir: "./npm",
   shims: {
     deno: "dev",
