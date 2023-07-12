@@ -1,17 +1,14 @@
-import { build, emptyDir } from "https://raw.githubusercontent.com/denoland/dnt/eec75130560bcf2fe7cf562c06e91dcd423fa519/mod.ts";
+import { build, emptyDir } from "https://deno.land/x/dnt@0.37.0/mod.ts";
 
 await emptyDir("./npm");
 
 await build({
   entryPoints: ["mod.ts"],
-  typeCheck: true,
   test: true,
-  esModule: true,
   outDir: "./npm",
   shims: {
     deno: "dev",
   },
-  declaration: "inline",
   package: {
     name: "code-block-writer",
     version: Deno.args[0],
