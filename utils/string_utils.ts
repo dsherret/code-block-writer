@@ -1,19 +1,16 @@
-const newlineRegex = /(\r?\n)/g;
-
 /** @internal */
 export function escapeForWithinString(str: string, quoteKind: string) {
-  return escapeChar(str, quoteKind).replace(newlineRegex, "\\$1");
-}
-
-/** @internal */
-export function escapeChar(str: string, char: string) {
-  if (char.length !== 1) {
-    throw new Error(`Specified char must be one character long.`);
-  }
-
   let result = "";
+  // todo: reduce appends (don't go char by char)
   for (let i = 0; i < str.length; i++) {
-    if (str[i] === char) {
+    if (str[i] === quoteKind) {
+      result += "\\";
+    } else if (str[i] === "\r" && str[i + 1] === "\n") {
+      result += "\\";
+      i++; // skip the \r
+    } else if (str[i] === "\n") {
+      result += "\\";
+    } else if (str[i] === "\\") {
       result += "\\";
     }
     result += str[i];
