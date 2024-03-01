@@ -551,7 +551,7 @@ test`;
     });
 
     it("should write out text surrounded by quotes and escape quotes and new lines", () => {
-      const expected = `"te\\"\\\r\nst"`;
+      const expected = `"te\\"\\r\\n\\\r\nst"`;
       doTest(expected, writer => {
         writer.quote("te\"\r\nst");
       });
@@ -1155,7 +1155,7 @@ describe("#hangingIndent", () => {
     writer.hangingIndent(() => {
       writer.quote("t\nu").newLine().write("t");
     });
-    expect(writer.toString()).to.equal(`"t\\\nu"\n    t`);
+    expect(writer.toString()).to.equal(`"t\\n\\\nu"\n    t`);
   });
 });
 

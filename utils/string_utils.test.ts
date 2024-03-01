@@ -7,7 +7,7 @@ describe("escapeForWithinString", () => {
   }
 
   it("should escape the quotes and newline", () => {
-    doTest(`"testing\n this out"`, `\\"testing\\\n this out\\"`);
+    doTest(`"testing\n this out"`, `\\"testing\\n\\\n this out\\"`);
   });
 
   function doQuoteTest(input: string, quote: string, expected: string) {
