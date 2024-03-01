@@ -6,10 +6,10 @@ export function escapeForWithinString(str: string, quoteKind: string) {
     if (str[i] === quoteKind) {
       result += "\\";
     } else if (str[i] === "\r" && str[i + 1] === "\n") {
-      result += "\\";
+      result += "\\r\\n\\";
       i++; // skip the \r
     } else if (str[i] === "\n") {
-      result += "\\";
+      result += "\\n\\";
     } else if (str[i] === "\\") {
       result += "\\";
     }
