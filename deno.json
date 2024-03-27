@@ -1,4 +1,7 @@
 {
+  "name": "@david/code-block-writer",
+  "version": "0.0.0",
+  "exports": "./mod.ts",
   "tasks": {
     "build:npm": "deno run -A ./scripts/build_npm.ts"
   },
