@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/code-block-writer.svg)](https://badge.fury.io/js/code-block-writer)
 [![CI](https://github.com/dsherret/code-block-writer/workflows/CI/badge.svg)](https://github.com/dsherret/code-block-writer/actions?query=workflow%3ACI)
-[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/code_block_writer/mod.ts)
+[![JSR](https://jsr.io/badges/@david/code-block-writer)](https://jsr.io/@david/code-block-writer)
 [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 Code writer for JavaScript and TypeScript code.
@@ -10,7 +10,7 @@ Code writer for JavaScript and TypeScript code.
 With Deno:
 
 ```ts
-import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
+deno add jsr:@david/code-block-writer
 ```
 
 Or with Node:
@@ -24,7 +24,8 @@ npm install --save code-block-writer
 <!-- dprint-ignore -->
 
 ```typescript
-import CodeBlockWriter from "https://deno.land/x/code_block_writer/mod.ts";
+// import CodeBlockWriter from "code-block-writer"; // for npm
+import CodeBlockWriter from "@david/code-block-writer";
 
 const writer = new CodeBlockWriter({
   // optional options
