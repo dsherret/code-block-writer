@@ -3,7 +3,7 @@
   "packages": {
     "specifiers": {
       "jsr:@deno/cache-dir@^0.8.0": "jsr:@deno/cache-dir@0.8.0",
-      "jsr:@deno/dnt@^0.41.0": "jsr:@deno/dnt@0.41.0",
+      "jsr:@deno/dnt@^0.41.1": "jsr:@deno/dnt@0.41.1",
       "jsr:@std/assert@^0.218.2": "jsr:@std/assert@0.218.2",
       "jsr:@std/bytes@^0.218.2": "jsr:@std/bytes@0.218.2",
       "jsr:@std/fmt@^0.218.2": "jsr:@std/fmt@0.218.2",
@@ -23,8 +23,8 @@
           "jsr:@std/io@^0.218.2"
         ]
       },
-      "@deno/dnt@0.41.0": {
-        "integrity": "c196a0dee92f939d1d6720e39331d631e0dc5e4f08f1fd0301b17a7d91bb9c78",
+      "@deno/dnt@0.41.1": {
+        "integrity": "8746a773e031ae19ef43d0eece850217b76cf1d0118fdd8e059652d7023d4aff",
         "dependencies": [
           "jsr:@deno/cache-dir@^0.8.0",
           "jsr:@std/fmt@^0.218.2",
@@ -266,7 +266,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@deno/dnt@^0.41.0"
+      "jsr:@deno/dnt@^0.41.1"
     ]
   }
 }

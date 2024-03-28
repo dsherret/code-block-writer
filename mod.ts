@@ -864,7 +864,7 @@ export default class CodeBlockWriter {
   }
 
   /** @internal - This is private, but exposed for testing. */
-  _getLastCharCodeWithOffset(offset: number) {
+  _getLastCharCodeWithOffset(offset: number): number | undefined {
     if (offset >= this._length || offset < 0) {
       return undefined;
     }
