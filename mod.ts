@@ -835,14 +835,15 @@ export default class CodeBlockWriter {
       }
 
       // handle comments
-      if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.FORWARD_SLASH) {
-        this._currentCommentChar = CommentChar.Line;
-      } else if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.ASTERISK) {
-        this._currentCommentChar = CommentChar.Star;
-      } else if (this._currentCommentChar === CommentChar.Star && pastChar === CHARS.ASTERISK && currentChar === CHARS.FORWARD_SLASH) {
-        this._currentCommentChar = undefined;
+      if (!this.isInString()) {
+        if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.FORWARD_SLASH) {
+          this._currentCommentChar = CommentChar.Line;
+        } else if (this._currentCommentChar == null && pastChar === CHARS.FORWARD_SLASH && currentChar === CHARS.ASTERISK) {
+          this._currentCommentChar = CommentChar.Star;
+        } else if (this._currentCommentChar === CommentChar.Star && pastChar === CHARS.ASTERISK && currentChar === CHARS.FORWARD_SLASH) {
+          this._currentCommentChar = undefined;
+        }
       }
-
       if (this.isInComment()) {
         continue;
       }
