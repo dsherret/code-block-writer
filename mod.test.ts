@@ -789,6 +789,16 @@ test`;
       });
     });
 
+    it("should not do anything if in a string", () => {
+      doTest('"/* test"', (writer) => {
+        writer.write('"/* test"').closeComment();
+      });
+
+      doTest('"// test"', (writer) => {
+        writer.write('"// test"').closeComment();
+      });
+    });
+
     it("should do a newline if in a slash slash comment", () => {
       doTest("// test\n", writer => {
         writer.write("// test").closeComment();
