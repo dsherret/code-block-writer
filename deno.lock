@@ -19,8 +19,10 @@
       "@deno/cache-dir@0.8.0": {
         "integrity": "e87e80a404958f6350d903e6238b72afb92468378b0b32111f7a1e4916ac7fe7",
         "dependencies": [
+          "jsr:@std/fmt@^0.218.2",
           "jsr:@std/fs@^0.218.2",
-          "jsr:@std/io@^0.218.2"
+          "jsr:@std/io@^0.218.2",
+          "jsr:@std/path@^0.218.2"
         ]
       },
       "@deno/dnt@0.41.1": {
@@ -53,6 +55,7 @@
       "@std/io@0.218.2": {
         "integrity": "c64fbfa087b7c9d4d386c5672f291f607d88cb7d44fc299c20c713e345f2785f",
         "dependencies": [
+          "jsr:@std/assert@^0.218.2",
           "jsr:@std/bytes@^0.218.2"
         ]
       },
