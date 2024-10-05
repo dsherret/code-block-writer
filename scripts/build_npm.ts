@@ -9,6 +9,9 @@ await build({
   shims: {
     deno: "dev",
   },
+  compilerOptions: {
+    "stripInternal": true
+  },
   package: {
     name: "code-block-writer",
     version: Deno.args[0],
